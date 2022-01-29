@@ -1,10 +1,10 @@
-import uploadFile from "./uploadToFirestore";
+import uploadToFirestore from "./uploadToFirestore";
 
 export default async function uploadMultipleSongs(songsWithTags) {
   for (const file of songsWithTags) {
     try {
-      const audioUpload = await uploadFile(file.audio, 'songs/')
-      const coverUpload = await uploadFile(file.cover.file, 'covers/')
+      const audioUpload = await uploadToFirestore(file.audio, 'songs/')
+      const coverUpload = await uploadToFirestore(file.cover.file, 'covers/')
       
       // Create documents in Firestore, add SRC urls to uploads
       // for future reference
