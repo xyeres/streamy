@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import * as id3 from '//unpkg.com/id3js@^2/lib/id3.js';
 
 export default async function extractID3Tags(mp3Files) {
@@ -25,7 +24,7 @@ export default async function extractID3Tags(mp3Files) {
         mime: rawTags['images'][0]['mime'],
         file: new File(
           [rawTags['images'][0]['data']],
-          `cover-${uuidv4()}.${fileEnding}`,
+          `cover.${fileEnding}`,
           { type: `${rawTags['images'][0]['mime']}` }
         )
       }
