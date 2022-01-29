@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Uploader from './features/Uploader/Uploader'
 import extractID3Tags from "./lib/extractID3Tags";
-import uploadFile from "./lib/uploadToFirestore";
+import uploadMultipleSongs from "./lib/uploadMultipleSongs";
+import uploadToFirestore from "./lib/uploadToFirestore";
 
 
 function App() {
@@ -12,17 +13,12 @@ function App() {
   const onFileInputChange = async (e) => {
     setFiles([...e.target.files])
 
-    // const songsWithTags = await extractID3Tags(files)
-
-    // const documentData = await uploadSongsToFirestore(songsWithTags)
-    // // { fileName: <name>, songUrl: <url>, coverUrl: <url> }
-    // const documentIds = await createSongDocuments(documentData)
-    // console.log(songsWithTags);
+    const songsWithTags = await extractID3Tags(files)
+    const result = await uploadMultipleSongs(songsWithTags)
   }
 
   const onBtnClick = async () => {
-    const { url, fullPath } = await uploadFile(files[0], 'a/path/')
-    console.log('url', url, fullPath);
+    console.log('testing area...');
   }
 
   const onDragIn = (e) => {
