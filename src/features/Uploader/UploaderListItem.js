@@ -15,10 +15,7 @@ export default function UploaderListItem({ file }) {
     const uploadItems = async () => {
       try {
         let result = await uploadAudioTrack(file, { setStatus })
-
         setUrl(result.songUrl)
-
-        console.log('result = ', result);
       } catch (err) {
         console.error(err);
       }
