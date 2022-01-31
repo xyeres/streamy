@@ -5,7 +5,7 @@ import { storage } from "./firebase"
 export default function useUploadFile(file, path, reactRef) {
   const [isUploading, setIsUploading] = useState(true);
   const [url, setUrl] = useState(null);
-  const [fullPath, setFullPath] = useState(null);
+  const [docPath, setDocPath] = useState(null);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function useUploadFile(file, path, reactRef) {
         async () => {
           const url = await getDownloadURL(task.snapshot.ref)
           const fullPath = task.snapshot.ref.fullPath
-          setFullPath(fullPath)
+          setDocPath(fullPath)
           setUrl(url)
           setIsUploading(false)
         }
@@ -36,5 +36,5 @@ export default function useUploadFile(file, path, reactRef) {
     }
   }, [file, path, reactRef]);
 
-  return { isUploading, url, fullPath, progress }
+  return { isUploading, url, docPath, progress }
 }
