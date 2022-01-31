@@ -1,10 +1,10 @@
 import { useRef } from "react";
 import useUploadFile from "../../lib/useUploadFile";
 
+
 export default function UploaderListItem({ file, path }) {
   const isComponentMounted = useRef(true)
-  const { url, progress }
-    = useUploadFile(file, path, isComponentMounted)
+  const { url, progress } = useUploadFile(file, path, isComponentMounted)
 
   return (
     <li className="flex place-content-between items-center bg-pink-700 text-white p-2">
