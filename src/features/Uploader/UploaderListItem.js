@@ -1,17 +1,40 @@
-import { useRef } from "react";
-import useUploadFile from "../../lib/useUploadFile";
+import { useEffect } from "react";
+import { useState } from "react/cjs/react.development";
+import uploadAudioTrack from "../../lib/uploadAudioTrack";
 
 
-export default function UploaderListItem({ file, path }) {
-  const isComponentMounted = useRef(true)
-  const { url, progress } = useUploadFile(file, path, isComponentMounted)
+export default function UploaderListItem({ file }) {
+  const [status, setStatus] = useState({
+    item: file.name,
+    message: 'Initiating upload...'
+  });
+
+  const [url, setUrl] = useState(null);
+
+  useEffect(() => {
+    const uploadItems = async () => {
+      try {
+        let result = await uploadAudioTrack(file, { setStatus })
+
+        setUrl(result.songUrl)
+
+        console.log('result = ', result);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    uploadItems()
+
+  }, [file]);
 
   return (
     <li className="flex place-content-between items-center bg-pink-700 text-white p-2">
-      {file.name.length < 31 ? file.name : file.name.slice(0, 31) + '...'}
+      <span>
+        {url ? <a href={url} className="bg-pink-900 text-white p-1.5 rounded-xl text-xs mr-2 ">View</a> : null}
+        {status.item.length < 31 ? status.item : status.item.slice(0, 31) + '...'}
+      </span>
       <span className="text-right">
-        Upload progress: {progress.toFixed(0)}%
-        {url ? <a href={url} className="bg-pink-900 text-white p-1.5 rounded-xl text-xs ml-3">View</a> : null}
+        {status.message}
       </span>
     </li>
   );
