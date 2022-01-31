@@ -1,8 +1,7 @@
 import { useState } from "react";
 import Uploader from './features/Uploader/Uploader'
-import extractID3Tags from "./lib/extractID3Tags";
-import uploadMultipleSongs from "./lib/uploadMultipleSongs";
-import uploadToFirestore from "./lib/uploadToFirestore";
+import uploadAudioTrack from "./lib/uploadAudioTrack";
+
 
 
 function App() {
@@ -10,16 +9,20 @@ function App() {
   const [files, setFiles] = useState([]);
   const [filesToUpload, setFilesToUpload] = useState([]);
 
+  const onBtnReadState = () => {
+    console.log('no state for you 😜');
+  }
+
+  const onBtnClickTags = async () => {
+    if (!files[0]) throw new Error("Select a file first!")
+    uploadAudioTrack(files[0])
+  }
+
   const onFileInputChange = async (e) => {
     setFiles([...e.target.files])
-
-    const songsWithTags = await extractID3Tags(files)
-    const result = await uploadMultipleSongs(songsWithTags)
   }
 
-  const onBtnClick = async () => {
-    console.log('testing area...');
-  }
+
 
   const onDragIn = (e) => {
     e.preventDefault()
@@ -36,14 +39,15 @@ function App() {
   const onDrop = e => {
     e.preventDefault()
     e.stopPropagation()
-    setFiles([...e.dataTransfer.files])
+    setFilesToUpload([...e.dataTransfer.files])
     setIsDragging(false)
   }
 
   return (
     <>
       <div className="mt-7 mx-9">
-        <button onClick={onBtnClick} className="p-5 bg-gray-200 m-4">Click me yo</button>
+        <button onClick={onBtnClickTags} className="p-5 bg-gray-200 m-4">Do It All 😜</button>
+        <button onClick={onBtnReadState} className="p-5 bg-gray-200 m-4">Read State</button>
         <h1 className="text-3xl mb-5">Upload audio to Streamy app backend</h1>
         <div id="dropzone"
           onDragOver={onDragIn}
@@ -56,7 +60,7 @@ function App() {
           <p className="font-bold">Drag files here to upload</p>
           <label htmlFor="fileInput" className="m-4 p-4 text-white font-bold bg-pink-300 rounded-lg border-solid border-4 border-pink-500">Or browse for a file</label>
           <input className="sr-only" onChange={onFileInputChange} multiple id="fileInput" type='file' />
-          <Uploader path='/some/path/here/' files={filesToUpload} />
+          <Uploader files={filesToUpload} />
         </div>
       </div>
     </>
