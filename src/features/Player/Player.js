@@ -1,5 +1,6 @@
-import React from 'react';
-import sound from './media/music/song.mp3'
+import { useEffect, useState } from 'react';
+import sound from '../../media/music/song.mp3'
+
 
 export default function Player() {
   // use Audio constructor to create HTMLAudioElement
@@ -11,6 +12,9 @@ export default function Player() {
   // load audio file on component load
   useEffect(() => {
     audioTune.load();
+    return () => {
+      audioTune.pause()
+    }
   }, [])
 
   // set the loop of audio tune
@@ -21,9 +25,9 @@ export default function Player() {
   // play audio sound
   const playSound = () => {
     if (audioTune.HAVE_FUTURE_DATA) {
-
       audioTune.play();
     }
+    
   }
 
   // pause audio sound
