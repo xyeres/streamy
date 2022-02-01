@@ -4,14 +4,11 @@ import uploadAudioTrack from "../../lib/uploadAudioTrack";
 
 
 export default function UploaderListItem({ file }) {
-  const [status, setStatus] = useState({
-    item: file.name,
-    message: 'Initiating upload...'
-  });
-
+  const [status, setStatus] = useState({ item: file.name, message: 'Initiating upload...' });
   const [url, setUrl] = useState(null);
 
   useEffect(() => {
+    
     const uploadItems = async () => {
       try {
         let result = await uploadAudioTrack(file, { setStatus })

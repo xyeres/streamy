@@ -1,10 +1,10 @@
 import * as id3 from '//unpkg.com/id3js@^2/lib/id3.js';
 
 
-export default async function extractID3Tags(file) {
+export default async function extractID3Tags(mp3File) {
   try {
     // Get tags
-    const rawTags = await id3.fromFile(file);
+    const rawTags = await id3.fromFile(mp3File);
 
     if (rawTags['images'] === undefined) {
       throw new Error('Cover art is missing. Try again.')
@@ -14,11 +14,8 @@ export default async function extractID3Tags(file) {
     // Get cover file ending
     let mime = coverImage['mime']
     let fileEnding = mime.replace(/image\//gm, "")
-    let newFile = new File(
-      [coverImage['data']],
-      `cover.${fileEnding}`,
-      { type: `${mime}` }
-    )
+    // Create new file from binary array
+    let newFile = new File([coverImage['data']], `cover.${fileEnding}`, { type: `${mime}` })
 
     let cover = {
       mime,
@@ -26,8 +23,8 @@ export default async function extractID3Tags(file) {
     }
 
     // Extract what we want
-    const tagsToSave = {
-      audio: file,
+    const mp3WithTags = {
+      audio: mp3File,
       tags: {
         album: rawTags['album'],
         artist: rawTags['artist'],
@@ -38,9 +35,9 @@ export default async function extractID3Tags(file) {
       cover
     }
 
-    return tagsToSave
+    return mp3WithTags
 
-  } catch(err) {
+  } catch (err) {
     throw err;
   }
 }

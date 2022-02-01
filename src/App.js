@@ -1,28 +1,15 @@
 import { useState } from "react";
 import Uploader from './features/Uploader/Uploader'
-import uploadAudioTrack from "./lib/uploadAudioTrack";
-
-
 
 function App() {
   const [isDragging, setIsDragging] = useState(false);
-  const [files, setFiles] = useState([]);
   const [filesToUpload, setFilesToUpload] = useState([]);
 
-  const onBtnReadState = () => {
-    console.log('no state for you 😜');
-  }
 
-  const onBtnClickTags = async () => {
-    if (!files[0]) throw new Error("Select a file first!")
-    uploadAudioTrack(files[0])
-  }
 
   const onFileInputChange = async (e) => {
-    setFiles([...e.target.files])
+    setFilesToUpload([...e.target.files])
   }
-
-
 
   const onDragIn = (e) => {
     e.preventDefault()
@@ -46,8 +33,6 @@ function App() {
   return (
     <>
       <div className="mt-7 mx-9">
-        <button onClick={onBtnClickTags} className="p-5 bg-gray-200 m-4">Do It All 😜</button>
-        <button onClick={onBtnReadState} className="p-5 bg-gray-200 m-4">Read State</button>
         <h1 className="text-3xl mb-5">Upload audio to Streamy app backend</h1>
         <div id="dropzone"
           onDragOver={onDragIn}
@@ -58,7 +43,7 @@ function App() {
             'm-10 flex flex-col items-center justify-center border-dashed border-4 border-pink-400 bg-pink-100 p-16'}
         >
           <p className="font-bold">Drag files here to upload</p>
-          <label htmlFor="fileInput" className="m-4 p-4 text-white font-bold bg-pink-300 rounded-lg border-solid border-4 border-pink-500">Or browse for a file</label>
+          <label htmlFor="fileInput" className="m-4 p-4 text-white font-bold bg-pink-300 hover:bg-pink-400 hover:drop-shadow-sm rounded-lg border-solid border-4 border-pink-500">Or browse for a file</label>
           <input className="sr-only" onChange={onFileInputChange} multiple id="fileInput" type='file' />
           <Uploader files={filesToUpload} />
         </div>
