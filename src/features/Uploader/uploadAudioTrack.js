@@ -18,7 +18,7 @@ export default async function uploadAudioTrack(mp3File, options = null) {
     // Create or get album document
     let albumDocRef;
     if (tags.tags.albumSlug) {
-      albumDocRef = await createOrGetAlbumDoc(tags.tags.albumSlug, tags.tags.album, coverFileUpload.url)
+      albumDocRef = await createOrGetAlbumDoc(tags.tags.albumSlug, tags.tags.album, coverFileUpload.url, songDocRef.id)
     }
 
     if (options) options.setStatus({ item: mp3File.name, message: `100% complete` })
