@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { AspectRatio } from 'react-aspect-ratio';
 
 export default function PlaylistItem({ song }) {
   let audio;
@@ -9,21 +10,19 @@ export default function PlaylistItem({ song }) {
   }
 
   useEffect(() => {
-    
+
 
     return () => {
-      if(audio) {
+      if (audio) {
         audio.pause()
       }
     };
   });
 
   return (
-    <li onClick={handleSongClick} className="list-none cursor-pointer hover:bg-slate-300 transition-colors duration-200 flex flex-row text-xs py-2 px-1 items-center">
-      <div className="p-1 m-1 bg-pink-50 rounded-3xl h-8 w-8">
-        <img src={song.coverUrl} alt={song.album} />
-      </div>
-      <div className="flex-grow">
+    <li onClick={handleSongClick} className="list-none cursor-pointer hover:bg-gray-100 transition-colors duration-200 flex flex-row text-xs py-2 px-1 items-center">
+      <img className="rounded-3xl object-cover h-8 w-8" src={song.coverUrl} alt={song.album} />
+      <div className="flex-grow ml-1">
         <div className="flex p-1 justify-between">
           <p className="font-bold">{song.title}</p>
           <p className="text-neutral-500">{song.genre}</p>
