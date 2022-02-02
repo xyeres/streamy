@@ -20,11 +20,14 @@ export default function Player() {
   }, []);
 
   return (
-    <div className="mx-5">
-      <h1 className='font-bold my-5 text-sm'>Latest Albums</h1>
-      <main className='flex flex-col sm:flex-row justify-between'>
-        <AlbumList setPlaylist={setPlaylist} isLoading={isLoading} albumList={albumList} />
-        <Playlist playlist={playlist} />
+    <div className="">
+      <h1 className='font-bold mt-6 mb-2 mx-4 text-lg'>Recent Albums</h1>
+      
+      <main className='flex flex-col sm:flex-row gap-2 sm:gap-7 justify-between'>
+        <div className='relative ml-4 mr-0'>
+          <AlbumList setPlaylist={setPlaylist} isLoading={isLoading} albumList={albumList} />
+        </div>
+        <div className='px-4 sm:pl-0 sm:mr-0 sm:ml-0 w-full'><Playlist playlist={playlist} /></div>
       </main>
       <Controls />
     </div>
