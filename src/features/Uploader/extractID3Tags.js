@@ -6,6 +6,10 @@ export default async function extractID3Tags(mp3File) {
     // Get tags
     const rawTags = await id3.fromFile(mp3File);
 
+    if (rawTags['title'] === null || undefined) {
+      throw new Error("Tags corrupted, fix and try again.")
+    }
+
     if (rawTags['images'] === undefined) {
       throw new Error('Cover art is missing. Try again.')
     }
