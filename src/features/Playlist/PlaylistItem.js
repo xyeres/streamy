@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { AspectRatio } from 'react-aspect-ratio';
 
 export default function PlaylistItem({ song }) {
   let audio;
