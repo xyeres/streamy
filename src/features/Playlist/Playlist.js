@@ -22,7 +22,7 @@ export default function Playlist({ playlist }) {
   })
 
   return (
-    <ul className="w-full divide-y divide-solid divide-neutral-400">
+    <ul className="divide-y divide-solid divide-neutral-100">
       {isLoading ? "Loading songs..." : playlistItems}
     </ul>
   )
