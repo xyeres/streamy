@@ -1,55 +1,32 @@
 import { useEffect, useState } from 'react';
-import sound from '../../media/music/song.mp3'
-
+import AlbumList from '../AlbumList/AlbumList';
+import Controls from './Controls';
+import Playlist from '../Playlist/Playlist';
+import queryAlbums from '../AlbumList/queryAlbums';
 
 export default function Player() {
-  // use Audio constructor to create HTMLAudioElement
-  const audioTune = new Audio(sound);
+  const [albumList, setAlbumList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [playlist, setPlaylist] = useState([1, 2, 3, 4, 5]);
 
-  // variable to play audio in loop
-  const [playInLoop, setPlayInLoop] = useState(false);
-
-  // load audio file on component load
   useEffect(() => {
-    audioTune.load();
-    return () => {
-      audioTune.pause()
+    const fetchAlbums = async () => {
+      setIsLoading(true)
+      const albums = await queryAlbums()
+      setAlbumList(albums)
+      setIsLoading(false)
     }
-  }, [])
-
-  // set the loop of audio tune
-  useEffect(() => {
-    audioTune.loop = playInLoop;
-  }, [playInLoop])
-
-  // play audio sound
-  const playSound = () => {
-    if (audioTune.HAVE_FUTURE_DATA) {
-      audioTune.play();
-    }
-    
-  }
-
-  // pause audio sound
-  const pauseSound = () => {
-    audioTune.pause();
-  }
-
-  // stop audio sound
-  const stopSound = () => {
-    audioTune.pause();
-    audioTune.currentTime = 0;
-  }
+    fetchAlbums()
+  }, []);
 
   return (
-    <div className="p-10">
-      <h3 className="mb-4">Play an mp3 file - <a href="https://www.cluemediator.com">Clue Mediator</a></h3>
-
-      <button type="button" className="border border-red-200 bg-blue-600 text-white rounded-lg px-2 mr-4 " value="Play" onClick={playSound}>Play</button>
-      <button type="button" className="border border-red-200 bg-blue-600 text-white rounded-lg px-2 mr-4 " value="Pause" onClick={pauseSound}>Pause</button>
-      <button type="button" className="border border-red-200 bg-blue-600 text-white rounded-lg px-2 mr-4 " value="Stop" onClick={stopSound}>Stop</button>
-
-      <label><input type="checkbox" checked={playInLoop} onChange={e => setPlayInLoop(e.target.checked)} /> Play in Loop</label>
+    <div className="mx-5">
+      <h1 className='font-bold my-5 text-sm'>Latest Albums</h1>
+      <main className='flex flex-col sm:flex-row justify-between'>
+        <AlbumList setPlaylist={setPlaylist} isLoading={isLoading} albumList={albumList} />
+        <Playlist playlist={playlist} />
+      </main>
+      <Controls />
     </div>
   );
 }
