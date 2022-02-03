@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import AlbumList from '../AlbumList/AlbumList';
-import Controls from '../Player/Controls';
-import queryAlbums from '../AlbumList/queryAlbums';
+import getAlbums from '../AlbumList/getAlbums';
 import FeaturedCard from '../AlbumList/FeaturedCard';
+import CategoryHeader from './CategoryHeader';
 
 export default function Home() {
   const [albumList, setAlbumList] = useState([]);
@@ -11,7 +11,7 @@ export default function Home() {
   useEffect(() => {
     const fetchAlbums = async () => {
       setIsLoading(true)
-      const albums = await queryAlbums()
+      const albums = await getAlbums()
       setAlbumList(albums)
       setIsLoading(false)
     }
@@ -19,14 +19,14 @@ export default function Home() {
   }, []);
 
   return (
-    <div className='relative sm:ml-4 mr-0'>
-      <h1 className='font-bold pt-6 mx-4 text-lg'>Recently Added</h1>
+    <div className='relative sm:mx-4 mr-0'>
+      <CategoryHeader title="Recently Added" />
       <AlbumList isLoading={isLoading} albumList={albumList} />
-      <h2 className='font-bold pt-4 mx-4 text-lg'>Featured</h2>
+      <CategoryHeader title="Featured Album" />
       <FeaturedCard />
-      <h2 className='font-bold pt-4 mx-4 text-lg'>Studio Albums</h2>
+      <CategoryHeader title="From the Studio" />
       <AlbumList isLoading={isLoading} albumList={albumList} />
-      <h2 className='font-bold pt-4 mx-4 text-lg'>Live and Unedited</h2>
+      <CategoryHeader title="Raw Live Sessions" />
       <AlbumList isLoading={isLoading} albumList={albumList} />
     </div>
   );
