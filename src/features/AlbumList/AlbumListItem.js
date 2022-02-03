@@ -1,13 +1,10 @@
-export default function AlbumListItem({ album, setPlaylist }) {
-  const handleAlbumClick = () => {
-    setPlaylist(album.id)
-  }
+export default function AlbumListItem({ album }) {
   return (
-    <a className="w-48 sm:w-full mr-6 sm:mr-0 transition-transform duration-200 relative hover:translate-y-1" onClick={handleAlbumClick}>
-      <li className="list-none">
+    <a href={`/play/${album.id}`}>
+      <li className="list-none sm:mb-5 w-32 sm:w-full mr-3 first:ml-4 sm:first:ml-0 sm:mr-0 transition-transform duration-200 relative hover:translate-y-1">
         <img
           alt={album.title}
-          className="aspect-3/4 sm:aspect-square drop-shadow-lg object-cover  w-full rounded-xl hover:drop-shadow-xl"
+          className="aspect-square drop-shadow-lg object-cover  w-full rounded-xl hover:drop-shadow-xl"
           src={album.coverUrl}
         />
         <p className="text-sm font-bold mt-3 text-neutral-700">{album.title}</p>
