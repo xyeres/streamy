@@ -1,8 +1,9 @@
 import AlbumListItem from "./AlbumListItem";
+import PropTypes from 'prop-types'
 
-export default function AlbumList({ isLoading, albumList, setPlaylist }) {
+function AlbumList({ isLoading, albumList }) {
   const albumListItems = albumList.map((album, index) => {
-    return <AlbumListItem setPlaylist={setPlaylist} key={index} album={album} />
+    return <AlbumListItem key={index} album={album} />
   })
   return (
     <div
@@ -13,3 +14,11 @@ export default function AlbumList({ isLoading, albumList, setPlaylist }) {
     </div>
   );
 }
+
+
+AlbumList.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  albumList: PropTypes.array,
+}
+
+export default AlbumList
