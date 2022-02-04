@@ -19,7 +19,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className='relative h-[var(--vh-minus-96)] overflow-auto sm:mx-4 mr-0'>
+    <div className='relative h-[var(--vh-minus-96)] overflow-auto'>
       <CategoryHeader title="Recently Added" />
       <AlbumList isLoading={isLoading} albumList={albumList} />
       <CategoryHeader title="Featured Album" />

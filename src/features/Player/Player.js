@@ -67,7 +67,7 @@ function Player({ open, setOpen, playing }) {
 Player.defaultProps = {
   playing: {
     song: {
-      artist: "Artist Name",
+      artist: "",
       title: "Song Title",
       coverUrl: CoverImage,
       songUrl: undefined

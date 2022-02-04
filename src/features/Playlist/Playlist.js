@@ -41,16 +41,19 @@ export default function Playlist() {
   })
 
   return (
-    <div className="p-4 w-full flex flex-col items-center">
+    <div className="p-4 w-full h-full flex flex-col items-center">
       {error.status ? <ErrorMessage message={error.message} /> : (
         <>
           <GoBack />
-          <img alt={`${album.title} album cover`} src={album.coverUrl} className="rounded-lg mb-5" />
-          <h1 className="font-bold text-lg">{album.title}</h1>
-          <p className="text-sm mb-3">{firstSong.artist}</p>
-          <ul className="divide-y divide-solid max-w-lg w-full divide-neutral-300 pb-24 sm:pb-0">
-            {isLoading ? "Loading songs..." : playlistItems}
-          </ul>
+          <>
+            {isLoading ? <div className="flex h-full items-center"><p>Loading playlist...</p></div> : (
+              <>
+                <img alt={`${album.title} album cover`} src={album.coverUrl} className="rounded-lg mb-5" /><h1 className="font-bold text-lg">{album.title}</h1><p className="text-sm mb-3">{firstSong.artist}</p><ul className="divide-y divide-solid max-w-lg w-full divide-neutral-300 pb-24 sm:pb-0">
+                  {playlistItems}
+                </ul>
+              </>
+            )}
+          </>
         </>
       )}
     </div>
