@@ -4,6 +4,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        fill: 'fill 3s infinite',
+      },
+      keyframes: {
+        fill: {
+          '100%': { width: '100%' },
+        }
+      },
       aspectRatio: {
         '1/2': '1 / 2',
         '1/3': '1 / 3',
