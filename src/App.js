@@ -1,4 +1,4 @@
-import { NavLink, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import UploadDashboard from "./features/Uploader/UploadDashboard";
 import Home from "./features/Home/Home";
 import Playlist from "./features/Playlist/Playlist";
@@ -10,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/play" element={<Home />} />
           <Route path="play/:playlistId" element={<Playlist />} />
         </Route>
         <Route path="/upload" element={<UploadDashboard />} />
