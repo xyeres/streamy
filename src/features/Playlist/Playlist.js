@@ -19,7 +19,7 @@ export default function Playlist() {
   useEffect(() => {
     const fetchData = async (albumId) => {
       try {
-        setError(prevState => ({...prevState, status:false}))
+        setError(prevState => ({ ...prevState, status: false }))
         setIsLoading(true)
         const songs = await querySongs(albumId)
         const album = await getAlbum(albumId)
@@ -37,7 +37,7 @@ export default function Playlist() {
   }, [playlistId]);
 
   const playlistItems = songs.map((song, index) => {
-    return <PlaylistItem key={index} song={song} />
+    return <PlaylistItem key={index} album={album} song={song} />
   })
 
   return (
