@@ -1,8 +1,8 @@
-import PlaylistItem from "./PlaylistItem";
 import { useEffect, useState } from "react";
-import querySongs from "./querySongs";
 import { useParams } from "react-router-dom";
 import { getAlbum } from "../AlbumList/getAlbums";
+import PlaylistItem from "./PlaylistItem";
+import querySongs from "./querySongs";
 import ErrorMessage from "../Home/ErrorMessage";
 import GoBack from "../Home/GoBack";
 
@@ -12,20 +12,20 @@ export default function Playlist() {
 
   const [songs, setSongs] = useState([]);
   const [firstSong, setFirstSong] = useState({});
-  const [album, setAlbum] = useState({});
+  const [playlist, setPlaylist] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState({ status: false, message: null });
 
   useEffect(() => {
-    const fetchData = async (albumId) => {
+    const fetchData = async (playlistId) => {
       try {
         setError(prevState => ({ ...prevState, status: false }))
         setIsLoading(true)
-        const songs = await querySongs(albumId)
-        const album = await getAlbum(albumId)
+        const songs = await querySongs(playlistId)
+        const playlist = await getAlbum(playlistId)
         setSongs(songs)
         setFirstSong(songs[0])
-        setAlbum(album)
+        setPlaylist(playlist)
       } catch (err) {
         setError({ status: true, message: err.message })
       } finally {
@@ -37,7 +37,7 @@ export default function Playlist() {
   }, [playlistId]);
 
   const playlistItems = songs.map((song, index) => {
-    return <PlaylistItem key={index} album={album} song={song} />
+    return <PlaylistItem key={index} playlistId={playlistId} songsList={songs} song={song} />
   })
 
   return (
@@ -48,7 +48,7 @@ export default function Playlist() {
           <>
             {isLoading ? <div className="flex h-full items-center"><p>Loading playlist...</p></div> : (
               <>
-                <img alt={`${album.title} album cover`} src={album.coverUrl} className="rounded-lg mb-5" /><h1 className="font-bold text-lg">{album.title}</h1><p className="text-sm mb-3">{firstSong.artist}</p><ul className="divide-y divide-solid max-w-lg w-full divide-neutral-300 pb-24 sm:pb-0">
+                <img alt={`${playlist.title} album cover`} src={playlist.coverUrl} className="rounded-lg mb-5" /><h1 className="font-bold text-lg">{playlist.title}</h1><p className="text-sm mb-3">{firstSong.artist}</p><ul className="divide-y divide-solid max-w-lg w-full divide-neutral-300 pb-24 sm:pb-0">
                   {playlistItems}
                 </ul>
               </>
