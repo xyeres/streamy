@@ -1,19 +1,30 @@
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentlyPlaying, dequeueAndPlayNext } from './playerSlice'
+import ReactPlayer from 'react-player'
+import { selectIsPlaying, selectCurrentlyPlaying, playNext, setDuration, progress, playPrev } from './playerSlice'
+
 import { MdExpandMore } from 'react-icons/md'
 import {
   MdSkipPrevious,
   MdSkipNext,
 } from 'react-icons/md'
 import PlayOrPause from './PlayOrPause'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import secondsToTime from './secondsToTime'
 
 function Player({ open, setOpen }) {
+
+  const isPlaying = useSelector(selectIsPlaying)
+  const url = useSelector((state) => state.player.url)
+  const playerRef = useRef()
+
   const handleOpen = () => setOpen(!open)
   const dispatch = useDispatch()
   const song = useSelector(selectCurrentlyPlaying)  
+
+  const handleSeekMouseUp = (e) => {
+    playerRef.current.seekTo(parseFloat(e.target.value))
+  }
   
   return (
     <>
@@ -53,9 +64,16 @@ function Player({ open, setOpen }) {
             <p className="">{song.artist}</p>
           </div>
           {/* Animated Progress Bar */}
-          <div className="cursor-pointer mt-4 mx-auto bg-opacity-50  bg-gray-400 w-full h-[3px]">
-            <div style={{ width: `${song.progress?.fraction?.toFixed(4) * 100}%`}} className="h-full bg-gray-200"></div>
-          </div>
+          {/* <div className="cursor-pointer mt-4 mx-auto bg-opacity-50  bg-gray-400 w-full h-[3px]">
+            <div htmlFor='seek' style={{ width: `${song.progress?.fraction?.toFixed(4) * 100}%`}} className="h-full bg-gray-200"></div>
+          </div> */}
+          <input
+            id="seek"
+            className='w-full h-[3px] decoration'
+            type='range' min={0} max={0.999999} step='any'
+            value={song.progress?.fraction?.toFixed(4) || 0}
+            onChange={handleSeekMouseUp}
+          />
           
           {/* Time Indicators */}
           <div className="flex flex-row justify-between text-xs pt-2">
@@ -64,12 +82,23 @@ function Player({ open, setOpen }) {
           </div>
           {/* Icon Controls */}
           <div className="flex items-center px-8 justify-around mt-8 drop-shadow-lg">
-            <MdSkipPrevious size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+            <MdSkipPrevious onClick={() => dispatch(playPrev())} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
             <PlayOrPause size="3em" styles={"cursor-pointerfill-white opacity-90 hover:opacity-100"} />
-            <MdSkipNext onClick={() => dispatch(dequeueAndPlayNext())} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+            <MdSkipNext onClick={() => dispatch(playNext())} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
           </div>
         </div>
       </div>
+      <ReactPlayer
+        ref={playerRef}
+        className="hidden"
+        progressInterval={250}
+        onDuration={(duration) => dispatch(setDuration(duration))}
+        onProgress={(prog) => dispatch(progress(prog))}
+        onEnded={() => dispatch(playNext())}
+        onSeek={(e)=> console.log('seeking..', e)}
+        playing={isPlaying}
+        url={url}
+      />
     </>
   );
 }

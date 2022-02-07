@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import MenuBar from "../MenuBar/MenuBar";
 import Player from "../Player/Player";
-import ReactPlayerWidget from "../Player/ReactPlayerWidget";
 
 export default function Layout() {
   const [open, setOpen] = useState(false);
@@ -13,7 +12,6 @@ export default function Layout() {
       </main>
       <Player open={open} setOpen={setOpen} />
       <MenuBar />
-      <ReactPlayerWidget />      
     </div>
   );
 }

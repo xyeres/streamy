@@ -17,6 +17,7 @@ export const playerSlice = createSlice({
     playbackRate: 1.0,
     loop: false,
     queue: [],
+    prevPlayed: [],
     currentlyPlaying: {
       songUrl: null,
       coverUrl: null,
@@ -59,25 +60,6 @@ export const playerSlice = createSlice({
       state.playing = true
       state.url = action.payload.song.songUrl
     },
-    playSong: (state, action) => {
-      const payload = action.payload
-      state.url = payload.song.songUrl
-      state.playing = true
-
-      const playedFrom = {
-        playlistId: payload.playlistId,
-        trackNumber: payload.song.track
-      }
-
-      state.currentlyPlaying = {
-        ...state.currentlyPlaying,
-        ...payload.song,
-        playedFrom
-      }
-    },
-    enqueue: (state, action) => {
-      state.queue.push(action.payload)
-    },
     setDuration: (state, action) => {
       state.currentlyPlaying.duration = action.payload
     },
@@ -96,10 +78,13 @@ export const playerSlice = createSlice({
         }
       }
     },
-    dequeueAndPlayNext: (state) => {
+    playNext: (state) => {
       // Removes first added song and plays it
       const nextSong = state.queue.shift()
       if (nextSong) {
+        // Push currently playing song to prevPlayed for back btn
+        state.prevPlayed.push(state.currentlyPlaying)
+
         state.currentlyPlaying = {
           ...state.currentlyPlaying,
           ...nextSong,
@@ -109,6 +94,26 @@ export const playerSlice = createSlice({
       } else {
         state.playing = false
       }
+    },
+    playPrev: (state) => {
+      let prevSong = state.prevPlayed.pop()
+
+      if (prevSong) {
+        // unshift current song to queue so we can come back
+        state.queue.unshift(state.currentlyPlaying)
+
+        state.currentlyPlaying = {
+          ...state.currentlyPlaying,
+          ...prevSong
+        }
+        state.url = prevSong.songUrl
+        state.playing = true
+      } else {
+        // just play current song from beginning
+        state.played = 0
+        state.loaded = 0
+        state.url = state.currentlyPlaying.songUrl
+      }
     }
   }
 })
@@ -116,11 +121,10 @@ export const playerSlice = createSlice({
 export const {
   playPause,
   setVolume,
-  playSong,
   playSongFromPlaylist,
-  dequeueAndPlayNext,
+  playNext,
+  playPrev,
   setDuration,
-  enqueue,
   progress
 } = playerSlice.actions
 
