@@ -1,7 +1,17 @@
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactPlayer from 'react-player'
-import { selectIsPlaying, selectCurrentlyPlaying, playNext, setDuration, progress, playPrev } from './playerSlice'
+import {
+  selectIsPlaying,
+  selectCurrentlyPlaying,
+  selectDuration,
+  selectUrl,
+  selectPlayed,
+  playNext,
+  setDuration,
+  playPrev,
+  progressMade
+} from './playerSlice'
 
 import { MdExpandMore } from 'react-icons/md'
 import {
@@ -9,27 +19,55 @@ import {
   MdSkipNext,
 } from 'react-icons/md'
 import PlayOrPause from './PlayOrPause'
-import { useEffect, useRef } from 'react'
+import { useRef, useState } from 'react'
 import secondsToTime from './secondsToTime'
 
 function Player({ open, setOpen }) {
-
+  const [seeking, setSeeking] = useState(false);
   const isPlaying = useSelector(selectIsPlaying)
-  const url = useSelector((state) => state.player.url)
+  const played = useSelector(selectPlayed)
+  const duration = useSelector(selectDuration)
+  const url = useSelector(selectUrl)
+
   const playerRef = useRef()
 
   const handleOpen = () => setOpen(!open)
   const dispatch = useDispatch()
-  const song = useSelector(selectCurrentlyPlaying)  
+  const song = useSelector(selectCurrentlyPlaying)
+
+  const handleSeekChange = (e) => {
+    playerRef.current.seekTo(parseFloat(e.target.value))
+    dispatch(progressMade(parseFloat(e.target.value)))
+  }
+
+  const isPlayerLoaded = url != null 
+
+  const handleSeekMouseDown = (e) => {
+    setSeeking(true)
+  }
 
   const handleSeekMouseUp = (e) => {
-    playerRef.current.seekTo(parseFloat(e.target.value))
+    setSeeking(false)
   }
-  
+
+  const handleProgress = state => {
+    if (!seeking) {
+      dispatch(progressMade(state.played))
+    }
+  }
+
+  const handlePrevSong = () => {
+    dispatch(playPrev())
+  }
+
+  const handleNextSong = () => {
+    dispatch(playNext())
+  }
+
   return (
     <>
       {/* Control Bar */}
-      <div onClick={handleOpen} className={open ? "control-bar-hide" : "control-bar-show"}>
+      {isPlayerLoaded && (<div onClick={handleOpen} className={open ? "control-bar-hide" : "control-bar-show"}>
         <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100">
           <div className='h-1 w-full absolute top-0 after:h-1 after:contents'></div>
           <div className="flex items-center flex-row text-xs">
@@ -47,7 +85,7 @@ function Player({ open, setOpen }) {
             <PlayOrPause styles="text-gray-800 drop-shadow-lg" size="2em" />
           </div>
         </div>
-      </div>
+      </div>)}
       {/* Full Screen Player */}
       <div className={open ? "player-show" : "player-hide"}>
         <MdExpandMore size="1.75em" onClick={handleOpen} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[19px] left-4" />
@@ -69,22 +107,24 @@ function Player({ open, setOpen }) {
           </div> */}
           <input
             id="seek"
-            className='w-full h-[3px] decoration'
+            className='w-full h-[3px]'
             type='range' min={0} max={0.999999} step='any'
-            value={song.progress?.fraction?.toFixed(4) || 0}
-            onChange={handleSeekMouseUp}
+            value={played}
+            onChange={handleSeekChange}
+            onMouseDown={handleSeekMouseDown}
+            onMouseUp={handleSeekMouseUp}
           />
-          
+
           {/* Time Indicators */}
           <div className="flex flex-row justify-between text-xs pt-2">
-            <p>{song.progress?.time}</p>
-            <p>{secondsToTime(song.duration - song.progress.playedSeconds)}</p>
+            <p>{secondsToTime(duration * played)}</p>
+            <p>{secondsToTime(duration * (1 - played))}</p>
           </div>
           {/* Icon Controls */}
           <div className="flex items-center px-8 justify-around mt-8 drop-shadow-lg">
-            <MdSkipPrevious onClick={() => dispatch(playPrev())} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+            <MdSkipPrevious onClick={handlePrevSong} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
             <PlayOrPause size="3em" styles={"cursor-pointerfill-white opacity-90 hover:opacity-100"} />
-            <MdSkipNext onClick={() => dispatch(playNext())} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+            <MdSkipNext onClick={handleNextSong} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
           </div>
         </div>
       </div>
@@ -93,9 +133,8 @@ function Player({ open, setOpen }) {
         className="hidden"
         progressInterval={250}
         onDuration={(duration) => dispatch(setDuration(duration))}
-        onProgress={(prog) => dispatch(progress(prog))}
+        onProgress={handleProgress}
         onEnded={() => dispatch(playNext())}
-        onSeek={(e)=> console.log('seeking..', e)}
         playing={isPlaying}
         url={url}
       />
