@@ -9,7 +9,6 @@ export default function PlaylistItem({ song, playlistId, songsList }) {
       {/* Round little image next to list item */}
       {/* <img className="rounded-3xl object-cover h-8 w-8" src={song.coverUrl} alt={song.album} /> */}
       <div className="flex-grow">
-
         <div className="flex p-1 justify-between">
           <p className="font-bold">{song.track} {song.title}</p>
         </div>
