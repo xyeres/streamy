@@ -1,5 +1,5 @@
 import { MdOutlineMusicNote } from 'react-icons/md'
-export default function LoadingSkeleton({ message }) {
+export default function LoadingMsg({ message }) {
   return (
     <div className="flex flex-row gap-2 h-full items-center justify-center">
       <h2 className="text-bold text-xl animate-bounce">{message}</h2>
