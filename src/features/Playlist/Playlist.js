@@ -5,7 +5,7 @@ import PlaylistItem from "./PlaylistItem";
 import querySongs from "./querySongs";
 import ErrorMessage from "../Home/ErrorMessage";
 import GoBack from "../Home/GoBack";
-import LoadingSkeleton from "../Home/LoadingSkeleton";
+import LoadingMsg from "../Home/LoadingMsg";
 
 export default function Playlist() {
   const params = useParams()
@@ -41,21 +41,19 @@ export default function Playlist() {
     return <PlaylistItem key={index} playlistId={playlistId} songsList={songs} song={song} />
   })
 
+  if (isLoading) return <LoadingMsg message="Loading playlist!" />
+
   return (
     <div className="p-4 w-full h-full flex flex-col items-center">
       {error.status ? <ErrorMessage message={error.message} /> : (
         <>
-          {isLoading ? <LoadingSkeleton message="Loading playlist" /> : (
-            <>
-              <GoBack />
-              <img alt={`${playlist.title} album cover`} src={playlist.coverUrl} className="rounded-lg mb-5" />
-              <h1 className="font-bold text-lg">{playlist.title}</h1>
-              <p className="text-sm mb-3">{firstSong.artist}</p>
-              <ul className="divide-y divide-solid max-w-lg w-full divide-neutral-300 pb-24 sm:pb-0">
-                {playlistItems}
-              </ul>
-            </>
-          )}
+          <GoBack />
+          <img alt={`${playlist.title} album cover`} src={playlist.coverUrl} className="rounded-lg mb-5" />
+          <h1 className="font-bold text-lg">{playlist.title}</h1>
+          <p className="text-sm mb-3">{firstSong.artist}</p>
+          <ul className="divide-y divide-solid max-w-lg w-full divide-neutral-300 pb-24 sm:pb-0">
+            {playlistItems}
+          </ul>
         </>
       )}
     </div>
