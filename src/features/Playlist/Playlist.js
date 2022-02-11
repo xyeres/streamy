@@ -45,8 +45,9 @@ export default function Playlist() {
 
   return (
     <div className="p-4 w-full h-full flex flex-col items-center">
-      {error.status ? <ErrorMessage message={error.message} /> : (
-        <>
+      {error.status
+        ? <ErrorMessage message={error.message} />
+        : (<>
           <GoBack />
           <img alt={`${playlist.title} album cover`} src={playlist.coverUrl} className="rounded-lg mb-5" />
           <h1 className="font-bold text-lg">{playlist.title}</h1>
@@ -54,8 +55,8 @@ export default function Playlist() {
           <ul className="divide-y divide-solid max-w-lg w-full divide-neutral-300 pb-24 sm:pb-0">
             {playlistItems}
           </ul>
-        </>
-      )}
+        </>)
+      }
     </div>
   )
 }
