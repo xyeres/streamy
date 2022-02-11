@@ -1,4 +1,4 @@
-import { arrayUnion, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 // Creates album document in Firestore using
 // album id

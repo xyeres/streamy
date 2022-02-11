@@ -1,4 +1,4 @@
-import createOrGetAlbumDoc from "../AlbumList/createOrGetAlbumDoc";
+import createOrGetAlbumDoc from "./createOrGetAlbumDoc";
 import createSongDoc from "./createSongDoc";
 import extractID3Tags from "./extractID3Tags";
 import uploadToFirestore from "../../lib/uploadToFirestore";
