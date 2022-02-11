@@ -1,34 +1,31 @@
-import { useEffect, useState } from 'react';
 import AlbumList from '../AlbumList/AlbumList';
-import getAlbums from '../AlbumList/getAlbums';
 import FeaturedCard from '../AlbumList/FeaturedCard';
 import CategoryHeader from './CategoryHeader';
 import LoadingMsg from './LoadingMsg';
+import useAlbums from '../AlbumList/useAlbums';
+import ErrorMessage from './ErrorMessage';
+import { useSelector } from 'react-redux';
+import { selectUrl } from '../Player/playerSlice';
 
 export default function Home() {
-  const [albumList, setAlbumList] = useState(null);
+  const { albums, isLoading, isError } = useAlbums()
 
-  useEffect(() => {
-    const fetchAlbums = async () => {
-      const albums = await getAlbums()
-      setAlbumList(albums)
-    }
-    fetchAlbums()
-  }, []);
+  const isPlayerBarVisible = useSelector(selectUrl)
 
-  if (!albumList) return <LoadingMsg message="Loading albums" />
+  if (isLoading) return <LoadingMsg message="Loading albums" />
+  if (isError) return <ErrorMessage message={isError.message} />
 
   return (
-    <div className='relative h-[var(--vh-minus-96)] overflow-auto'>
+    <div className={`relative ${isPlayerBarVisible ? 'h-[var(--vh-minus-96)]' : 'h-full'} w-full overflow-auto`}>
       <>
         <CategoryHeader title="Recently Added" />
-        <AlbumList albumList={albumList} />
+        <AlbumList albumList={albums} />
         <CategoryHeader title="Featured Album" />
         <FeaturedCard />
         <CategoryHeader title="From the Studio" />
-        <AlbumList albumList={albumList} />
+        <AlbumList albumList={albums} />
         <CategoryHeader title="Raw Live Sessions" />
-        <AlbumList albumList={albumList} />
+        <AlbumList albumList={albums} />
       </>
     </div>
   );
