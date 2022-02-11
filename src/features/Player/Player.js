@@ -10,7 +10,9 @@ import {
   playNext,
   setDuration,
   playPrev,
-  progressMade
+  progressMade,
+  selectQueue,
+  selectPrevPlayed
 } from './playerSlice'
 
 import { MdExpandMore } from 'react-icons/md'
@@ -28,6 +30,8 @@ function Player({ open, setOpen }) {
   const played = useSelector(selectPlayed)
   const duration = useSelector(selectDuration)
   const url = useSelector(selectUrl)
+  const queue = useSelector(selectQueue)
+  const prevPlayed = useSelector(selectPrevPlayed)
 
   const playerRef = useRef()
 
@@ -57,7 +61,13 @@ function Player({ open, setOpen }) {
   }
 
   const handlePrevSong = () => {
-    dispatch(playPrev())
+    // Play song from beginning if this is
+    // first song in the playlist
+    if (prevPlayed.length < 1) {
+      playerRef.current.seekTo(parseFloat(0))
+    } else {
+      dispatch(playPrev())
+    }
   }
 
   const handleNextSong = () => {
