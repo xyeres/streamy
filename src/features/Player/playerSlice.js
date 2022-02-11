@@ -42,6 +42,10 @@ export const playerSlice = createSlice({
       state.played = action.payload
     },
     playSongFromPlaylist: (state, action) => {
+      // Clear Queue and Playhistory to create new context:
+      state.queue = []
+      state.prevPlayed = []
+      
       // queue tracks in front of this one in playlist
       const trackNumber = action.payload.song.track
 
