@@ -20,8 +20,8 @@ export const playerSlice = createSlice({
     currentlyPlaying: {
       songUrl: null,
       coverUrl: null,
-      title: "Song Title",
-      artist: "Artist Name",
+      title: "",
+      artist: "",
       playedFrom: {
         playlistId: null,
         trackNumber: null
@@ -45,7 +45,7 @@ export const playerSlice = createSlice({
       // Clear Queue and Playhistory to create new context:
       state.queue = []
       state.prevPlayed = []
-      
+
       // queue tracks in front of this one in playlist
       const trackNumber = action.payload.song.track
 
@@ -103,12 +103,6 @@ export const playerSlice = createSlice({
         }
         state.url = prevSong.songUrl
         state.playing = true
-      } else {
-        // just play current song from beginning
-        state.playing = false
-        state.played = 0
-        state.loaded = 0
-        
       }
     }
   }
@@ -130,3 +124,5 @@ export const selectCurrentlyPlaying = (state) => state.player.currentlyPlaying
 export const selectPlayed = (state) => state.player.played
 export const selectDuration = (state) => state.player.duration
 export const selectUrl = (state) => state.player.url
+export const selectQueue = (state) => state.player.queue
+export const selectPrevPlayed = (state) => state.player.prevPlayed
