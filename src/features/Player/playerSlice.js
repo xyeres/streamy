@@ -5,6 +5,7 @@ export const playerSlice = createSlice({
   initialState: {
     url: null,
     pip: false,
+    open: false,
     playing: false,
     controls: false,
     light: false,
@@ -29,6 +30,9 @@ export const playerSlice = createSlice({
     },
   },
   reducers: {
+    openClose: (state) => {
+      state.open = !state.open
+    },
     playPause: (state) => {
       state.playing = !state.playing
     },
@@ -109,6 +113,7 @@ export const playerSlice = createSlice({
 })
 
 export const {
+  openClose,
   playPause,
   setVolume,
   progressMade,
@@ -119,6 +124,7 @@ export const {
 } = playerSlice.actions
 
 export default playerSlice.reducer
+export const selectIsOpen = (state) => state.player.open
 export const selectIsPlaying = (state) => state.player.playing
 export const selectCurrentlyPlaying = (state) => state.player.currentlyPlaying
 export const selectPlayed = (state) => state.player.played

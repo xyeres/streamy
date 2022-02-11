@@ -11,9 +11,10 @@ import {
   setDuration,
   playPrev,
   progressMade,
-  selectQueue,
   selectPrevPlayed,
-  playPause
+  playPause,
+  openClose,
+  selectIsOpen
 } from './playerSlice'
 
 import { MdExpandMore } from 'react-icons/md'
@@ -25,19 +26,20 @@ import PlayOrPause from './PlayOrPause'
 import { useRef, useState } from 'react'
 import secondsToTime from './secondsToTime'
 
-function Player({ open, setOpen }) {
+function Player() {
   const [seeking, setSeeking] = useState(false);
   const isPlaying = useSelector(selectIsPlaying)
+  const isOpen = useSelector(selectIsOpen)
   const prevPlayed = useSelector(selectPrevPlayed)
   const played = useSelector(selectPlayed)
   const duration = useSelector(selectDuration)
   const url = useSelector(selectUrl)
+  const song = useSelector(selectCurrentlyPlaying)
 
   const playerRef = useRef()
 
-  const handleOpen = () => setOpen(!open)
   const dispatch = useDispatch()
-  const song = useSelector(selectCurrentlyPlaying)
+  const handleOpen = () => dispatch(openClose())
 
   const handleSeekChange = (e) => {
     playerRef.current.seekTo(parseFloat(e.target.value))
@@ -78,7 +80,7 @@ function Player({ open, setOpen }) {
   return (
     <>
       {/* Control Bar */}
-      {isPlayerLoaded && (<div onClick={handleOpen} className={open ? "control-bar-hide" : "control-bar-show"}>
+      {isPlayerLoaded && (<div onClick={handleOpen} className={isOpen ? "control-bar-hide" : "control-bar-show"}>
         <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100">
           <div className='h-1 w-full absolute top-0 after:h-1 after:contents'></div>
           <div className="flex items-center flex-row text-xs">
@@ -98,15 +100,14 @@ function Player({ open, setOpen }) {
         </div>
       </div>)}
       {/* Full Screen Player */}
-      <div className={open ? "player-show" : "player-hide"}>
+      <div className={isOpen ? "player-show" : "player-hide"}>
         <MdExpandMore size="1.75em" onClick={handleOpen} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[19px] left-4" />
         <div className="absolute top-10 text-xs">
           <p>From Playlist ID: {song.playedFrom.playlistId}</p>
           <p>Track number: {song.track}</p>
         </div>
-
-        <img className="pt-28 px-10" src={song.coverUrl} alt="album cover" />
-        <div className="p-8 pt-16 w-full sm:max-w-screen-sm">
+        <img className="mt-20 px-8 sm:max-w-md" src={song.coverUrl} alt="album cover" />
+        <div className="px-8 py-2 w-full sm:max-w-screen-sm">
           {/* Song Metadata */}
           <div className="text-sm pt-8">
             <p className="font-bold">{song.title}</p>
