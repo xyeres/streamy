@@ -8,10 +8,10 @@ export default function UploaderListItem({ file }) {
   const [url, setUrl] = useState(null);
 
   useEffect(() => {
-    
+
     const uploadItems = async () => {
       try {
-        let result = await uploadAudioTrack(file, { setStatus })
+        let result = await uploadAudioTrack(file, setStatus)
         setUrl(result.songUrl)
       } catch (err) {
         console.error(err);
