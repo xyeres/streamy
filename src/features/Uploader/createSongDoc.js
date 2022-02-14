@@ -1,4 +1,4 @@
-import { addDoc, collection, arrayUnion } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 // Creates song document in Firestore using
 // cover image URL, songUrl, and Id3 tags
