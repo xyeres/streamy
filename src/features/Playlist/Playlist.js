@@ -1,5 +1,6 @@
+import CoverImage from '../../img/lfas-cover.png'
 import { useParams } from "react-router-dom";
-import { useDocFetcher, useAlbumSongs } from "../AlbumList/useAlbums";
+import { useCollectionGroup, useDocument } from "../CoverGrid/useAlbums";
 import PlaylistItem from "./PlaylistItem";
 import ErrorMessage from "../Layout/ErrorMessage";
 import GoBack from "../Layout/GoBack";
@@ -9,19 +10,19 @@ export default function Playlist() {
   const params = useParams()
   const { playlistId } = params
 
-  const { data: playlist, isLoading: isLoadingAlbum, isError: isErrorAlbum } = useDocFetcher('albums', playlistId)
-  const { songs, isLoading: isLoadingSongs, isError: isErrorSongs } = useAlbumSongs(playlistId)
+  const playlist = useDocument('playlists', playlistId)
+  const songs = useCollectionGroup(`playlists/${playlistId}`, 'songs')
 
-  const isError = isErrorAlbum || isErrorSongs
-  const isLoading = isLoadingAlbum || isLoadingSongs
+  const isError = playlist.isError || songs.isError
+  const isLoading = playlist.isLoading || songs.isLoading
+
+  console.log('songs data', songs)
 
   if (isLoading) return <LoadingMsg message="Loading playlist!" />
   if (isError) return <ErrorMessage message={isError.message} />
 
-  const firstSong = songs[0]
-
-  const playlistItems = songs.map((song, index) => {
-    return <PlaylistItem key={index} playlistId={playlistId} songsList={songs} song={song} />
+  const playlistItems = songs.data.map((song, index) => {
+    return <PlaylistItem key={index} playlistId={playlistId} songsList={songs.data} song={song} />
   })
 
   return (
@@ -29,10 +30,10 @@ export default function Playlist() {
       <>
         <GoBack />
         <div className="px-10 pt-10 mb-5">
-          <img alt={`${playlist.title} album cover`} src={playlist.coverUrl} className="rounded-xl" />
+          <img alt={`${playlist.data.title} album cover`} src={CoverImage} className="rounded-xl" />
         </div>
-        <h1 className="font-bold text-lg">{playlist.title}</h1>
-        <p className="text-sm mb-3">{firstSong.artist}</p>
+        <h1 className="font-bold text-lg">{playlist.data.title}</h1>
+        <p className="text-sm mb-3">Featuring artists, and more artists</p>
         <ul className="divide-y divide-solid max-w-lg w-full divide-neutral-300 pb-28">
           {playlistItems}
         </ul>
