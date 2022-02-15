@@ -4,6 +4,7 @@ import Home from "./features/Home/Home";
 import Playlist from "./features/Playlist/Playlist";
 import Layout from "./features/Layout/Layout";
 import Fb from './features/Fb.js'
+import Albumlist from "./features/Albumlist/Albumlist";
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/fb" element={<Fb />} />
           <Route path="/play" element={<Home />} />
-          <Route path="play/:playlistId" element={<Playlist />} />
+          <Route path="/album/:albumId" element={<Albumlist />} />
+          <Route path="/playlist/:playlistId" element={<Playlist />} />
         </Route>
         <Route path="/upload" element={<UploadDashboard />} />
       </Routes>
