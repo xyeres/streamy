@@ -1,9 +1,9 @@
 import AlbumList from '../AlbumList/AlbumList';
 import FeaturedCard from './FeaturedCard';
 import CategoryHeader from './CategoryHeader';
-import LoadingMsg from './LoadingMsg';
+import LoadingMsg from '../Layout/LoadingMsg';
 import useAlbums from '../AlbumList/useAlbums';
-import ErrorMessage from './ErrorMessage';
+import ErrorMessage from '../Layout/ErrorMessage';
 import { useSelector } from 'react-redux';
 import { selectUrl } from '../Player/playerSlice';
 

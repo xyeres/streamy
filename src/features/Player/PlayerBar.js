@@ -1,7 +1,7 @@
 import { MdHomeFilled, MdSearch, MdLibraryMusic } from 'react-icons/md'
 import { NavLink } from 'react-router-dom';
 
-export default function MenuBar() {
+export default function PlayerBar() {
   let activeStyle = (isActive) => {
     return {
       color: isActive ? "text-gray-900" : "black"

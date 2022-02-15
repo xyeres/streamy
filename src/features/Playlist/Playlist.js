@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useDocFetcher, useAlbumSongs } from "../AlbumList/useAlbums";
 import PlaylistItem from "./PlaylistItem";
-import ErrorMessage from "../Home/ErrorMessage";
-import GoBack from "../Home/GoBack";
-import LoadingMsg from "../Home/LoadingMsg";
+import ErrorMessage from "../Layout/ErrorMessage";
+import GoBack from "../Layout/GoBack";
+import LoadingMsg from "../Layout/LoadingMsg";
 
 export default function Playlist() {
   const params = useParams()
