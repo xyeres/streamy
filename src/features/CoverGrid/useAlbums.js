@@ -51,7 +51,7 @@ export async function collectionGroupFetcher(path, subColl) {
   const docData = docSnap.data()
   if (!docSnap.exists()) throw new Error('No document with that path')
 
-  const q = query(collectionGroup(db, subColl), where('id', 'in', docData.songs))
+  const q = query(collectionGroup(db, subColl), where('id', 'in', docData[subColl]))
   const qSnap = await getDocs(q)
   qSnap.forEach((doc) => buffer.push(doc.data()))
 
