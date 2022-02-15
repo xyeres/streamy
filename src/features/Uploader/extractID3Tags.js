@@ -27,10 +27,15 @@ export default async function extractID3Tags(mp3File) {
     }
 
     let albumTitleSlug = null;
-
     if (rawTags['album']){
       let albumTitle = rawTags['album'].toLowerCase()
       albumTitleSlug = albumTitle.replace(/[^a-z]+/gm, '-')
+    }
+
+    let artistSlug = null;
+    if (rawTags['artist']) {
+      let albumArtist = rawTags['artist'].toLowerCase()
+      artistSlug = albumArtist.replace(/[^a-z]+/gm, '-')
     }
     
     // Extract what we want
@@ -42,6 +47,7 @@ export default async function extractID3Tags(mp3File) {
         genre: rawTags['genre'],
         comments: rawTags['comments'],
         artist: rawTags['artist'],
+        artistSlug: artistSlug,
         title: rawTags['title'],
         track: rawTags['track'],
         year: rawTags['year']
