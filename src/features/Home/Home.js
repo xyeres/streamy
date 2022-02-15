@@ -1,5 +1,5 @@
 import AlbumList from '../AlbumList/AlbumList';
-import FeaturedCard from '../AlbumList/FeaturedCard';
+import FeaturedCard from './FeaturedCard';
 import CategoryHeader from './CategoryHeader';
 import LoadingMsg from './LoadingMsg';
 import useAlbums from '../AlbumList/useAlbums';
