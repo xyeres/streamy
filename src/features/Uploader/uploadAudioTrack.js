@@ -1,28 +1,51 @@
-import createOrGetAlbumDoc from "./createOrGetAlbumDoc";
-import createSongDoc from "./createSongDoc";
+import getOrCreateAlbum from "./getOrCreateAlbum";
+import getOrCreateSong from "./getOrCreateSong";
 import extractID3Tags from "./extractID3Tags";
 import uploadToFirestore from "../../lib/uploadToFirestore";
 
 
 export default async function uploadAudioTrack(mp3File, setStatus) {
   try {
-    setStatus(prevState => ({ ...prevState, message: `Extracting ID3 tags...` }))
-    const tags = await extractID3Tags(mp3File)
+    setStatus(prevState =>
+      ({ ...prevState, message: `Extracting ID3 tags...` }))
+    const id3 = await extractID3Tags(mp3File)
 
-    const audioFileUpload = await uploadToFirestore(tags.audio, 'songs/', setStatus)
-    const coverFileUpload = await uploadToFirestore(tags.cover.file, 'covers/', setStatus)
+    const audioUpload
+      = await uploadToFirestore(id3.audio, 'songs/', setStatus)
+    const coverUpload
+      = await uploadToFirestore(id3.cover.file, 'covers/', setStatus)
 
-    setStatus(prevState => ({ ...prevState, message: `Saving document...` }))
-    const songDocRef = await createSongDoc(coverFileUpload.url, audioFileUpload.url, tags)
+    setStatus(prevState =>
+      ({ ...prevState, message: `Saving document...` }))
 
-    // Create or get album document
-    let albumDocRef;
-    if (tags.tags.albumSlug) {
-      albumDocRef = await createOrGetAlbumDoc(tags.tags.albumSlug, tags.tags.album, coverFileUpload.url, songDocRef.id)
+    if (!id3.tags.albumSlug)
+      throw new Error('No album title found, check ID3 tags and try again')
+
+    const album = {
+      slug: id3.tags.albumSlug,
+      title: id3.tags.album, 
+      artist: id3.tags.artist,
+      artistSlug: id3.tags.artistSlug,
+      coverUrl: coverUpload.url,
     }
 
+    await getOrCreateAlbum(album)
+
+    const song = {
+      songUrl: audioUpload.url,
+      coverUrl: coverUpload.url,
+      albumSlug: album.slug,
+      artistSlug: id3.tags.artistSlug,
+    }
+
+    await getOrCreateSong(song, id3)
+
     setStatus({ item: mp3File.name, message: `100% complete` })
-    return { songDocId: songDocRef.id, songUrl: audioFileUpload.url, coverUrl: coverFileUpload.url }
+
+    return {
+      songUrl: audioUpload.url,
+      coverUrl: coverUpload.url
+    }
 
   } catch (err) {
     setStatus({ item: mp3File.name, message: `Error: ${err.message}` })
