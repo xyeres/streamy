@@ -22,7 +22,12 @@ export default function Playlist() {
   if (isError) return <ErrorMessage message={isError.message} />
 
   const playlistItems = songs.data.map((song, index) => {
-    return <PlaylistItem key={index} playlistId={playlistId} songsList={songs.data} song={song} />
+    return <PlaylistItem
+      key={index}
+      playlistId={playlistId}
+      songsList={songs.data}
+      song={song}
+    />
   })
 
   return (
