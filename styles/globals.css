@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --vh-minus-96: calc(100vh - 96px);
+}
+
+body {
+  background-color: theme('colors.zinc.50');
+}
+
+@layer components {
+  .control-bar-show {
+    @apply transition-transform duration-700 cursor-pointer fixed bottom-12 left-0 right-0;
+  }
+
+  .control-bar-hide {
+    @apply translate-y-full transition-transform duration-700 fixed bottom-12 left-0 right-0;
+  }
+
+  .player-show {
+    @apply transition-transform overflow-y-auto duration-300 text-white z-50 flex flex-col w-screen items-center absolute top-0 right-0 bottom-0 left-0 bg-black bg-opacity-90;
+  }
+
+  .player-hide {
+    @apply translate-y-full transition-transform duration-300 text-white z-50 flex flex-col w-screen items-center absolute top-0 right-0 bottom-0 left-0 bg-black bg-opacity-90;
+    ;
+  }
+  .divide {
+    @apply divide-y divide-solid divide-neutral-300;
+  }
+}
