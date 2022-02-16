@@ -1,4 +1,4 @@
-import { useAlbumsTesting } from "./AlbumList/useAlbums";
+import { useAlbumsTesting } from "./CoverGrid/useAlbums";
 import { useState } from "react";
 
 
