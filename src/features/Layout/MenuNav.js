@@ -1,10 +1,10 @@
 import { MdHomeFilled, MdSearch, MdLibraryMusic } from 'react-icons/md'
 import { NavLink } from 'react-router-dom';
 
-export default function PlayerBar() {
+export default function MenuNav() {
   let activeStyle = (isActive) => {
     return {
-      color: isActive ? "text-gray-900" : "black"
+      color: isActive ? "black" : "black"
     }
   };
   return (
@@ -12,7 +12,9 @@ export default function PlayerBar() {
       <NavLink style={activeStyle} to="/">
         <MdHomeFilled size="1.25em" className="drop-shadow" />
       </NavLink>
-      <MdSearch size="1.25em" className="text-gray-900 drop-shadow" />
+      <NavLink style={activeStyle} to="/search">
+        <MdSearch size="1.25em" className="text-gray-900 drop-shadow" />
+      </NavLink>
       <MdLibraryMusic size="1.25em" className="text-gray-900 drop-shadow" />
     </div>
   );

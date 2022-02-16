@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import PlayerBar from "../Player/PlayerBar";
+import MenuNav from "./MenuNav";
 import Player from "../Player/Player";
 
 export default function Layout() {
@@ -9,7 +9,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Player />
-      <PlayerBar />
+      <MenuNav />
     </div>
   );
 }
