@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Uploader from './Uploader'
+import Uploader from './index'
 
 
 export default function UploadDashboard() {
