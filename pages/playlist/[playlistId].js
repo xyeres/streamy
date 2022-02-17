@@ -1,11 +1,10 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useCollectionGroup, useDocument } from "../../components/CoverGrid/useAlbums";
-import PlaylistItem from "./PlaylistItem";
 import ErrorMessage from "../../components/Layout/ErrorMessage";
-import GoBack from "../../components/Layout/GoBack";
 import LoadingMsg from "../../components/Layout/LoadingMsg";
 import Layout from "../../components/Layout/Layout";
+import PlaylistItem from "../../components/Playlist/PlaylistItem";
 
 export default function Playlist() {
   const router = useRouter()
@@ -16,8 +15,6 @@ export default function Playlist() {
 
   const isError = playlist.isError || songs.isError
   const isLoading = playlist.isLoading || songs.isLoading
-
-  console.log('songs data', songs)
 
   if (isLoading) return <LoadingMsg message="Loading playlist!" />
   if (isError) return <ErrorMessage message={isError.message} />

@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { playSongFromPlaylist } from "../../components/Player/playerSlice";
+import { playSongFromPlaylist } from "../Player/playerSlice";
 
 export default function AlbumlistItem({ song, playlistId, songsList }) {
   const dispatch = useDispatch()

@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router'
+import Image from 'next/image';
 import useCollection, { useDocument } from "../../components/CoverGrid/useAlbums";
-import AlbumlistItem from "./AlbumlistItem";
 import ErrorMessage from "../../components/Layout/ErrorMessage";
 import LoadingMsg from "../../components/Layout/LoadingMsg";
 import Layout from '../../components/Layout/Layout';
-import Image from 'next/image';
+import AlbumlistItem from '../../components/Album/AlbumlistItem';
 
 export default function Albumlist() {
   const router = useRouter()

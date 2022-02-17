@@ -1,4 +1,4 @@
-import { useAlbumsTesting } from "../../components/CoverGrid/useAlbums";
+import { useAlbumsTesting } from "../components/CoverGrid/useAlbums";
 import { useState } from "react";
 
 export default function Fb() {

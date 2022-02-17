@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { MdOutlineSearch, MdOutlineMusicNote, MdQueueMusic } from "react-icons/md"
-import Layout from "../../components/Layout/Layout"
+import Layout from "../components/Layout/Layout"
 
-import AlbumResultList from "./AlbumResultList"
-import PlaylistResultList from "./PlaylistResultList"
-import SongResultList from "./SongResultList"
+import AlbumResultList from "../components/Search/AlbumResultList"
+import PlaylistResultList from "../components/Search/PlaylistResultList"
+import SongResultList from "../components/Search/SongResultList"
 
 export default function Search() {
   const [searchInput, setSearchInput] = useState("")

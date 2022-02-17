@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux'
-import { playSongFromPlaylist } from "../../components/Player/playerSlice";
+import { playSongFromPlaylist } from "../Player/playerSlice";
 
 export default function PlaylistItem({ song, playlistId, songsList }) {
   const dispatch = useDispatch()
