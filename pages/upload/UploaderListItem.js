@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react/cjs/react.development";
-import uploadAudioTrack from "./uploadAudioTrack";
+import uploadAudioTrack from "../../lib/uploader/uploadAudioTrack";
 
 
 export default function UploaderListItem({ file }) {
