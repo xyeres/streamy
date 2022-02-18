@@ -9,7 +9,8 @@ export default function GoBack() {
 
   const routesToIgnore = [
     router.route == "/",
-    router.route == "/search"
+    router.route == "/search",
+    router.route == "/library",
   ]
 
   const checker = (route) => route === true
