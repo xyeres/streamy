@@ -14,7 +14,8 @@ import {
   selectPrevPlayed,
   playPause,
   openClose,
-  selectIsOpen
+  selectIsOpen,
+  stopAndUnload
 } from './playerSlice'
 
 import { MdExpandMore } from 'react-icons/md'
@@ -29,25 +30,32 @@ import Image from 'next/image'
 
 function Player() {
   const [seeking, setSeeking] = useState(false);
+  const [touching, setTouching] = useState(false);
+  
   const isPlaying = useSelector(selectIsPlaying)
   const isOpen = useSelector(selectIsOpen)
   const prevPlayed = useSelector(selectPrevPlayed)
   const played = useSelector(selectPlayed)
   const duration = useSelector(selectDuration)
   const url = useSelector(selectUrl)
+
+  console.log('URL', url)
+
   const song = useSelector(selectCurrentlyPlaying)
 
   const playerRef = useRef()
 
   const dispatch = useDispatch()
   const handleOpen = () => dispatch(openClose())
+  const handleTouchMove = () => setTouching(true)
+  const handleTouchEnd = () => {
+    if (touching) dispatch(stopAndUnload())
+  }
 
   const handleSeekChange = (e) => {
     playerRef.current.seekTo(parseFloat(e.target.value))
     dispatch(progressMade(parseFloat(e.target.value)))
   }
-
-  const isPlayerLoaded = url != null
 
   const handleSeekMouseDown = (e) => {
     setSeeking(true)
@@ -81,38 +89,37 @@ function Player() {
   return (
     <>
       {/* Control Bar */}
-      {isPlayerLoaded && (
-        <div aria-controls="player-controls" aria-expanded="false" onClick={handleOpen}
-          className={isOpen ? "control-bar-hide" : "control-bar-show"}>
-          <span className="sr-only">Player Controls</span>
-          <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100">
-            <div className='h-1 w-full absolute top-0 after:h-1 after:contents'></div>
-            <div className="flex items-center flex-row text-xs">
-              <Image priority width={48} height={48} alt="album cover" src={song.coverUrl} className='w-12 h-12' />
+      <div aria-controls="player-controls" onTouchEnd={handleTouchEnd} onTouchMove={handleTouchMove} aria-expanded={isOpen} onClick={handleOpen}
+        className={isOpen ? "control-bar-hide" : "control-bar-show"}>
+        <span className="sr-only">Player Controls</span>
+        <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100">
+          <div className='h-1 w-full absolute top-0 after:h-1 after:contents'></div>
+          <div className="flex items-center flex-row text-xs">
+            <Image priority width={48} height={48} alt="album cover" src={song.coverUrl} className='w-12 h-12' />
+            <div>
+              <div className="flex pl-1">
+                <p className="font-bold">{song.title}</p>
+              </div>
               <div>
-                <div className="flex pl-1">
-                  <p className="font-bold">{song.title}</p>
-                </div>
-                <div>
-                  <span className="pl-1">{song.artist}</span>
-                </div>
+                <span className="pl-1">{song.artist}</span>
               </div>
             </div>
-            <div onClick={(e) => e.stopPropagation()} className='flex items-center justify-center mr-4'>
-              <PlayOrPause styles="text-gray-800 drop-shadow-lg cursor-pointer" size="2em" />
-            </div>
+          </div>
+          <div onClick={(e) => e.stopPropagation()} className='flex items-center justify-center mr-4'>
+            <PlayOrPause styles="text-gray-800 drop-shadow-lg cursor-pointer" size="2em" />
           </div>
         </div>
-      )}
+      </div>
+
       {/* Full Screen Player */}
-      <div id="player-controls" className={isOpen ? "player-show" : "player-hide"}>
+      <div id="player-controls" className={`${isOpen ? "player-show" : "player-hide"}`}>
         <MdExpandMore size="1.75em" onClick={handleOpen} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[32px] left-5" />
-        <div className="absolute bottom-14 left-2 text-xs text-gray-600">
+        {/* <div className="absolute bottom-14 left-2 text-xs text-gray-600">
           <p>DEBUG MODE: From Playlist ID: {song.playedFrom.playlistId}</p>
           <p>Track number: {song.track}</p>
-        </div>
+        </div> */}
         <div className="mt-[86px] relative px-8 aspect-square min-w-[240px] min-h-[240px] sm:min-w-[400px] sm:min-h-[400px] max-w-md mx-8">
-          <Image priority layout='fill' objectFit='cover' className='my-8' objectPosition="50% 50%" src={song.coverUrl ? song.coverUrl : '/images/lfas-cover.png'} alt="album cover" />
+          <Image priority layout='fill' objectFit='cover' className='my-8' objectPosition="50% 50%" src={song.coverUrl} alt="album cover" />
         </div>
         <div className="px-8 py-2 w-full sm:max-w-screen-sm">
           {/* Song Metadata */}
