@@ -4,7 +4,8 @@ import MenuNav from "./MenuNav";
 
 export default function LayoutWrapper({ children, home, search, library, bareBones }) {
   return (
-    <div className="relative w-screen h-screen overflow-clip">
+    // Add overflow-hidden here vs overflow-clip as a POTENTIAL solution to mobile scroll issues
+    <div className="relative bg-green-50 w-screen overflow-hidden h-screen">
       {children}
       <Player />
       <nav>
