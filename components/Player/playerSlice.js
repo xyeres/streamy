@@ -36,6 +36,10 @@ export const playerSlice = createSlice({
     playPause: (state) => {
       state.playing = !state.playing
     },
+    stopAndUnload: (state) => {
+      state.playing = false
+      state.url = null
+    },
     setVolume: (state, action) => {
       state.volume = parseFloat(action.payload)
     },
@@ -115,6 +119,7 @@ export const playerSlice = createSlice({
 export const {
   openClose,
   playPause,
+  stopAndUnload,
   setVolume,
   progressMade,
   playSongFromPlaylist,
