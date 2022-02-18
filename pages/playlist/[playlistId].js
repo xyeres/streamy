@@ -32,7 +32,7 @@ export default function Playlist() {
     <Layout>
       <div className="p-4 w-full h-full flex flex-col items-center">
           <div className="px-10 pt-10 mb-5">
-            <Image alt={`${playlist.data.title} album cover`} height={400} width={400} src="/images/lfas-cover.png" className="rounded-xl" />
+            <Image priority alt={`${playlist.data.title} album cover`} height={400} width={400} src="/images/lfas-cover.png" className="rounded-xl" />
           </div>
           <h1 className="font-bold text-lg">{playlist.data.title}</h1>
           <p className="text-sm mb-3">Featuring artists, and more artists</p>

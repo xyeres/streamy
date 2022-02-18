@@ -10,14 +10,18 @@ export default function PlayOrPause({ size, styles }) {
 
   const dispatch = useDispatch()
 
-  let button
+  let buttonValue
   if (isPlaying) {
-    button = <MdPauseCircleFilled onClick={() => dispatch(playPause())} size={size} className={styles} />
-
+    buttonValue = <MdPauseCircleFilled onClick={() => dispatch(playPause())} size={size} className={styles} />
   } else {
-    button = <MdPlayCircleFilled onClick={() => dispatch(playPause())} size={size} className={styles} />
+    buttonValue = <MdPlayCircleFilled onClick={() => dispatch(playPause())} size={size} className={styles} />
   }
 
-  return <>{button}</>
+  return (
+    <button>
+      <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
+      {buttonValue}
+    </button>
+  )
 
 }

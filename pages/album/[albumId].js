@@ -28,6 +28,7 @@ export default function Albumlist() {
       <div className="p-4 w-full h-full flex flex-col items-center z-0">
         <div className="px-20 pt-10 mb-5 min-w-[320px] min-h-[320px] sm:min-w-[440px] sm:min-h-[440px] aspect-square relative">
           <Image
+          priority
           layout='fill'
           objectFit='cover'
           objectPosition="top left"
