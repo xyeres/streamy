@@ -26,15 +26,15 @@ export default function Albumlist() {
   return (
     <Layout>
       <div className="p-4 w-full h-full flex flex-col items-center z-0">
-        <div className="px-20 pt-10 mb-5 min-w-[320px] min-h-[320px] sm:min-w-[440px] sm:min-h-[440px] aspect-square relative">
+        <div className="mx-10 mt-10 mb-5 w-[220px] h-[220px] sm:min-w-[440px] sm:min-h-[440px] aspect-square relative">
           <Image
           priority
           layout='fill'
           objectFit='cover'
-          objectPosition="top left"
+          objectPosition="50% 50%"
           alt={`${album.data.title} album cover`} 
           src={album.data.coverUrl} 
-          className="rounded-xl" 
+          className="rounded-xl m-10" 
           />
         </div>
         <h1 className="font-bold text-lg">{album.data.title}</h1>

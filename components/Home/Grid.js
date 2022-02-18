@@ -16,13 +16,11 @@ function Grid() {
   const isLoading = albums.isLoading || playlists.isLoading
   const isError = albums.isError || playlists.isError
 
-  const isPlayerBarVisible = useSelector(selectUrl)
-
   if (isError) return <ErrorMessage message={isError.message} />
   if (isLoading) return <LoadingMsg message="Loading music" />
 
   return (
-    <div className={`relative ${isPlayerBarVisible ? 'h-[var(--vh-minus-96)]' : 'h-full'} w-full overflow-auto`}>
+    <div className={`relative h-full w-full`}>
       <CategoryHeader title="Recently Added" />
       <CoverGrid path="/album" items={albums.data} />
       <CategoryHeader title="Featured Album" />

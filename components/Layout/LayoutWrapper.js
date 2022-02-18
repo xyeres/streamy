@@ -1,13 +1,23 @@
+import { useSelector } from "react-redux";
 import Player from "../Player/Player";
-import Layout from "./Layout";
+import { selectIsOpen, selectUrl } from "../Player/playerSlice";
 import MenuNav from "./MenuNav";
 
 export default function LayoutWrapper({ children, home, search, library, bareBones }) {
+  const playerIsOpen = useSelector(selectIsOpen)
+  const isPlayerLoaded = useSelector(selectUrl)
+
+
   return (
-    // Add overflow-hidden here vs overflow-clip as a POTENTIAL solution to mobile scroll issues
-    <div className="relative w-screen h-screen">
+    <div className={`
+      relative w-full h-full
+      ${playerIsOpen ? "overflow-hidden" : "overflow-auto"} 
+      ${isPlayerLoaded ? 'h-[var(--vh-minus-96)]' : 'h-full'}
+    `}>
+
       {children}
-      <Player />
+
+      {isPlayerLoaded && <Player />}
       <nav>
         <MenuNav home={home} search={search} library={library} />
       </nav>
