@@ -9,7 +9,7 @@ export const playerSlice = createSlice({
     playing: false,
     controls: false,
     light: false,
-    volume: 0.8,
+    volume: 0.0,
     muted: false,
     played: 0,
     loaded: 0,
