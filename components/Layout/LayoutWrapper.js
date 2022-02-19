@@ -8,19 +8,28 @@ export default function LayoutWrapper({ children, home, search, library, bareBon
   const isPlayerLoaded = useSelector(selectUrl)
 
 
-  return (
-    <div className={`
+  if (playerIsOpen) {
+    document.body.classList.remove("overflow-auto")
+    document.body.classList.add("overflow-hidden")
+  } else {
+    document.body.classList.add("overflow-auto")
+    document.body.classList.remove("overflow-hidden")
+  }
+
+
+return (
+  <div className={`
       relative w-full h-full
-      ${playerIsOpen ? "overflow-hidden" : "overflow-auto"} 
+      
       ${isPlayerLoaded ? 'h-[var(--vh-minus-96)]' : 'h-full'}
     `}>
 
-      {children}
+    {children}
 
-      {isPlayerLoaded && <Player />}
-      <nav>
-        <MenuNav home={home} search={search} library={library} />
-      </nav>
-    </div>
-  )
+    {isPlayerLoaded && <Player />}
+    <nav>
+      <MenuNav home={home} search={search} library={library} />
+    </nav>
+  </div>
+)
 }
