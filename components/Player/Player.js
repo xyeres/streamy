@@ -86,6 +86,14 @@ function Player() {
     dispatch(playNext())
   }
 
+    if (isOpen) {
+      document.body.classList.remove("overflow-auto")
+      document.body.classList.add("overflow-hidden")
+    } else {
+      document.body.classList.add("overflow-auto")
+      document.body.classList.remove("overflow-hidden")
+    }
+
   return (
     <>
       {/* Control Bar */}
