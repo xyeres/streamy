@@ -6,7 +6,7 @@ export const playerSlice = createSlice({
     url: null,
     pip: false,
     open: false,
-    playing: true,
+    playing: false,
     controls: false,
     light: false,
     volume: 0.0,
