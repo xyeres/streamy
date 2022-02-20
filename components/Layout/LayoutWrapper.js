@@ -1,11 +1,10 @@
 import { useSelector } from "react-redux";
 import Player from "../Player/Player";
-import { selectIsOpen, selectUrl } from "../Player/playerSlice";
+import { selectIsOpen } from "../Player/playerSlice";
 import MenuNav from "./MenuNav";
 
 export default function LayoutWrapper({ children, home, search, library, bareBones }) {
   const playerIsOpen = useSelector(selectIsOpen)
-  const isPlayerLoaded = useSelector(selectUrl)
 
   return (
     <div className={`
@@ -15,7 +14,7 @@ export default function LayoutWrapper({ children, home, search, library, bareBon
 
       {children}
 
-      {isPlayerLoaded && <Player />}
+      <Player />
       <nav>
         <MenuNav home={home} search={search} library={library} />
       </nav>

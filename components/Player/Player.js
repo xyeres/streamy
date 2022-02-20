@@ -31,19 +31,19 @@ import Image from 'next/image'
 function Player() {
   const [seeking, setSeeking] = useState(false);
   const [touching, setTouching] = useState(false);
-  
+
   const isPlaying = useSelector(selectIsPlaying)
   const isOpen = useSelector(selectIsOpen)
   const prevPlayed = useSelector(selectPrevPlayed)
   const played = useSelector(selectPlayed)
   const duration = useSelector(selectDuration)
   const url = useSelector(selectUrl)
-  const volume = useSelector((state) => state.player.volume)
-  console.log('VOLUME', volume)
 
   const song = useSelector(selectCurrentlyPlaying)
 
   const playerRef = useRef()
+
+  const isPlayerLoaded = url != null
 
   const dispatch = useDispatch()
   const handleOpen = () => dispatch(openClose())
@@ -86,6 +86,7 @@ function Player() {
     dispatch(playNext())
   }
 
+  if (isPlayerLoaded) {
     if (isOpen) {
       document.body.classList.remove("overflow-auto")
       document.body.classList.add("overflow-hidden")
@@ -93,75 +94,80 @@ function Player() {
       document.body.classList.add("overflow-auto")
       document.body.classList.remove("overflow-hidden")
     }
+  }
 
   return (
     <>
-      {/* Control Bar */}
-      <div aria-controls="player-controls" onTouchEnd={handleTouchEnd} onTouchMove={handleTouchMove} aria-expanded={isOpen} onClick={handleOpen}
-        className={isOpen ? "control-bar-hide" : "control-bar-show"}>
-        <span className="sr-only">Player Controls</span>
-        <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100">
-          <div className='h-1 w-full absolute top-0 after:h-1 after:contents'></div>
-          <div className="flex items-center flex-row text-xs">
-            <Image priority width={48} height={48} alt="album cover" src={song.coverUrl} className='w-12 h-12' />
-            <div>
-              <div className="flex pl-1">
-                <p className="font-bold">{song.title}</p>
+      {isPlayerLoaded && (
+        <>
+          {/* Control Bar */}
+          <div aria-controls="player-controls" onTouchEnd={handleTouchEnd} onTouchMove={handleTouchMove} aria-expanded={isOpen} onClick={handleOpen}
+            className={isOpen ? "control-bar-hide" : "control-bar-show"}>
+            <span className="sr-only">Player Controls</span>
+            <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100">
+              <div className='h-1 w-full absolute top-0 after:h-1 after:contents'></div>
+              <div className="flex items-center flex-row text-xs">
+                <Image priority width={48} height={48} alt="album cover" src={song.coverUrl} className='w-12 h-12' />
+                <div>
+                  <div className="flex pl-1">
+                    <p className="font-bold">{song.title}</p>
+                  </div>
+                  <div>
+                    <span className="pl-1">{song.artist}</span>
+                  </div>
+                </div>
               </div>
-              <div>
-                <span className="pl-1">{song.artist}</span>
+              <div onClick={(e) => e.stopPropagation()} className='flex items-center justify-center mr-4'>
+                <PlayOrPause styles="text-gray-800 drop-shadow-lg cursor-pointer" size="2em" />
               </div>
             </div>
           </div>
-          <div onClick={(e) => e.stopPropagation()} className='flex items-center justify-center mr-4'>
-            <PlayOrPause styles="text-gray-800 drop-shadow-lg cursor-pointer" size="2em" />
-          </div>
-        </div>
-      </div>
 
-      {/* Full Screen Player */}
-      <div id="player-controls" className={`${isOpen ? "player-show" : "player-hide"}`}>
-        <MdExpandMore size="1.75em" onClick={handleOpen} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[32px] left-5" />
-        {/* <div className="absolute bottom-14 left-2 text-xs text-gray-600">
+          {/* Full Screen Player */}
+          <div id="player-controls" className={`${isOpen ? "player-show" : "player-hide"}`}>
+            <MdExpandMore size="1.75em" onClick={handleOpen} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[32px] left-5" />
+            {/* <div className="absolute bottom-14 left-2 text-xs text-gray-600">
           <p>DEBUG MODE: From Playlist ID: {song.playedFrom.playlistId}</p>
           <p>Track number: {song.track}</p>
         </div> */}
-        <div className="mt-[86px] relative px-8 aspect-square min-w-[240px] min-h-[240px] sm:min-w-[400px] sm:min-h-[400px] max-w-md mx-8">
-          <Image priority layout='fill' objectFit='cover' className='my-8' objectPosition="50% 50%" src={song.coverUrl} alt="album cover" />
-        </div>
-        <div className="px-8 py-2 w-full sm:max-w-screen-sm">
-          {/* Song Metadata */}
-          <div className="text-sm pt-8">
-            <p className="font-bold">{song.title}</p>
-            <p className="">{song.artist}</p>
-          </div>
-          {/* Animated Progress Bar */}
-          {/* <div className="cursor-pointer mt-4 mx-auto bg-opacity-50  bg-gray-400 w-full h-[3px]">
+            <div className="mt-[86px] relative px-8 aspect-square min-w-[240px] min-h-[240px] sm:min-w-[400px] sm:min-h-[400px] max-w-md mx-8">
+              <Image priority layout='fill' objectFit='cover' className='my-8' objectPosition="50% 50%" src={song.coverUrl} alt="album cover" />
+            </div>
+            <div className="px-8 py-2 w-full sm:max-w-screen-sm">
+              {/* Song Metadata */}
+              <div className="text-sm pt-8">
+                <p className="font-bold">{song.title}</p>
+                <p className="">{song.artist}</p>
+              </div>
+              {/* Animated Progress Bar */}
+              {/* <div className="cursor-pointer mt-4 mx-auto bg-opacity-50  bg-gray-400 w-full h-[3px]">
             <div htmlFor='seek' style={{ width: `${song.progress?.fraction?.toFixed(4) * 100}%`}} className="h-full bg-gray-200"></div>
           </div> */}
-          <input
-            id="seek"
-            className='w-full h-[3px]'
-            type='range' min={0} max={0.999999} step='any'
-            value={played}
-            onChange={handleSeekChange}
-            onMouseDown={handleSeekMouseDown}
-            onMouseUp={handleSeekMouseUp}
-          />
+              <input
+                id="seek"
+                className='w-full h-[3px]'
+                type='range' min={0} max={0.999999} step='any'
+                value={played}
+                onChange={handleSeekChange}
+                onMouseDown={handleSeekMouseDown}
+                onMouseUp={handleSeekMouseUp}
+              />
 
-          {/* Time Indicators */}
-          <div className="flex flex-row justify-between text-xs pt-2">
-            <p>{secondsToTime(duration * played)}</p>
-            <p>{secondsToTime(duration * (1 - played))}</p>
+              {/* Time Indicators */}
+              <div className="flex flex-row justify-between text-xs pt-2">
+                <p>{secondsToTime(duration * played)}</p>
+                <p>{secondsToTime(duration * (1 - played))}</p>
+              </div>
+              {/* Icon Controls */}
+              <div className="flex items-center px-8 justify-around mt-5 drop-shadow-lg">
+                <MdSkipPrevious onClick={handlePrevSong} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+                <PlayOrPause size="3em" styles={"cursor-pointerfill-white opacity-90 hover:opacity-100"} />
+                <MdSkipNext onClick={handleNextSong} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+              </div>
+            </div>
           </div>
-          {/* Icon Controls */}
-          <div className="flex items-center px-8 justify-around mt-5 drop-shadow-lg">
-            <MdSkipPrevious onClick={handlePrevSong} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
-            <PlayOrPause size="3em" styles={"cursor-pointerfill-white opacity-90 hover:opacity-100"} />
-            <MdSkipNext onClick={handleNextSong} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
-          </div>
-        </div>
-      </div>
+        </>
+      )}
       <ReactPlayer
         ref={playerRef}
         className="hidden"
