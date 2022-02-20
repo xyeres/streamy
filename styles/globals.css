@@ -3,12 +3,17 @@
 @tailwind utilities;
 
 :root {
+  --vh-minus-48: calc(100vh - 48px);
   --vh-minus-96: calc(100vh - 96px);
+  --tst: calc(100%-48px);
+}
+
+html, body {
+  height: 100%;
 }
 
 body {
   background-color: theme('colors.zinc.50');
-  min-height: 100vh;
 }
 
 @layer components {

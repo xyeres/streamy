@@ -38,8 +38,8 @@ function Player() {
   const played = useSelector(selectPlayed)
   const duration = useSelector(selectDuration)
   const url = useSelector(selectUrl)
-
-  console.log('URL', url)
+  const volume = useSelector((state) => state.player.volume)
+  console.log('VOLUME', volume)
 
   const song = useSelector(selectCurrentlyPlaying)
 

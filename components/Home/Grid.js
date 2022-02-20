@@ -10,6 +10,8 @@ import FeaturedCard from "./FeaturedCard"
 
 
 function Grid() {
+  const isPlayerLoaded = useSelector(selectUrl)
+
   const albums = useCollection("albums", "lastUpdated")
   const playlists = useCollection("playlists", "title")
 
@@ -20,7 +22,7 @@ function Grid() {
   if (isLoading) return <LoadingMsg message="Loading music" />
 
   return (
-    <div className={`relative h-full w-full`}>
+    <div className={`relative h-full w-full ${isPlayerLoaded ? 'pb-24' : 'pb-12'}`}>
       <CategoryHeader title="Recently Added" />
       <CoverGrid path="/album" items={albums.data} />
       <CategoryHeader title="Featured Album" />

@@ -9,9 +9,8 @@ export default function LayoutWrapper({ children, home, search, library, bareBon
 
   return (
     <div className={`
-      relative w-full h-full
-      
-      ${isPlayerLoaded ? 'h-[var(--vh-minus-96)]' : 'h-full'}
+      w-full
+      min-h-screen
     `}>
 
       {children}
