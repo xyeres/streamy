@@ -4,8 +4,6 @@ import { selectIsOpen } from "../Player/playerSlice";
 import MenuNav from "./MenuNav";
 
 export default function LayoutWrapper({ children, home, search, library, bareBones }) {
-  const playerIsOpen = useSelector(selectIsOpen)
-
   return (
     <div className={`
       w-full
