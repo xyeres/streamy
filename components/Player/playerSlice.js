@@ -10,7 +10,7 @@ export const playerSlice = createSlice({
     controls: false,
     light: false,
     volume: 0.0,
-    muted: false,
+    muted: true,
     played: 0,
     loaded: 0,
     duration: 0,
@@ -39,6 +39,7 @@ export const playerSlice = createSlice({
     play: (state) => {
       if (state.url != null) {
         state.playing = true
+        state.muted = false
       }
     },
     stopAndUnload: (state) => {
