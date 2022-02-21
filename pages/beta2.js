@@ -71,12 +71,13 @@ export default function Beta() {
           })}
         </ul>
         <button
-          className="bg-red-300 border-gray-600 p-3 px-4 m-4 shadow-lg"
+          className="bg-purple-300 border-gray-600 p-3 px-4 m-4 shadow-lg"
           onClick={handlePlayPause}>{isPlaying ? "pause" : "play"}</button>
         <ReactPlayer
           ref={playerRef}
           url={songUrl}
           playing={isPlaying}
+          playsinline
           config={{
             file: {
               forceAudio: false,
