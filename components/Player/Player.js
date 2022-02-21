@@ -105,28 +105,28 @@ function Player() {
 
   return (
     <>
+      <ReactPlayer
+        id="test-id-from-react"
+        ref={playerRef}
+        className="hidden"
+        progressInterval={250}
+        onDuration={(duration) => dispatch(setDuration(duration))}
+        onProgress={handleProgress}
+        onEnded={() => dispatch(playNext())}
+        playing={isPlaying}
+        url={url}
+        muted={isMuted}
+        config={{
+          file: {
+            forceAudio: false,
+            attributes: {
+              autoPlay: true
+            },
+          }
+        }}
+      />
       {isPlayerLoaded && (
         <>
-          <ReactPlayer
-            id="test-id-from-react"
-            ref={playerRef}
-            className="hidden"
-            progressInterval={250}
-            onDuration={(duration) => dispatch(setDuration(duration))}
-            onProgress={handleProgress}
-            onEnded={() => dispatch(playNext())}
-            playing={isPlaying}
-            url={url}
-            muted={isMuted}
-            config={{
-              file: {
-                forceAudio: false,
-                attributes: {
-                  autoPlay: true
-                },
-              }
-            }}
-          />
           {/* Control Bar */}
           <div aria-controls="player-controls" onTouchEnd={handleTouchEnd} onTouchMove={handleTouchMove} aria-expanded={isOpen} onClick={handleOpen}
             className={isOpen ? "control-bar-hide" : "control-bar-show"}>
@@ -195,7 +195,6 @@ function Player() {
           </div>
         </>
       )}
-
     </>
   );
 }
