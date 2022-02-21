@@ -49,6 +49,8 @@ function Player() {
 
     if (audioElement && isPlaying) {
       audioElement.play()
+    } else if (audioElement) {
+      audioElement.pause()
     }
   }
 
@@ -116,11 +118,12 @@ function Player() {
         playing={isPlaying}
         url={url}
         muted={isMuted}
+        playsinline
         config={{
           file: {
             forceAudio: false,
             attributes: {
-              autoPlay: true
+              autoPlay: false,
             },
           }
         }}
