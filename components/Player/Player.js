@@ -15,7 +15,8 @@ import {
   playPause,
   openClose,
   selectIsOpen,
-  stopAndUnload
+  stopAndUnload,
+  selectIsMuted
 } from './playerSlice'
 
 import { MdExpandMore } from 'react-icons/md'
@@ -33,17 +34,31 @@ function Player() {
   const [touching, setTouching] = useState(false);
 
   const isPlaying = useSelector(selectIsPlaying)
+  const isMuted = useSelector(selectIsMuted)
   const isOpen = useSelector(selectIsOpen)
   const prevPlayed = useSelector(selectPrevPlayed)
   const played = useSelector(selectPlayed)
   const duration = useSelector(selectDuration)
   const url = useSelector(selectUrl)
-
   const song = useSelector(selectCurrentlyPlaying)
-
   const playerRef = useRef()
-
   const isPlayerLoaded = url != null
+
+  if (isPlayerLoaded) {
+    const audioElement = playerRef.current.getInternalPlayer()
+
+    if (isPlaying && audioElement) {
+      audioElement.play()
+      console.log('play hit')
+    } else if (audioElement) {
+      console.log('pause hit')
+      audioElement.pause()
+    }
+
+    // audioElement.pause()
+
+    console.log('property', audioElement)
+  }
 
   const dispatch = useDispatch()
   const handleOpen = () => dispatch(openClose())
@@ -169,6 +184,7 @@ function Player() {
         </>
       )}
       <ReactPlayer
+        id="test-id-from-react"
         ref={playerRef}
         className="hidden"
         progressInterval={250}
@@ -177,6 +193,15 @@ function Player() {
         onEnded={() => dispatch(playNext())}
         playing={isPlaying}
         url={url}
+        muted={isMuted}
+        config={{
+          file: {
+            forceAudio: false,
+            attributes: {
+              autoplay: false
+            },
+          }
+        }}
       />
     </>
   );

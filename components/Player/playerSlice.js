@@ -137,6 +137,7 @@ export const {
 
 export default playerSlice.reducer
 export const selectIsOpen = (state) => state.player.open
+export const selectIsMuted = (state) => state.player.muted
 export const selectIsPlaying = (state) => state.player.playing
 export const selectCurrentlyPlaying = (state) => state.player.currentlyPlaying
 export const selectPlayed = (state) => state.player.played
