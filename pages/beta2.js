@@ -10,10 +10,15 @@ export default function Beta() {
   const playerRef = useRef()
 
   useEffect(() => {
-    if (songUrl && playerRef.current) {
-      const player = playerRef.current.getInternalPlayer()
-      player.load()
-      setIsPlaying(true)
+    if (songUrl) {
+      if (playerRef.current) {
+        const player = playerRef.current.getInternalPlayer()
+        if (player) {
+          console.log('loaded')
+          player.load()
+          setIsPlaying(true)
+        }
+      }
     }
   }, [songUrl])
 
@@ -25,14 +30,14 @@ export default function Beta() {
 
   const handlePlayPause = () => {
     setIsPlaying(prevState => !prevState)
-    if (playerRef.current) {
-      const player = playerRef.current.getInternalPlayer()
-      if (player.paused === true) {
-        player.play()
-      } else {
-        player.pause()
-      }
-    }
+    // if (playerRef.current) {
+    //   const player = playerRef.current.getInternalPlayer()
+    //   if (player.paused === true) {
+    //     player.play()
+    //   } else {
+    //     player.pause()
+    //   }
+    // }
   }
 
   const handleSongClick = (src) => {
@@ -73,12 +78,12 @@ export default function Beta() {
           })}
         </ul>
         <button
-          className="bg-green-300 border-gray-600 p-3 px-4 m-4 shadow-lg"
-          onClick={handlePlayPause}>{isPlaying ? "pause" : "play"}</button>
+          className="bg-pink-300 border-gray-600 p-3 px-4 m-4 shadow-lg"
+          onClick={handlePlayPause}>{!!songUrl ? "pause" : "play"}</button>
         <ReactPlayer
           ref={playerRef}
           url={songUrl}
-          playing={isPlaying}
+          playing={!!songUrl}
           playsinline
           config={{
             file: {
@@ -89,7 +94,7 @@ export default function Beta() {
             }
           }}
         />
-        
+
       </div>
 
 
