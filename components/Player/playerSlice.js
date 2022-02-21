@@ -10,7 +10,7 @@ export const playerSlice = createSlice({
     controls: false,
     light: false,
     volume: 0.0,
-    muted: true,
+    muted: false,
     played: 0,
     loaded: 0,
     duration: 0,

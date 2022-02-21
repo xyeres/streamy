@@ -198,7 +198,7 @@ function Player() {
           file: {
             forceAudio: false,
             attributes: {
-              autoplay: false
+              autoPlay: false
             },
           }
         }}
