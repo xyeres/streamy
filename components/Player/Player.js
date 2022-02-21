@@ -44,21 +44,21 @@ function Player() {
   const playerRef = useRef()
   const isPlayerLoaded = url != null
 
-  if (isPlayerLoaded) {
-    const audioElement = playerRef.current.getInternalPlayer()
+  // if (isPlayerLoaded) {
+  //   const audioElement = playerRef.current.getInternalPlayer()
 
-    if (isPlaying && audioElement) {
-      audioElement.play()
-      console.log('play hit')
-    } else if (audioElement) {
-      console.log('pause hit')
-      audioElement.pause()
-    }
+  //   if (isPlaying && audioElement) {
+  //     audioElement.play()
+  //     console.log('play hit')
+  //   } else if (audioElement) {
+  //     console.log('pause hit')
+  //     audioElement.pause()
+  //   }
 
-    // audioElement.pause()
+  //   // audioElement.pause()
 
-    console.log('property', audioElement)
-  }
+  //   console.log('property', audioElement)
+  // }
 
   const dispatch = useDispatch()
   const handleOpen = () => dispatch(openClose())
