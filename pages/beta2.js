@@ -10,7 +10,9 @@ export default function Beta() {
   const playerRef = useRef()
 
   useEffect(() => {
-    if (songUrl) {
+    if (songUrl && playerRef.current) {
+      const player = playerRef.current.getInternalPlayer()
+      player.load()
       setIsPlaying(true)
     }
   }, [songUrl])
@@ -71,7 +73,7 @@ export default function Beta() {
           })}
         </ul>
         <button
-          className="bg-purple-300 border-gray-600 p-3 px-4 m-4 shadow-lg"
+          className="bg-green-300 border-gray-600 p-3 px-4 m-4 shadow-lg"
           onClick={handlePlayPause}>{isPlaying ? "pause" : "play"}</button>
         <ReactPlayer
           ref={playerRef}
