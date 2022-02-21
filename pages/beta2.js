@@ -5,8 +5,7 @@ import ReactPlayer from "react-player";
 
 export default function Beta() {
   const [songUrl, setSongUrl] = useState(null)
-  const [isPlaying, setIsPlaying] = useState(true)
-  const song1 = 'https://firebasestorage.googleapis.com/v0/b/streamy-dev-51f11.appspot.com/o/songs%2F40dfc93e-1574-400a-a41c-4893c5fa7cfatagmp3_02-Lifting-Off.mp3?alt=media&token=8be753ad-a1fe-4bbe-9975-3fa34d093157'
+  const [isPlaying, setIsPlaying] = useState(false)
 
   const playerRef = useRef()
 
@@ -17,11 +16,21 @@ export default function Beta() {
   }, [songUrl])
 
 
+
+
   // list of songs that allow me to click various ones and it loads into
   // the player
 
   const handlePlayPause = () => {
     setIsPlaying(prevState => !prevState)
+    if (playerRef.current) {
+      const player = playerRef.current.getInternalPlayer()
+      if (player.paused === true) {
+        player.play()
+      } else {
+        player.pause()
+      }
+    }
   }
 
   const handleSongClick = (src) => {
@@ -61,6 +70,9 @@ export default function Beta() {
             )
           })}
         </ul>
+        <button
+          className="bg-red-300 border-gray-600 p-3 px-4 m-4 shadow-lg"
+          onClick={handlePlayPause}>{isPlaying ? "pause" : "play"}</button>
         <ReactPlayer
           ref={playerRef}
           url={songUrl}
@@ -74,9 +86,7 @@ export default function Beta() {
             }
           }}
         />
-        <button
-          className="bg-blue-300 border-gray-600 p-3 px-4 m-4 shadow-lg"
-          onClick={handlePlayPause}>{isPlaying?"pause":"play"}</button>
+        
       </div>
 
 
