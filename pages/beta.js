@@ -62,9 +62,7 @@ export default function Beta() {
         </ul>
         <ReactAudioPlayer
           ref={ref}
-          
           src={songUrl}
-          controls
         />
         <button
           className="bg-blue-300 border-gray-600 p-3 px-4 m-4 shadow-lg"
