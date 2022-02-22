@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const playerSlice = createSlice({
   name: 'player',
   initialState: {
+    betaUrl: null,
     url: null,
     pip: false,
     open: false,
@@ -30,6 +31,9 @@ export const playerSlice = createSlice({
     },
   },
   reducers: {
+    setBetaPlayerUrl: (state, action) => {
+      state.betaUrl = action.payload
+    },
     openClose: (state) => {
       state.open = !state.open
     },
@@ -123,6 +127,7 @@ export const playerSlice = createSlice({
 })
 
 export const {
+  setBetaPlayerUrl,
   openClose,
   playPause,
   play,

@@ -1,26 +1,18 @@
 import Layout from "../components/Layout/Layout";
 import ReactAudioPlayer from 'react-audio-player';
 import { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setBetaPlayerUrl } from "../components/Player/playerSlice";
 
-export default function Beta() {
-  const [songUrl, setSongUrl] = useState(null)
-  const song1 = 'https://firebasestorage.googleapis.com/v0/b/streamy-dev-51f11.appspot.com/o/songs%2F40dfc93e-1574-400a-a41c-4893c5fa7cfatagmp3_02-Lifting-Off.mp3?alt=media&token=8be753ad-a1fe-4bbe-9975-3fa34d093157'
-
-  let playerRef;
-
-  const ref = useRef()
+export default function Beta({ betaPlayerRef }) {
+  const dispatch = useDispatch()
 
   const handlePlay = () => {
-    if (playerRef.paused) playerRef.play()
-    else playerRef.pause()
   }
 
-  const handleSongClick = (src) => {
-    console.log('song src', src)
-    // setSongUrl(src)
-    ref.current.audioEl.current.src = src
-    ref.current.audioEl.current.load()
-    ref.current.audioEl.current.play()
+  const setSongSrc = (src) => {
+    dispatch(setBetaPlayerUrl(src))
+    console.log('song src to dispatch', src)
   }
 
   // list of songs that allow me to click various ones and it loads into
@@ -45,7 +37,7 @@ export default function Beta() {
   ]
 
   const handleLoadSong = (url) => {
-    setSongUrl(url)
+    // setSongUrl(url)
   }
 
   return (
@@ -56,14 +48,10 @@ export default function Beta() {
         <ul className="my-5">
           {songData.map((song) => {
             return (
-              <li className="underline cursor-pointer text-green-400" key={song.id} onClick={() => handleSongClick(song.src)}>{song.title}</li>
+              <li className="underline cursor-pointer text-green-400" key={song.id} onClick={() => setSongSrc(song.src)}>{song.title}</li>
             )
           })}
         </ul>
-        <ReactAudioPlayer
-          ref={ref}
-          src={songUrl}
-        />
         <button
           className="bg-blue-300 border-gray-600 p-3 px-4 m-4 shadow-lg"
           onClick={handlePlay}>button</button>
