@@ -12,7 +12,7 @@ export const playerSlice = createSlice({
     light: false,
     volume: 0.0,
     muted: false,
-    played: 0,
+    currentTime: 0,
     loaded: 0,
     duration: 0,
     playbackRate: 1.0,
@@ -56,8 +56,8 @@ export const playerSlice = createSlice({
     setDuration: (state, action) => {
       state.duration = action.payload
     },
-    progressMade: (state, action) => {
-      state.played = action.payload
+    setCurrentTime: (state, action) => {
+      state.currentTime = action.payload
     },
     playSongFromPlaylist: (state, action) => {
       // Clear Queue and Playhistory to create new context:
@@ -133,7 +133,7 @@ export const {
   play,
   stopAndUnload,
   setVolume,
-  progressMade,
+  setCurrentTime,
   playSongFromPlaylist,
   playNext,
   playPrev,
@@ -145,7 +145,7 @@ export const selectIsOpen = (state) => state.player.open
 export const selectIsMuted = (state) => state.player.muted
 export const selectIsPlaying = (state) => state.player.playing
 export const selectCurrentlyPlaying = (state) => state.player.currentlyPlaying
-export const selectPlayed = (state) => state.player.played
+export const selectCurrentTime = (state) => state.player.currentTime
 export const selectDuration = (state) => state.player.duration
 export const selectUrl = (state) => state.player.url
 export const selectQueue = (state) => state.player.queue
