@@ -4,8 +4,6 @@ import Player from "../Player/Player";
 import MenuNav from "./MenuNav";
 
 export default function LayoutWrapper({ children, home, search, library, bareBones }) {
-  const playerRef = useRef()
-
   return (
     <div className={`
       w-full
@@ -15,7 +13,7 @@ export default function LayoutWrapper({ children, home, search, library, bareBon
       {children}
 
       <Player />
-      <BetaPlayer playerRef={playerRef} />
+      <BetaPlayer />
       <nav>
         <MenuNav home={home} search={search} library={library} />
       </nav>
