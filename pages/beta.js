@@ -1,7 +1,6 @@
 import Layout from "../components/Layout/Layout";
-import ReactAudioPlayer from 'react-audio-player';
-import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import {MdMusicNote} from 'react-icons/md'
 import { setBetaPlayerUrl } from "../components/Player/playerSlice";
 
 export default function Beta({ betaPlayerRef }) {
@@ -49,9 +48,11 @@ export default function Beta({ betaPlayerRef }) {
           {songData.map((song) => {
             return (
               <li
-                className="w-36 border-2 border-pink-600 h-36 p-4 hover:bg-pink-300 bg-pink-200 m-2 cursor-pointer text-gray-600"
+                className="w-1/4 flex items-start rounded-lg shadow-sm p-4 hover:bg-blue-400 hover:text-white group bg-white m-2 cursor-pointer text-gray-600"
                 key={song.id}
-                onClick={() => setSongSrc(song.src)}>{song.title}
+                onClick={() => setSongSrc(song.src)}>
+                <span className="w-7 mt-1"><MdMusicNote className="w-full group-hover:text-white text-blue-400" /></span>
+                {song.title}
               </li>
             )
           })}
