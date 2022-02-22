@@ -45,16 +45,17 @@ export default function Beta({ betaPlayerRef }) {
       <div className="px-5 pt-20 h-screen">
         <h1>Audio Player Test</h1>
         <p>Songs: </p>
-        <ul className="my-5">
+        <ul className="my-5 flex flex-wrap">
           {songData.map((song) => {
             return (
-              <li className="underline cursor-pointer text-green-400" key={song.id} onClick={() => setSongSrc(song.src)}>{song.title}</li>
+              <li
+                className="w-36 border-2 border-pink-600 h-36 p-4 hover:bg-pink-300 bg-pink-200 m-2 cursor-pointer text-gray-600"
+                key={song.id}
+                onClick={() => setSongSrc(song.src)}>{song.title}
+              </li>
             )
           })}
         </ul>
-        <button
-          className="bg-blue-300 border-gray-600 p-3 px-4 m-4 shadow-lg"
-          onClick={handlePlay}>button</button>
       </div>
 
 
