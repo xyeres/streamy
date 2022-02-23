@@ -2,6 +2,7 @@ import Image from "next/image";
 import ErrorMessage from "../../components/Layout/ErrorMessage";
 import LoadingMsg from "../../components/Layout/LoadingMsg";
 import TracklistItem from "../../components/Tracklist/TracklistItem";
+import FeaturedPill from "../Home/FeaturedPill";
 
 export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
   const isError = listDoc.isError || tracks.isError
@@ -38,9 +39,10 @@ export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
           src={coverArt}
           className="rounded-xl"
         />
+        <div className="absolute right-5 top-16">{listDoc.data.featured ? <FeaturedPill message="Featured" /> : null}</div>
       </div>
       <h1 className="font-bold text-lg">{listDoc.data.title}</h1>
-      <p className="text-xs mb-5">{isPlaylist ? `Playlist featuring ${Array.from(artists).join(', ')}`: listDoc.data.artist}</p>
+      <p className="text-xs mb-5">{isPlaylist ? `Playlist featuring ${Array.from(artists).join(', ')}` : listDoc.data.artist}</p>
       <ul className="divide max-w-lg w-full pb-28">
         {tracklistItems}
       </ul>

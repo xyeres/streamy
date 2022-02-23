@@ -39,9 +39,30 @@ export function useAlbumsTesting(albumId) {
   }
 }
 
+export function useFeatured(coll) {
+  const { data, error } = useSWR(`${coll}/featured`, () => featuredFetcher(coll))
+  return {
+    data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+
 /*
   Fetchers, custom data fetchers for SWR custom hooks
 */
+
+export async function featuredFetcher(coll) {
+  const qRef = collection(db, coll)
+  const q = query(qRef, where('featured', '==', true))
+  const qSnapshot = await getDocs(q)
+  const docsBuffer = []
+  qSnapshot.forEach((doc) => docsBuffer.push(doc.data()))
+  if (docsBuffer.length > 0) return docsBuffer
+  else throw new Error('No featured items found')
+}
+
 
 // Get a sub collection and return all of its docs in an array
 export async function collectionGroupFetcher(path, subColl) {
