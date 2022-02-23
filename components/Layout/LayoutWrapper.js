@@ -1,5 +1,3 @@
-import { useRef } from "react";
-import BetaPlayer from "../Player/BetaPlayer";
 import Player from "../Player/Player";
 import MenuNav from "./MenuNav";
 
