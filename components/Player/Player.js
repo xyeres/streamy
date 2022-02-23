@@ -1,31 +1,14 @@
+import Image from 'next/image'
 import PropTypes from 'prop-types'
+import { useEffect, useRef, useState } from 'react'
+import { MdExpandMore, MdHourglassBottom, MdSkipNext, MdSkipPrevious } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  selectIsPlaying,
-  selectCurrentlyPlaying,
-  selectDuration,
-  selectUrl,
-  playNext,
-  setDuration,
-  playPrev,
-  setCurrentTime,
-  selectPrevPlayed,
-  playPause,
-  openClose,
-  selectIsOpen,
-  selectCurrentTime
+  openClose, playNext, playPause, playPrev, selectCurrentlyPlaying, selectCurrentTime, selectDuration, selectIsOpen, selectIsPlaying, selectPrevPlayed, selectUrl, setCurrentTime, setDuration
 } from './playerSlice'
-
-import { MdExpandMore } from 'react-icons/md'
-import {
-  MdSkipPrevious,
-  MdSkipNext,
-  MdHourglassBottom
-} from 'react-icons/md'
 import PlayOrPause from './PlayOrPause'
-import { useEffect, useRef, useState } from 'react'
 import secondsToTime from './secondsToTime'
-import Image from 'next/image'
+
 
 function Player() {
   const [seeking, setSeeking] = useState(false);
