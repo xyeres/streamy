@@ -44,11 +44,11 @@ export default function Beta({ betaPlayerRef }) {
       <div className="px-5 pt-20 h-screen">
         <h1>Audio Player Test</h1>
         <p>Songs: </p>
-        <ul className="my-5 flex flex-wrap">
+        <ul className="my-5 flex flex-col flex-wrap gap-3">
           {songData.map((song) => {
             return (
               <li
-                className="w-1/4 flex items-start rounded-lg shadow-sm p-4 hover:bg-blue-400 hover:text-white group bg-white m-2 cursor-pointer text-gray-600"
+                className="w-full border border-gray-200 sm:w-1/4 flex items-start rounded-lg shadow-sm p-4 hover:bg-blue-400 hover:text-white group bg-white sm:m-2 cursor-pointer text-gray-600"
                 key={song.id}
                 onClick={() => setSongSrc(song.src)}>
                 <span className="w-7 mt-1"><MdMusicNote className="w-full group-hover:text-white text-blue-400" /></span>
