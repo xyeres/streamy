@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { playedFromList } from "../Player/playerSlice";
+import { loadFromList, play } from "../Player/playerSlice";
 
 export default function AlbumlistItem({ song, index, listId, listSongs }) {
   const dispatch = useDispatch()
@@ -7,12 +7,11 @@ export default function AlbumlistItem({ song, index, listId, listSongs }) {
   const queue = useSelector(state => state.player.queue)
   const prevPlayed = useSelector(state => state.player.prevPlayed)
 
-  console.log('queue', queue, 'prevPlayed', prevPlayed)
+  // console.log('queue', queue, 'prevPlayed', prevPlayed)
 
   const handleItemClick = () => {
-    dispatch(playedFromList({ song, index, listId, listSongs }))
-    console.log({ song, index, listId, listSongs })
-
+    dispatch(loadFromList({ index, listId, listSongs }))
+    dispatch(play())
   }
 
   return (

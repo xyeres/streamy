@@ -4,7 +4,22 @@ import { useEffect, useRef, useState } from 'react'
 import { MdExpandMore, MdHourglassBottom, MdSkipNext, MdSkipPrevious } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  openClose, playNext, playPause, playPrev, selectCurrentlyPlaying, selectCurrentTime, selectDuration, selectIsOpen, selectIsPlaying, selectPrevPlayed, selectUrl, setCurrentTime, setDuration
+  openClose,
+  loadNext,
+  loadPrev,
+  selectCurrentlyPlaying,
+  selectCurrentTime,
+  selectDuration,
+  selectIsOpen,
+  selectIsPlaying,
+  selectPrevPlayed,
+  selectUrl,
+  setCurrentTime,
+  setDuration,
+  play,
+  pause,
+  selectQueue,
+  stopAndUnload
 } from './playerSlice'
 import PlayOrPause from './PlayOrPause'
 import secondsToTime from './secondsToTime'
@@ -12,10 +27,11 @@ import secondsToTime from './secondsToTime'
 
 function Player() {
   const [seeking, setSeeking] = useState(false);
-  const [isMediaLoading, setIsMediaLoading] = useState(true)
+  const [isMediaLoading, setIsMediaLoading] = useState(false)
 
   const isPlaying = useSelector(selectIsPlaying)
   const isOpen = useSelector(selectIsOpen)
+  const queue = useSelector(selectQueue)
   const prevPlayed = useSelector(selectPrevPlayed)
   const currentTime = useSelector(selectCurrentTime)
   const duration = useSelector(selectDuration)
@@ -36,35 +52,49 @@ function Player() {
       pRef.current.src = url
       pRef.current.title = `${song.title} by ${song.artist}`
       pRef.current.load()
-      pRef.current.play()
+    }
+
+    if (url === null) {
+      pRef.current.src = ''
     }
 
   }, [url])
 
-  
-
-  // Play audio if isPlaying changes
+  // Manage audio state if isPlaying changes
   useEffect(() => {
-    if (isPlayerLoaded) {
-      if (isPlaying) {
-        pRef.current.play()
-      } else {
-        pRef.current.pause()
+    if (isPlayerLoaded && !isMediaLoading) {
+      let playPromise = pRef.current.play()
+      // Make sure it is safe to pause
+      if (!isPlaying) {
+        if (playPromise != undefined) {
+          playPromise
+            .then(_ => {
+              pRef.current.pause()
+              dispatch(pause())
+            })
+            .catch(err => {
+              console.log('Error playing:', err.message)
+            })
+        }
       }
     }
-  }, [isPlaying])
+  }, [isPlaying, isMediaLoading])
 
   // Handle various UI clicks
   const handleOpen = () => dispatch(openClose())
+
+  const seek = (time) => {
+    // Update state
+    dispatch(setCurrentTime(time))
+    // Move playhead to correct pos
+    pRef.current.currentTime = time
+  }
 
   const handleSeekClick = (e) => {
     // Calculate normalized position
     let clickPosition = (e.pageX - progBarContainerRef.current.offsetLeft) / progBarContainerRef.current.offsetWidth
     let clickTime = parseFloat(clickPosition * duration)
-    // Update state
-    dispatch(setCurrentTime(clickTime))
-    // Move playhead to correct pos
-    pRef.current.currentTime = clickTime
+    seek(clickTime)
   }
 
   const handleProgress = () => {
@@ -73,22 +103,31 @@ function Player() {
 
     // Update Progress Bar 
     const percentage = parseFloat((currentTime / duration) * 100)
-    progressBarRef.current.style.width = `${percentage}%`
+    progressBarRef.current?.style.width = `${percentage}%`
   }
 
   const handlePrevSong = () => {
     // Play song from beginning if this is
     // first song in the playlist
     if (prevPlayed.length < 1) {
-      pRef.current.seekTo(parseFloat(0))
-      dispatch(playPause())
+      seek(0.00)
+      dispatch(play())
     } else {
-      dispatch(playPrev())
+      dispatch(loadPrev())
+      dispatch(play())
     }
   }
 
   const handleNextSong = () => {
-    dispatch(playNext())
+    if (queue.length < 1) {
+      dispatch(openClose())
+      setTimeout(function () {
+        dispatch(stopAndUnload())
+      }, 350)
+    } else {
+      dispatch(loadNext())
+      dispatch(play())
+    }
   }
 
   const handleDurationChange = () => {
@@ -145,7 +184,7 @@ function Player() {
       onError={handleMediaError}
       onDurationChange={handleDurationChange}
       onTimeUpdate={handleProgress}
-      onEnded={() => dispatch(playNext())}
+      onEnded={handleNextSong}
     >
       Your browser does not support the
       <code>audio</code> element.
@@ -175,8 +214,8 @@ function Player() {
                 </div>
               </div>
               <div onClick={(e) => e.stopPropagation()} className='flex items-center justify-center mr-4'>
-              
-                {isMediaLoading ? <MdHourglassBottom className="animate-spin text-gray-700" size="2em" /> : (
+
+                {isMediaLoading ? <MdHourglassBottom className="animate-spin text-gray-700" size="1.5em" /> : (
                   <PlayOrPause styles="text-gray-800 drop-shadow-lg cursor-pointer" size="2em" />
                 )}
               </div>
@@ -198,7 +237,7 @@ function Player() {
               {/* Animated Progress Bar */}
               <div onClick={handleSeekClick} ref={progBarContainerRef} className="relative cursor-pointer mt-4 mx-auto bg-opacity-50  bg-gray-400 w-full h-[7px]">
                 <div htmlFor='seek' ref={progressBarRef} className="h-full transition-all bg-gray-200"></div>
-                <div ref={bufferBarRef} className="h-full absolute top-0 w-0 transition-all opacity-50 bg-gray-700"></div>
+                <div ref={bufferBarRef} className="h-full absolute top-0 transition-all w-0 opacity-50 bg-red-700"></div>
               </div>
 
               {/* Time Indicators */}

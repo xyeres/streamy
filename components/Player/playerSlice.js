@@ -5,7 +5,7 @@ export const playerSlice = createSlice({
   initialState: {
     url: null,
     open: false,
-    playing: true,
+    playing: false,
     volume: 0.0,
     muted: false,
     currentTime: 0,
@@ -40,8 +40,10 @@ export const playerSlice = createSlice({
     play: (state) => {
       if (state.url != null) {
         state.playing = true
-        state.muted = false
       }
+    },
+    pause: (state) => {
+      state.playing = false
     },
     stopAndUnload: (state) => {
       state.playing = false
@@ -56,10 +58,11 @@ export const playerSlice = createSlice({
     setCurrentTime: (state, action) => {
       state.currentTime = action.payload
     },
-    playedFromList: (state, action) => {
-      const { song, listSongs, listId } = action.payload
-      const trackNumber = action.payload.song.track
+    loadFromList: (state, action) => {
+      const { listSongs, listId } = action.payload
       const listIndex = action.payload.index
+      const song = listSongs[listIndex]
+      const trackNumber = song.track
 
       // Clear Queue because we've started a new list
       state.queue = []
@@ -84,10 +87,9 @@ export const playerSlice = createSlice({
         ...song,
         playedFrom
       }
-      state.playing = true
       state.url = song.songUrl
     },
-    playNext: (state) => {
+    loadNext: (state) => {
       // Remove first song from queue
       const nextSong = state.queue.shift()
       if (nextSong) {
@@ -100,23 +102,21 @@ export const playerSlice = createSlice({
           ...nextSong,
         }
         state.url = nextSong.songUrl
-        state.playing = true
       } else {
         // If last song
 
         // Stop playing and close player
         // to alert user that the list is over
-        state.playing = false
         state.open = false
 
         // Load the first song in the songList that the user 
         // was listening to so they can start list over
-        const listSongs = state.currentlyPlaying.playedFrom.listSongs
+        const listSongs = [...state.currentlyPlaying.playedFrom.listSongs]
         const firstSongInList = listSongs.shift()
 
         if (firstSongInList) {
           state.prevPlayed = []
-          state.queue = listSongs
+          state.queue = [...listSongs]
 
           state.currentlyPlaying = {
             ...state.currentlyPlaying,
@@ -126,7 +126,7 @@ export const playerSlice = createSlice({
         }
       }
     },
-    playPrev: (state) => {
+    loadPrev: (state) => {
       let prevSong = state.prevPlayed.pop()
 
       if (prevSong) {
@@ -139,7 +139,6 @@ export const playerSlice = createSlice({
           ...prevSong
         }
         state.url = prevSong.songUrl
-        state.playing = true
       }
     }
   }
@@ -150,11 +149,13 @@ export const {
   openClose,
   playPause,
   play,
+  pause,
+  stopAndUnload,
   setVolume,
   setCurrentTime,
-  playedFromList,
-  playNext,
-  playPrev,
+  loadFromList,
+  loadNext,
+  loadPrev,
   setDuration
 } = playerSlice.actions
 
