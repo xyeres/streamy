@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import PropTypes from 'prop-types'
 import { useEffect, useRef, useState } from 'react'
 import { MdExpandMore, MdHourglassBottom, MdSkipNext, MdSkipPrevious } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,9 +25,11 @@ import secondsToTime from './secondsToTime'
 
 
 function Player() {
-  const [seeking, setSeeking] = useState(false);
+  const dispatch = useDispatch()
+  // Local State
   const [isMediaLoading, setIsMediaLoading] = useState(false)
 
+  // Selectors
   const isPlaying = useSelector(selectIsPlaying)
   const isOpen = useSelector(selectIsOpen)
   const queue = useSelector(selectQueue)
@@ -37,14 +38,15 @@ function Player() {
   const duration = useSelector(selectDuration)
   const url = useSelector(selectUrl)
   const song = useSelector(selectCurrentlyPlaying)
+
+  // Refs
   const pRef = useRef()
   const progressBarRef = useRef()
   const bufferBarRef = useRef()
   const progBarContainerRef = useRef()
 
+  // Logical
   const isPlayerLoaded = url != null
-
-  const dispatch = useDispatch()
 
   // Load a song if url changes
   useEffect(() => {
@@ -58,7 +60,7 @@ function Player() {
       pRef.current.src = ''
     }
 
-  }, [url])
+  }, [url, song.title, song.artist])
 
   // Manage audio state if isPlaying changes
   useEffect(() => {
@@ -78,7 +80,7 @@ function Player() {
         }
       }
     }
-  }, [isPlaying, isMediaLoading])
+  }, [isPlaying, isMediaLoading, isPlayerLoaded, dispatch])
 
   // Handle various UI clicks
   const handleOpen = () => dispatch(openClose())
@@ -160,9 +162,7 @@ function Player() {
     }
   }
 
-  const handleMediaError = (e) => {
-    
-  }
+  const handleMediaError = (e) => { }
 
   if (isPlayerLoaded) {
     if (isOpen) {
@@ -173,8 +173,6 @@ function Player() {
       document.body.classList.remove("overflow-hidden")
     }
   }
-
-  // onProgress = { handleProgress }
 
   const audioTag = (
     <audio
@@ -216,7 +214,6 @@ function Player() {
                 </div>
               </div>
               <div onClick={(e) => e.stopPropagation()} className='flex items-center justify-center mr-4'>
-
                 {isMediaLoading ? <MdHourglassBottom className="animate-spin text-gray-700" size="1.5em" /> : (
                   <PlayOrPause styles="text-gray-800 drop-shadow-lg cursor-pointer" size="2em" />
                 )}
@@ -260,11 +257,6 @@ function Player() {
       )}
     </>
   );
-}
-
-
-Player.propTypes = {
-  open: PropTypes.bool,
 }
 
 export default Player
