@@ -73,7 +73,7 @@ function Player() {
               dispatch(pause())
             })
             .catch(err => {
-              console.log('Error playing:', err.message)
+              console.error('Error playing:', err.message)
             })
         }
       }
@@ -103,7 +103,9 @@ function Player() {
 
     // Update Progress Bar 
     const percentage = parseFloat((currentTime / duration) * 100)
-    progressBarRef.current?.style.width = `${percentage}%`
+    if (progressBarRef.current) {
+      progressBarRef.current.style.width = `${percentage}%`
+    }
   }
 
   const handlePrevSong = () => {
@@ -159,7 +161,7 @@ function Player() {
   }
 
   const handleMediaError = (e) => {
-    console.log('error', e)
+    
   }
 
   if (isPlayerLoaded) {
@@ -237,7 +239,7 @@ function Player() {
               {/* Animated Progress Bar */}
               <div onClick={handleSeekClick} ref={progBarContainerRef} className="relative cursor-pointer mt-4 mx-auto bg-opacity-50  bg-gray-400 w-full h-[7px]">
                 <div htmlFor='seek' ref={progressBarRef} className="h-full transition-all bg-gray-200"></div>
-                <div ref={bufferBarRef} className="h-full absolute top-0 transition-all w-0 opacity-50 bg-red-700"></div>
+                <div ref={bufferBarRef} className="h-full absolute top-0 transition-all w-0 opacity-50 bg-gray-700"></div>
               </div>
 
               {/* Time Indicators */}
