@@ -20,7 +20,9 @@ export const playerSlice = createSlice({
       title: "",
       artist: "",
       playedFrom: {
-        playlistId: null,
+        listId: null,
+        listIndex: null,
+        listSongs: [],
         trackNumber: null
       }
     },
@@ -54,41 +56,42 @@ export const playerSlice = createSlice({
     setCurrentTime: (state, action) => {
       state.currentTime = action.payload
     },
-    playSongFromPlaylist: (state, action) => {
-      // Clear Queue and Playhistory to create new context:
+    playedFromList: (state, action) => {
+      const { song, listSongs, listId } = action.payload
+      const trackNumber = action.payload.song.track
+      const listIndex = action.payload.index
+
+      // Clear Queue because we've started a new list
       state.queue = []
       state.prevPlayed = []
 
-      // queue tracks in front of this one in playlist
-      const trackNumber = action.payload.song.track
+      // Populate queue and prevPlayed stack
+      const forwardTracks = listSongs.filter(((song, index) => index > listIndex))
+      const backwardTracks = listSongs.filter(((song, index) => index < listIndex))
+      state.queue.push(...forwardTracks)
+      state.prevPlayed.push(...backwardTracks)
 
-      const forward = action.payload.songsList
-        .filter((song) => song.track > trackNumber)
-      const backward = action.payload.songsList
-        .filter((song) => song.track < trackNumber)
-
-      state.queue.push(...forward)
-      state.prevPlayed.push(...backward)
-
-      // set currently playing
+      // Set played from
       const playedFrom = {
-        playlistId: action.payload.playlistId,
+        listId,
+        listIndex,
+        listSongs,
         trackNumber
       }
 
+      // Set currently playing
       state.currentlyPlaying = {
-        ...state.currentlyPlaying,
-        ...action.payload.song,
+        ...song,
         playedFrom
       }
       state.playing = true
-      state.url = action.payload.song.songUrl
+      state.url = song.songUrl
     },
     playNext: (state) => {
-      // Removes first added song and plays it
+      // Remove first song from queue
       const nextSong = state.queue.shift()
       if (nextSong) {
-        // Push currently playing song to prevPlayed for back btn
+        // Push currently playing song to prevPlayed for playPrev action
         state.prevPlayed.push(state.currentlyPlaying)
 
         // Update Currently Playing
@@ -99,7 +102,28 @@ export const playerSlice = createSlice({
         state.url = nextSong.songUrl
         state.playing = true
       } else {
+        // If last song
+
+        // Stop playing and close player
+        // to alert user that the list is over
         state.playing = false
+        state.open = false
+
+        // Load the first song in the songList that the user 
+        // was listening to so they can start list over
+        const listSongs = state.currentlyPlaying.playedFrom.listSongs
+        const firstSongInList = listSongs.shift()
+
+        if (firstSongInList) {
+          state.prevPlayed = []
+          state.queue = listSongs
+
+          state.currentlyPlaying = {
+            ...state.currentlyPlaying,
+            ...firstSongInList,
+          }
+          state.url = firstSongInList.songUrl
+        }
       }
     },
     playPrev: (state) => {
@@ -128,7 +152,7 @@ export const {
   play,
   setVolume,
   setCurrentTime,
-  playSongFromPlaylist,
+  playedFromList,
   playNext,
   playPrev,
   setDuration

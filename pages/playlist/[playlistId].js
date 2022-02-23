@@ -22,9 +22,10 @@ export default function Playlist() {
   const playlistItems = songs.data.map((song, index) => {
     return <PlaylistItem
       key={index}
-      playlistId={playlistId}
-      songsList={songs.data}
+      index={index}
       song={song}
+      listId={playlistId}
+      listSongs={songs.data}
     />
   })
 

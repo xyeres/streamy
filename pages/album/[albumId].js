@@ -1,10 +1,10 @@
-import { useRouter } from 'next/router'
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import AlbumlistItem from '../../components/Album/AlbumlistItem';
 import useCollection, { useDocument } from "../../components/CoverGrid/useAlbums";
 import ErrorMessage from "../../components/Layout/ErrorMessage";
-import LoadingMsg from "../../components/Layout/LoadingMsg";
 import Layout from '../../components/Layout/Layout';
-import AlbumlistItem from '../../components/Album/AlbumlistItem';
+import LoadingMsg from "../../components/Layout/LoadingMsg";
 
 export default function Albumlist() {
   const router = useRouter()
@@ -20,7 +20,13 @@ export default function Albumlist() {
   if (isError) return <ErrorMessage message={isError.message} />
 
   const albumlistItems = songs.data.map((song, index) => {
-    return <AlbumlistItem key={index} playlistId={albumId} songsList={songs.data} song={song} />
+    return (<AlbumlistItem
+      key={index}
+      index={index}
+      song={song}
+      listId={albumId}
+      listSongs={songs.data}
+    />)
   })
 
   return (
