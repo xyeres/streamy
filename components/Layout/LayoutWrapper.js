@@ -13,7 +13,6 @@ export default function LayoutWrapper({ children, home, search, library, bareBon
       {children}
 
       <Player />
-      <BetaPlayer />
       <nav>
         <MenuNav home={home} search={search} library={library} />
       </nav>

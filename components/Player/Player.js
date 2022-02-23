@@ -13,7 +13,6 @@ import {
   playPause,
   openClose,
   selectIsOpen,
-  stopAndUnload,
   selectCurrentTime
 } from './playerSlice'
 
@@ -30,7 +29,6 @@ import Image from 'next/image'
 
 function Player() {
   const [seeking, setSeeking] = useState(false);
-  const [touching, setTouching] = useState(false);
   const [isMediaLoading, setIsMediaLoading] = useState(true)
 
   const isPlaying = useSelector(selectIsPlaying)
@@ -44,7 +42,7 @@ function Player() {
   const progressBarRef = useRef()
   const bufferBarRef = useRef()
   const progBarContainerRef = useRef()
-  
+
   const isPlayerLoaded = url != null
 
   const dispatch = useDispatch()
@@ -53,13 +51,14 @@ function Player() {
   useEffect(() => {
     if (url != null) {
       pRef.current.src = url
-      pRef.current.title = `${song.title} from ${song.artist}`
+      pRef.current.title = `${song.title} by ${song.artist}`
       pRef.current.load()
       pRef.current.play()
-      console.log('buffered', pRef.current.buffered)
-
     }
+
   }, [url])
+
+  
 
   // Play audio if isPlaying changes
   useEffect(() => {
@@ -75,11 +74,6 @@ function Player() {
   // Handle various UI clicks
   const handleOpen = () => dispatch(openClose())
 
-  const handleTouchMove = () => setTouching(true)
-  const handleTouchEnd = () => {
-    if (touching) dispatch(stopAndUnload())
-  }
-
   const handleSeekClick = (e) => {
     // Calculate normalized position
     let clickPosition = (e.pageX - progBarContainerRef.current.offsetLeft) / progBarContainerRef.current.offsetWidth
@@ -90,19 +84,9 @@ function Player() {
     pRef.current.currentTime = clickTime
   }
 
-  const handleSeekMouseDown = (e) => {
-    setSeeking(true)
-  }
-
-  const handleSeekMouseUp = (e) => {
-    setSeeking(false)
-  }
-
   const handleProgress = () => {
     // Update State
-    if (!seeking) {
-      dispatch(setCurrentTime(pRef.current.currentTime))
-    }
+    dispatch(setCurrentTime(pRef.current.currentTime))
 
     // Update Progress Bar 
     const percentage = parseFloat((currentTime / duration) * 100)
@@ -139,14 +123,21 @@ function Player() {
   }
 
   const handleOnProgress = () => {
-    if (duration > 0){
-      for (let i = 0; i < pRef.current.buffered.length; i++) {
-        if (pRef.current.buffered.start(pRef.current.buffered.length - 1 - i) < pRef.current.currentTime) {
-          bufferBarRef.current.style.width = (pRef.current.buffered.end(pRef.current.length - 1 - i) / duration) * 100 + "%"
+    const audio = pRef.current
+    if (duration > 0) {
+      for (var i = 0; i < audio.buffered.length; i++) {
+        if (audio.buffered.start(audio.buffered.length - 1 - i)
+          < audio.currentTime) {
+          bufferBarRef.current.style.width =
+            (audio.buffered.end(audio.buffered.length - 1 - i) / duration) * 100 + "%";
           break;
         }
       }
     }
+  }
+
+  const handleMediaError = (e) => {
+    console.log('error', e)
   }
 
   if (isPlayerLoaded) {
@@ -168,6 +159,7 @@ function Player() {
       onProgress={handleOnProgress}
       onCanPlay={handleCanPlay}
       onLoadStart={handleLoadStart}
+      onError={handleMediaError}
       onDurationChange={handleDurationChange}
       onTimeUpdate={handleProgress}
       onEnded={() => dispatch(playNext())}
@@ -183,7 +175,7 @@ function Player() {
       {isPlayerLoaded && (
         <>
           {/* Control Bar */}
-          <div aria-controls="player-controls" onTouchEnd={handleTouchEnd} onTouchMove={handleTouchMove} aria-expanded={isOpen} onClick={handleOpen}
+          <div aria-controls="player-controls" aria-expanded={isOpen} onClick={handleOpen}
             className={isOpen ? "control-bar-hide" : "control-bar-show"}>
             <span className="sr-only">Player Controls</span>
             <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100">
@@ -200,6 +192,7 @@ function Player() {
                 </div>
               </div>
               <div onClick={(e) => e.stopPropagation()} className='flex items-center justify-center mr-4'>
+              
                 {isMediaLoading ? <MdHourglassBottom className="animate-spin text-gray-700" size="2em" /> : (
                   <PlayOrPause styles="text-gray-800 drop-shadow-lg cursor-pointer" size="2em" />
                 )}
@@ -209,12 +202,6 @@ function Player() {
 
           {/* Full Screen Player */}
           <div id="player-controls" className={`${isOpen ? "player-show" : "player-hide"}`}>
-
-            {/* <div className="absolute bottom-14 left-2 text-xs text-gray-600">
-              <p>DEBUG MODE: From Playlist ID: {song.playedFrom.playlistId}</p>
-              <p>Track number: {song.track}</p>
-              </div> */}
-
             <MdExpandMore size="1.75em" onClick={handleOpen} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[32px] left-5" />
             <div className="mt-[86px] relative px-8 aspect-square min-w-[240px] min-h-[240px] sm:min-w-[400px] sm:min-h-[400px] max-w-md mx-8">
               <Image priority layout='fill' objectFit='cover' className='my-8' objectPosition="50% 50%" src={song.coverUrl} alt="album cover" />
@@ -226,9 +213,9 @@ function Player() {
               </div>
 
               {/* Animated Progress Bar */}
-              <div onClick={handleSeekClick} ref={progBarContainerRef} className="cursor-pointer mt-4 mx-auto bg-opacity-50  bg-gray-400 w-full h-[7px]">
+              <div onClick={handleSeekClick} ref={progBarContainerRef} className="relative cursor-pointer mt-4 mx-auto bg-opacity-50  bg-gray-400 w-full h-[7px]">
                 <div htmlFor='seek' ref={progressBarRef} className="h-full transition-all bg-gray-200"></div>
-                <div ref={bufferBarRef} className="h-full transition-all bg-gray-50"></div>
+                <div ref={bufferBarRef} className="h-full absolute top-0 w-0 transition-all opacity-50 bg-gray-700"></div>
               </div>
 
               {/* Time Indicators */}
@@ -237,7 +224,7 @@ function Player() {
                 <p>{secondsToTime(duration - currentTime)}</p>
               </div>
 
-              {/* Icon Controls */}
+              {/* Prev/Play/Next Controls */}
               <div className="flex items-center px-8 justify-around mt-5 drop-shadow-lg">
                 <MdSkipPrevious onClick={handlePrevSong} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
                 <PlayOrPause size="3em" styles={"cursor-pointerfill-white opacity-90 hover:opacity-100"} />
