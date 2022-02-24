@@ -22,9 +22,9 @@ export default function UploaderListItem({ file }) {
   }, [file]);
 
   return (
-    <li className="flex place-content-between items-center bg-pink-700 text-white p-2">
+    <li className="flex place-content-between items-center bg-blue-700 text-white p-2">
       <span>
-        {url ? <a href={url} className="bg-pink-900 text-white p-1.5 rounded-xl text-xs mr-2 ">View</a> : null}
+        {url ? <a href={url} className="bg-blue-900 text-white p-1.5 rounded-xl text-xs mr-2 ">View</a> : null}
         {status.item.length < 31 ? status.item : status.item.slice(0, 31) + '...'}
       </span>
       <span className="text-right">

@@ -38,11 +38,14 @@ export default function UploadDashboard() {
         onDragLeave={onDragOut}
         onDrop={onDrop}
         className={isDragging ?
-          'm-10 flex flex-col items-center justify-center bg-pink-200 p-16 border-dashed border-4 border-pink-900' :
-          'm-10 flex flex-col items-center justify-center border-dashed border-4 border-pink-400 bg-pink-100 p-16'}
+          'h-96 my-8 flex flex-col items-center justify-center bg-blue-200 p-8 border-dashed border-2 border-blue-900' :
+          'h-96 my-8 flex flex-col items-center justify-center border-dashed p-8 border-2 border-blue-400 bg-blue-100'}
       >
         <p className="font-bold">Drag files here to upload</p>
-        <label htmlFor="fileInput" className="m-4 p-4 text-white font-bold bg-pink-300 hover:bg-pink-400 hover:drop-shadow-sm rounded-lg border-solid border-4 border-pink-500">Or browse for a file</label>
+        <label htmlFor="fileInput" 
+          className="mt-5 p-4 text-white font-bold bg-blue-500 hover:bg-blue-600 hover:drop-shadow-sm rounded-lg">
+          Or browse for a file
+        </label>
         <input className="sr-only" onChange={onFileInputChange} multiple id="fileInput" type='file' />
         <UploaderList files={filesToUpload} />
       </div>
