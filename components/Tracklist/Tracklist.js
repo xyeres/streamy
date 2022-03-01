@@ -11,12 +11,14 @@ export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
   if (isLoading) return <LoadingMsg message="Loading playlist!" />
   if (isError) return <ErrorMessage message={isError.message} />
 
-  const isPlaylist = !listDoc.data.artist
+  const isPlaylist = !!listDoc.data.listType
   const artists = new Set()
   const coverArt = tracks.data[0].coverUrl
 
   const tracklistItems = tracks.data.map((song, index) => {
     artists.add(song.artist)
+    
+    delete song.lastUpdated
 
     return <TracklistItem
       key={index}

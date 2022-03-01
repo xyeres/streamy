@@ -15,13 +15,12 @@ function Grid() {
         path="/album"
         keywords={{field: 'tags', opStr: 'array-contains', value: 'new'}}
         swrkey="recentlyAdded"
-
       />
-      <CategoryHeader title="The OG Collection" />
+      <CategoryHeader title="Early Live EPs" />
       <CoverGrid
         path="/album"
-        keywords={{ field: 'tags', opStr: 'array-contains', value: 'og' }}
-        swrkey="og"
+        keywords={{ field: 'tags', opStr: 'array-contains', value: 'monthlyep' }}
+        swrkey="monthlyep"
       />
       <CategoryHeader title="Featured Album" />
       <FeaturedCard featuredColl="albums" />
@@ -30,11 +29,12 @@ function Grid() {
         path="/playlist"
         coll="playlists"
       />
-      <CategoryHeader title="Live and Raw" />
+      <CategoryHeader title="Studio albums" />
       <CoverGrid
         path="/album"
-        limit={5}
-        swrkey="raw"
+        limit={12}
+        swrkey="studioAlbums"
+        keywords={{ field: 'tags', opStr: 'array-contains', value: 'studio' }}
       />
     </div>
   )
