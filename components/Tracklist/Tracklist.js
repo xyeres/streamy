@@ -13,7 +13,7 @@ export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
 
   const isPlaylist = !!listDoc.data.listType
   const artists = new Set()
-  const coverArt = tracks.data[0].coverUrl
+  let coverArt = listDoc.data.coverUrl
 
   const tracklistItems = tracks.data.map((song, index) => {
     artists.add(song.artist)
@@ -39,7 +39,7 @@ export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
           height={380}
           width={380}
           src={coverArt}
-          className="rounded-xl"
+          className="rounded-xl aspect-square object-cover"
         />
         <div className="absolute right-5 top-16">{listDoc.data.featured ? <FeaturedPill message="Featured" /> : null}</div>
       </div>
