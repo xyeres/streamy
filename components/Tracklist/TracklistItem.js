@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { loadFromList, play } from "../Player/playerSlice";
 
@@ -13,19 +14,30 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
     dispatch(loadFromList({ index, listId, listSongs }))
     dispatch(play())
   }
+  const trackNo = useMemo(() => index + 1, [index])
+  const duration = useMemo(() => (song.format.duration / 60).toFixed(2).replace('.', ':'), [song])
 
   return (
-    <li onClick={handleItemClick} className="list-none cursor-pointer hover:bg-gray-100 transition-colors duration-200 flex flex-row text-xs py-2 items-center">
+    <li onClick={handleItemClick} className="list-none cursor-pointer hover:bg-gray-100 transition-colors duration-200 
+    flex flex-row text-xs p-2 items-center">
+      <span className="text-xs mr-2">{trackNo}</span>
+
       {thumbnail &&
-        <Image width={32} height={32} className="rounded-full object-cover h-8 w-8" src={song.coverUrl} alt={song.album} />
+        <Image width={28} height={28} className="rounded-none flex-grow object-cover h-7 w-7" src={song.coverUrl} alt={song.album} />
       }
-      <div className="flex-grow ml-3">
-        <div className="flex p-1 justify-between">
-          <p className="font-bold">{song.title}</p>
+      <div className="flex-grow flex text-left items-center justify-between ml-2">
+        <div className='w-full pr-2'>
+          <div className="flex items-start justify-between">
+            <p className="font-bold">{song.title}</p>
+          </div>
+          <div>
+            <span className="">{song.artist}</span>
+          </div>
         </div>
-        <div>
-          <span className="p-1">{song.artist}</span>
-        </div>
+        <span className="pr-3 w-full justify-self-start">
+          {song.album.length > 22 ? song.album.slice(0, 22) + '...' : song.album}
+        </span>
+        <span className="">{duration}</span>
       </div>
     </li>
   );
