@@ -28,15 +28,19 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
       <div className="flex-grow flex text-left items-center justify-between ml-2">
         <div className='w-full pr-2'>
           <div className="flex items-start justify-between">
-            <p className="font-bold">{song.title}</p>
+            <p className="font-bold">
+              {song.title.length > 38 ? song.title.slice(0, 38) + '...' : song.title}
+            </p>
           </div>
           <div>
             <span className="">{song.artist}</span>
           </div>
         </div>
-        <span className="pr-3 w-full justify-self-start">
-          {song.album.length > 22 ? song.album.slice(0, 22) + '...' : song.album}
-        </span>
+        {!!thumbnail &&
+          (<span className="pr-3 w-full justify-self-start">
+            {song.album.length > 22 ? song.album.slice(0, 22) + '...' : song.album}
+          </span>)
+        }
         <span className="">{duration}</span>
       </div>
     </li>
