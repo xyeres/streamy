@@ -13,11 +13,9 @@ function Grid() {
       <CategoryHeader title="Recently Added" />
       <CoverGrid
         path="/album"
-        limit={12}
         coll="albums"
-        swrPath="recentAdded"
+        swrPath="lots"
         order="lastUpdated"
-        keyword={{ field: "tag", value: "2020-2021" }}
       />
       <CategoryHeader title="Featured Album" />
       <FeaturedCard />
@@ -29,12 +27,14 @@ function Grid() {
         order="title"
         limit={7}
       />
-      <CategoryHeader title="Raw Live Sessions" />
+      <CategoryHeader title="New for 2021-2022" />
       <CoverGrid
         path="/album"
+        limit={12}
         coll="albums"
-        swrPath="lots"
+        swrPath="recentAdded"
         order="lastUpdated"
+        keyword={{ field: "tag", value: "2020-2021" }}
       />
     </div>
   )
