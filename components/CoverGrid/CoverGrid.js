@@ -6,11 +6,11 @@ import LoadingMsgResponsive from "../Layout/LoadingMsgResponsive";
 
 function CoverGrid({ coll, path, order, limit, swrkey, keywords }) {
 
-  let dataFetcher;
-  if (path === '/album') dataFetcher = () => useAlbums(keywords, order, limit, swrkey)
-  if (path === '/playlist') dataFetcher = () => useCollection(coll)
+  let useDataFetcher;
+  if (path === '/album') useDataFetcher = () => useAlbums(keywords, order, limit, swrkey)
+  if (path === '/playlist') useDataFetcher = () => useCollection(coll)
 
-  const { data, isLoading, isError } = dataFetcher()
+  const { data, isLoading, isError } = useDataFetcher()
   
   if (isError) return <ErrorMsgResponsive message={isError.message} />
   if (isLoading) return <LoadingMsgResponsive message="Loading..." />
