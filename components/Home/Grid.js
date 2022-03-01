@@ -13,28 +13,28 @@ function Grid() {
       <CategoryHeader title="Recently Added" />
       <CoverGrid
         path="/album"
-        coll="albums"
-        swrPath="lots"
-        order="lastUpdated"
+        keywords={{field: 'tags', opStr: 'array-contains', value: 'new'}}
+        swrkey="recentlyAdded"
+
+      />
+      <CategoryHeader title="The OG Collection" />
+      <CoverGrid
+        path="/album"
+        keywords={{ field: 'tags', opStr: 'array-contains', value: 'og' }}
+        swrkey="og"
       />
       <CategoryHeader title="Featured Album" />
-      <FeaturedCard />
+      <FeaturedCard featuredColl="albums" />
       <CategoryHeader title="New playlists" />
       <CoverGrid
         path="/playlist"
         coll="playlists"
-        swrPath="homePlaylists"
-        order="title"
-        limit={7}
       />
-      <CategoryHeader title="New for 2021-2022" />
+      <CategoryHeader title="Live and Raw" />
       <CoverGrid
         path="/album"
-        limit={12}
-        coll="albums"
-        swrPath="recentAdded"
-        order="lastUpdated"
-        keyword={{ field: "tag", value: "2020-2021" }}
+        limit={5}
+        swrkey="raw"
       />
     </div>
   )

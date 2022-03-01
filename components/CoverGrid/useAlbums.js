@@ -2,16 +2,25 @@ import { query, orderBy, collection, getDocs, doc, getDoc, where, collectionGrou
 import { db } from "../../lib/firebase";
 import useSWR from "swr";
 
-export default function useCollection(coll, order=null, limit=1000, keyword=null, swrPath=null) {
-  if (swrPath === null) swrPath = coll
-
-  const { data, error } = useSWR(swrPath, () => collectionFetcher(coll, order, limit, keyword))
+export default function useCollection(coll, order = null, limit = 7) {
+  const { data, error } = useSWR(`${coll}/${order}`, () => collectionFetcher(coll, order, limit))
   return {
     data,
     isLoading: !error && !data,
     isError: error
   }
 }
+
+export function useAlbums(keywords = null, order = null, itemLimit = 12, swrkey) {
+  const { data, error } = useSWR(swrkey, () => albumsFetcher(keywords, order, itemLimit))
+  return {
+    data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+
 
 export function useDocument(collection, id) {
   const { data, error } = useSWR(`${collection}/${id}`, documentFetcher)
@@ -56,8 +65,8 @@ export function useFeatured(coll) {
 */
 
 export async function featuredFetcher(coll) {
-  const qRef = collection(db, coll)
-  const q = query(qRef, where('featured', '==', true))
+  const qRef = collectionGroup(db, coll)
+  const q = query(qRef, where('tags', 'array-contains', 'featured'))
   const qSnapshot = await getDocs(q)
   const docsBuffer = []
   qSnapshot.forEach((doc) => docsBuffer.push(doc.data()))
@@ -80,6 +89,29 @@ export async function collectionGroupFetcher(path, subColl) {
 
   if (buffer.length > 0) return buffer
   else throw new Error("No documents found in collection group")
+}
+
+// Get a sub collection and return all of its docs in an array
+export async function albumsFetcher(keywords, order, itemLimit) {
+  const buffer = []
+  const qRef = collectionGroup(db, 'albums')
+
+  let q
+  if (keywords) {
+    const { field, opStr, value } = keywords
+    q = query(qRef, where(field, opStr, value), limit(itemLimit))
+  } else if (order) {
+    q = query(qRef, orderBy(order), limit(itemLimit))
+  } else {
+    q = query(qRef, limit(itemLimit))
+  }
+
+
+  const qSnap = await getDocs(q)
+  qSnap.forEach((doc) => buffer.push(doc.data()))
+
+  if (buffer.length > 0) return buffer
+  else throw new Error("Woops, no albums here yet")
 }
 
 export async function albumsTesting(albumId) {
@@ -113,14 +145,12 @@ export async function albumsTesting(albumId) {
   } else throw new Error(`URL for "${albumId}" does not exist.`)
 }
 
-export async function collectionFetcher(coll, order, itemLimit, keyword) {
+export async function collectionFetcher(coll, order, itemLimit) {
 
   const qRef = collection(db, coll)
   let q;
 
-  if (keyword) {
-    q = query(qRef, where(keyword.field, '==', keyword.value), limit(itemLimit))
-  } else if (order) {
+  if (order) {
     q = query(qRef, orderBy(order), limit(itemLimit))
   } else {
     q = query(qRef, limit(itemLimit))

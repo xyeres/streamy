@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { MdFiberNew } from 'react-icons/md'
 import { useFeatured } from '../CoverGrid/useAlbums';
 import {MdFeedback} from 'react-icons/md'
-export default function FeaturedCard({ item }) {
-  const { data, isError, isLoading } = useFeatured('albums')
+export default function FeaturedCard({ item, featuredColl }) {
+  const { data, isError, isLoading } = useFeatured(featuredColl)
 
   if (isLoading) return 'Loading featured item'
   if (isError) return (
