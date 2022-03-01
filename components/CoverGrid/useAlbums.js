@@ -2,7 +2,9 @@ import { query, orderBy, collection, getDocs, doc, getDoc, where, collectionGrou
 import { db } from "../../lib/firebase";
 import useSWR from "swr";
 
-export default function useCollection(coll, order, limit, keyword, swrPath) {
+export default function useCollection(coll, order=null, limit=1000, keyword=null, swrPath=null) {
+  if (swrPath === null) swrPath = coll
+
   const { data, error } = useSWR(swrPath, () => collectionFetcher(coll, order, limit, keyword))
   return {
     data,
@@ -118,8 +120,10 @@ export async function collectionFetcher(coll, order, itemLimit, keyword) {
 
   if (keyword) {
     q = query(qRef, where(keyword.field, '==', keyword.value), limit(itemLimit))
-  } else {
+  } else if (order) {
     q = query(qRef, orderBy(order), limit(itemLimit))
+  } else {
+    q = query(qRef, limit(itemLimit))
   }
 
   const qSnapshot = await getDocs(q)
