@@ -1,9 +1,9 @@
-import { query, orderBy, collection, getDocs, doc, getDoc, where, collectionGroup } from "firebase/firestore";
+import { query, orderBy, collection, getDocs, doc, getDoc, where, collectionGroup, limit } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import useSWR from "swr";
 
-export default function useCollection(path, order) {
-  const { data, error } = useSWR(path, () => collectionFetcher(path, order))
+export default function useCollection(coll, order, limit, keyword, swrPath) {
+  const { data, error } = useSWR(swrPath, () => collectionFetcher(coll, order, limit, keyword))
   return {
     data,
     isLoading: !error && !data,
@@ -111,16 +111,22 @@ export async function albumsTesting(albumId) {
   } else throw new Error(`URL for "${albumId}" does not exist.`)
 }
 
-export async function collectionFetcher(path, order) {
+export async function collectionFetcher(coll, order, itemLimit, keyword) {
 
-  const qRef = collection(db, path)
-  const q = query(qRef, orderBy(order))
+  const qRef = collection(db, coll)
+  let q;
+
+  if (keyword) {
+    q = query(qRef, where(keyword.field, '==', keyword.value), limit(itemLimit))
+  } else {
+    q = query(qRef, orderBy(order), limit(itemLimit))
+  }
+
   const qSnapshot = await getDocs(q)
   const docsBuffer = []
   qSnapshot.forEach((doc) => docsBuffer.push(doc.data()))
   if (docsBuffer.length > 0) return docsBuffer
   else throw new Error('No playlist items found')
-
 }
 
 export async function documentFetcher(id) {

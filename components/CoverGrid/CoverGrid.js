@@ -1,8 +1,14 @@
 import CoverGridItem from "./CoverGridItem";
 import PropTypes from 'prop-types'
+import useCollection from "./useAlbums";
 
-function CoverGrid({ items, path }) {
-  const albumItems = items.map((item, index) => {
+function CoverGrid({ path, coll, order, limit, keyword, swrPath }) {
+  const {data, isLoading, isError} = useCollection(coll, order, limit, keyword, swrPath)
+  
+  if (isError) return <>isError.message</>
+  if (isLoading) return <>Loading...</>
+
+  const albumItems = data.map((item, index) => {
     return <CoverGridItem key={index} path={path} item={item} />
   })
   return (
@@ -14,9 +20,5 @@ function CoverGrid({ items, path }) {
   );
 }
 
-
-CoverGrid.propTypes = {
-  items: PropTypes.array.isRequired
-}
 
 export default CoverGrid
