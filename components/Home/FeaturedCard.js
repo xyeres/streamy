@@ -2,19 +2,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { MdFiberNew } from 'react-icons/md'
 import { useFeatured } from '../CoverGrid/useAlbums';
-import {MdFeedback} from 'react-icons/md'
+import { MdFeedback } from 'react-icons/md'
+import ErrMsgHome from '../Layout/ErrMsgHome'
+import LoadingFeaturedItem from '../Layout/LoadingFeaturedItem'
+
 export default function FeaturedCard({ item, featuredColl }) {
   const { data, isError, isLoading } = useFeatured(featuredColl)
 
-  if (isLoading) return 'Loading featured item'
-  if (isError) return (
-    <div className="p-4 rounded-md bg-gray-200 text-xs font-semibold m-4 flex items-center">
-      <MdFeedback className="text-gray-500" size="1.25em" />
-      <div className="pl-2">
-        {isError.message}
-      </div>
-    </div>
-  )
+  if (isError) return <ErrMsgHome message={isError.message} />
+  if (isLoading) return <LoadingFeaturedItem />
 
   const feature = data[0]
 
