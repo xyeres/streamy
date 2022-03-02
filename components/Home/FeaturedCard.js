@@ -21,8 +21,8 @@ export default function FeaturedCard({ item, featuredColl }) {
           <Image src={feature.coverUrl} width={180} height={180} alt={feature.title} className="rounded-xl max-w-[96px] sm:max-w-[210px] aspect-square" />
           <div className="ml-4 mt-1 group-hover:text-white">
             <div className="flex flex-row items-start">
-              <MdFiberNew size="1.35em" className="group-hover:text-white inline mt-1 mr-1" />
               <h3 className="font-bold">{feature.title}</h3>
+              <MdFiberNew size="1.35em" className="group-hover:text-white inline mt-1 ml-1" />
             </div>
             <p className="text-sm mt-2">{feature.promo}</p>
           </div>
