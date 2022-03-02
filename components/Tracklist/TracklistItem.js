@@ -20,12 +20,12 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
   return (
     <li onClick={handleItemClick} className="list-none cursor-pointer hover:bg-gray-100 transition-colors duration-200 
     flex flex-row text-xs p-2 items-center">
-      <span className="text-xs mr-2">{trackNo}</span>
+      <span className="text-xs mr-3">{trackNo}</span>
 
       {thumbnail &&
         <Image width={28} height={28} className="rounded-none flex-grow object-cover h-7 w-7" src={song.coverUrl} alt={song.album} />
       }
-      <div className="flex-grow flex text-left items-center justify-between ml-2">
+      <div className="flex-grow flex text-left items-center justify-between ml-3">
         <div className='w-full pr-2'>
           <div className="flex items-start justify-between">
             <p className="font-bold">
@@ -36,11 +36,11 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
             <span className="">{song.artist}</span>
           </div>
         </div>
-        {!!thumbnail &&
+        {/* {!!thumbnail &&
           (<span className="pr-3 w-full justify-self-start">
             {song.album.length > 22 ? song.album.slice(0, 22) + '...' : song.album}
           </span>)
-        }
+        } */}
         <span className="">{duration}</span>
       </div>
     </li>
