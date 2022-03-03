@@ -14,7 +14,7 @@ export default function Library() {
 
   return (
     <Layout library>
-      <div className="overflow-hidden text-center m-4 gap-6 text-slate-600 flex flex-col items-center justify-center h-[80vh]">
+      <div className="overflow-hidden text-center m-4 gap-6 text-slate-600 flex flex-col items-center justify-center h-[76vh]">
         {!sent && (
           <>
             <GiHeartBottle size="6em" className="drop-shadow-md hover:drop-shadow-lg transition-all" />
