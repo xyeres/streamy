@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { loadFromList, play } from "../Player/playerSlice";
+import { loadFromList, play, selectCurrentlyPlaying, selectIsPlaying } from "../Player/playerSlice";
+import { CgLoadbarSound } from 'react-icons/cg'
 
 export default function TracklistItem({ song, index, listId, listSongs, thumbnail }) {
   const dispatch = useDispatch()
@@ -14,6 +15,10 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
     dispatch(loadFromList({ index, listId, listSongs }))
     dispatch(play())
   }
+
+  const currentlyPlaying = useSelector(selectCurrentlyPlaying)
+  const isPlaying = useSelector(selectIsPlaying)
+
   const trackNo = useMemo(() => index + 1, [index])
   const duration = useMemo(() => (song.format.duration / 60).toFixed(2).replace('.', ':'), [song])
 
@@ -45,6 +50,7 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
             {song.album.length > 22 ? song.album.slice(0, 22) + '...' : song.album}
           </span>)
         } */}
+        {(currentlyPlaying.slug === song.slug && isPlaying) ? <CgLoadbarSound size="2em" className="animate-pulse mr-2" /> : null}
         <span className="">{duration}</span>
       </div>
     </li>
