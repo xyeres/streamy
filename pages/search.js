@@ -34,7 +34,7 @@ export default function Search() {
 
   const CustomHits = connectHits(Hits)
 
-  const SearchBox = ({ currentRefinement, refine, isSearchStalled }) => {
+  const SearchBox = ({ currentRefinement, refine }) => {
     return (
       <div className="relative">
         <input
@@ -46,7 +46,6 @@ export default function Search() {
         />
         <FaAlgolia size="1.25em" className="text-gray-300 top-[10px] right-5 absolute" />
         <MdOutlineSearch size="1.25em" className="text-gray-500 top-3 left-4 absolute" />
-        {isSearchStalled ? 'Search stalled' : ''}
       </div>
     )
   }
