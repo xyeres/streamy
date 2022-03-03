@@ -44,7 +44,7 @@ export default function Search() {
           onChange={(e) => refine(e.currentTarget.value)}
           className="bg-gray-100 mb-4 focus:outline-2 text-gray-500 focus:outline-gray-400 p-2 px-4 pl-12 rounded-3xl w-full"
         />
-        <FaAlgolia size="1.25em" className="text-gray-300 top-[10px] right-5 absolute" />
+        <FaAlgolia size="1.25em" className="text-gray-200 top-[9px] right-5 absolute" />
         <MdOutlineSearch size="1.25em" className="text-gray-500 top-3 left-4 absolute" />
       </div>
     )

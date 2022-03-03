@@ -7,7 +7,7 @@ export default function SongResultList({ data }) {
   })
 
   return (
-    <div className="my-9">
+    <div className="mb-9">
       <ul>
         {songResultItems}
       </ul>
