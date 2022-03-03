@@ -1,11 +1,15 @@
 import SongResultListItem from "./SongResultListItem";
 
-export default function SongResultList() {
+export default function SongResultList({ data }) {
+
+  const songResultItems = data.map((song, index) => {
+    return <SongResultListItem key={index} song={song} />
+  })
+
   return (
     <div className="my-9">
-      <h2 className="font-bold text-xs mb-4">Songs</h2>
       <ul>
-        <SongResultListItem />
+        {songResultItems}
       </ul>
     </div>
   )

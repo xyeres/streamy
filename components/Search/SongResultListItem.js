@@ -1,50 +1,33 @@
+import Image from "next/image"
 import Link from "next/link"
+import { useDispatch } from "react-redux"
+import { loadFromList, play } from "../Player/playerSlice"
 
-export default function SongResultListItem() {
+export default function SongResultListItem({ song }) {
+  const dispatch = useDispatch()
+
+  const handleSongClick = () => {
+    dispatch(loadFromList({ index: 0, listId: song.albumSlug, listSongs: [{ ...song }] }))
+    dispatch(play())
+  }
   return (
-    <>
-      <Link href="/song/239dfskl32">
-        <a>
-          <li className="hover:bg-gray-200 hover:rounded-md p-[6px] flex flex-row text-sm">
-            <div
-              alt="cover image"
-              className="w-12 h-12 mr-3 shadow-sm bg-yellow-300 object-cover aspect-square rounded-md"
-            ></div>
-            <div className="flex flex-col justify-center w-full">
-              <p className="font-bold">Clouds on Sunset</p>
-              <p className="text-gray-500 text-xs">Moby</p>
-            </div>
-          </li>
+    <li onClick={handleSongClick} className="hover:bg-gray-200 hover:rounded-md p-[6px] text-sm">
+      <Link href={`album/${song.albumSlug}`}>
+        <a className="flex flex-row">
+          <div className="flex-shrink-0">
+            <Image
+              width={48}
+              height={48}
+              src={song.coverUrl}
+              className="shadow-sm flex-shrink-0 bg-yellow-300 object-cover aspect-square rounded-md"
+            />
+          </div>
+          <div className="flex flex-col justify-center w-full ml-3">
+            <p className="font-bold">{song.title}</p>
+            <p className="text-gray-500 text-xs">{song.artist}</p>
+          </div>
         </a>
       </Link>
-      <Link href="/song/dgflk56t2">
-        <a>
-          <li className="hover:bg-gray-200 hover:rounded-md p-[6px] flex flex-row text-sm">
-            <div
-              alt="cover image"
-              className="w-12 h-12 mr-3 shadow-sm bg-orange-300 object-cover aspect-square rounded-md"
-            ></div>
-            <div className="flex flex-col justify-center w-full">
-              <p className="font-bold">The Sun Never Stops Setting</p>
-              <p className="text-gray-500 text-xs">Moby</p>
-            </div>
-          </li>
-        </a>
-      </Link>
-      <Link href="/song/3242f324">
-        <a>
-          <li className="hover:bg-gray-200 hover:rounded-md p-[6px] flex flex-row text-sm">
-            <div
-              alt="cover image"
-              className="w-12 h-12 mr-3 shadow-sm bg-purple-300 object-cover aspect-square rounded-md"
-            ></div>
-            <div className="flex flex-col justify-center w-full">
-              <p className="font-bold">My Baby Sunshine</p>
-              <p className="text-gray-500 text-xs">Moby</p>
-            </div>
-          </li>
-        </a>
-      </Link>
-    </>
+    </li>
   )
 }

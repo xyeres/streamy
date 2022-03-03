@@ -1,17 +1,13 @@
-import { useState } from "react"
 import { MdOutlineSearch, MdOutlineMusicNote, MdQueueMusic } from "react-icons/md"
+import { FaAlgolia } from 'react-icons/fa'
+import { InstantSearch, connectHits, connectSearchBox } from 'react-instantsearch-dom'
 import Layout from "../components/Layout/Layout"
+import algoliasearch from 'algoliasearch/lite'
 
-import AlbumResultList from "../components/Search/AlbumResultList"
-import PlaylistResultList from "../components/Search/PlaylistResultList"
 import SongResultList from "../components/Search/SongResultList"
 
 export default function Search() {
-  const [searchInput, setSearchInput] = useState("")
-
-  const handleInput = (e) => {
-    setSearchInput(e.target.value)
-  }
+  const searchClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID, process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY)
 
   const Loading = () => {
     return (
@@ -31,27 +27,39 @@ export default function Search() {
     )
   }
 
+  const Hits = ({ hits }) => {
+    console.log('hits', hits)
+    return <SongResultList data={hits} />
+  }
+
+  const CustomHits = connectHits(Hits)
+
+  const SearchBox = ({ currentRefinement, refine, isSearchStalled }) => {
+    return (
+      <div className="relative">
+        <input
+          type="text"
+          placeholder="Artist, album, song"
+          value={currentRefinement}
+          onChange={(e) => refine(e.currentTarget.value)}
+          className="bg-gray-100 mb-4 focus:outline-2 text-gray-500 focus:outline-gray-400 p-2 px-4 pl-12 rounded-3xl w-full"
+        />
+        <FaAlgolia size="1.25em" className="text-gray-300 top-[10px] right-5 absolute" />
+        <MdOutlineSearch size="1.25em" className="text-gray-500 top-3 left-4 absolute" />
+        {isSearchStalled ? 'Search stalled' : ''}
+      </div>
+    )
+  }
+
+  const CustomSearchBox = connectSearchBox(SearchBox)
+
   return (
     <Layout search>
       <div className="p-4 w-full">
-        <div className="relative">
-          <input
-            type="text"
-            onChange={handleInput}
-            placeholder="Album, playlist, song"
-            value={searchInput}
-            className="bg-gray-100 mb-4 focus:outline-2 text-gray-500 focus:outline-gray-400 p-2 px-4 pl-12 rounded-3xl w-full"
-          />
-          <MdOutlineSearch size="1.25em" className="text-gray-500 top-3 left-4 absolute" />
-        </div>
-        {searchInput ? (
-          <>
-            <Loading />
-            <SongResultList />
-            <AlbumResultList />
-            <PlaylistResultList />
-          </>
-        ) : <InitialState />}
+        <InstantSearch searchClient={searchClient} indexName="songs">
+          <CustomSearchBox />
+          <CustomHits />
+        </InstantSearch>
       </div>
     </Layout>
   )
