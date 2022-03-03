@@ -8,11 +8,10 @@ import createFeedbackInDb from './createFeedbackInDb'
 
 export default function Feedback({ isOpen, setIsOpen, setSent }) {
   const [textArea, setTextArea] = useState('')
-
   const [sad, setSad] = useState(false)
   const [happy, setHappy] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
-
+  const [isError, setIsError] = useState(null)
   const isEmotionSelected = sad || happy
   const textButNoFace = (textArea && !isEmotionSelected)
   const isFormFilled = textArea && isEmotionSelected
@@ -27,25 +26,29 @@ export default function Feedback({ isOpen, setIsOpen, setSent }) {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitted(true)
+    try {
+      e.preventDefault()
+      setIsError(null)
+      setIsSubmitted(true)
 
-    console.log('you submitted your data! You said:', textArea)
+      let emotion = null;
+      if (sad) emotion = 'sad'
+      if (happy) emotion = 'happy'
 
-    let emotion = null;
-    if (sad) emotion = 'sad'
-    if (happy) emotion = 'happy'
+      await createFeedbackInDb(textArea, emotion)
 
-    await createFeedbackInDb(textArea, emotion)
-
-    setTimeout(() => {
+      setTimeout(() => {
+        setIsSubmitted(false)
+        setSent(true)
+        setHappy(false)
+        setSad(false)
+        setIsOpen(false)
+        setTextArea('')
+      }, 1100)
+    } catch (err) {
       setIsSubmitted(false)
-      setSent(true)
-      setHappy(false)
-      setSad(false)
-      setIsOpen(false)
-      setTextArea('')
-    }, 1100)
+      setIsError(err)
+    }
 
   }
 
@@ -118,6 +121,7 @@ export default function Feedback({ isOpen, setIsOpen, setSent }) {
               {(textArea && isEmotionSelected && !isSubmitted) && 'Send feedback'}
             </span>
           </button>
+          {isError && <p>Frowny face, something went wrong <br />{isError.message}</p>}
         </form>
       </div>
     </div>
