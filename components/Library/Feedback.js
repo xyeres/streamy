@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { GiPiercedHeart } from 'react-icons/gi'
 import { MdOutlineClose } from 'react-icons/md'
-
+import { IoMdHeartHalf } from 'react-icons/io'
 import { FaRegSadCry, FaRegSmileBeam } from 'react-icons/fa'
 
+import createFeedbackInDb from './createFeedbackInDb'
 
-export default function Feedback({ isOpen, setIsOpen }) {
+
+export default function Feedback({ isOpen, setIsOpen, setSent }) {
   const [textArea, setTextArea] = useState('')
 
   const [sad, setSad] = useState(false)
@@ -25,20 +26,26 @@ export default function Feedback({ isOpen, setIsOpen }) {
     setHappy(!e.target.checked)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitted(true)
 
     console.log('you submitted your data! You said:', textArea)
 
-    setTextArea('')
+    let emotion = null;
+    if (sad) emotion = 'sad'
+    if (happy) emotion = 'happy'
+
+    await createFeedbackInDb(textArea, emotion)
 
     setTimeout(() => {
       setIsSubmitted(false)
+      setSent(true)
       setHappy(false)
       setSad(false)
       setIsOpen(false)
-    }, 1500)
+      setTextArea('')
+    }, 1100)
 
   }
 
@@ -50,42 +57,69 @@ export default function Feedback({ isOpen, setIsOpen }) {
     setTextArea(e.target.value)
   }
 
-  return (<div className={`${isOpen ? "absolute top-1/8 left-4 right-4 transition-transform" : "absolute translate-x-full transition-transform top-1/8 left-4 right-4"}`}>
-    <div className="text-gray-600 shadow-lg bg-slate-100 px-10 py-16 rounded-lg relative">
-      <MdOutlineClose onClick={handleToggle} className="absolute right-4 top-4 text-gray-300 cursor-pointer" size="1.5em" />
+  return (
+    <div>
+      <div className={
+        `${isOpen ? "translate-x-0" : "translate-x-[220%]"} 
+        bg-violet-50
+        text-gray-600
+        shadow-lg
+        rounded-lg
+        transition-transform
+        fixed
+        top-[8%] 
+        bottom-[20%]
+        left-4 
+        right-4  
+        px-18 
+        py-8
+        pt-12
+      `}
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5 justify-center items-center ">
-        <p>How does the app make you feel?</p>
-        <div className="flex flex-row justify-between items-center gap-4">
+      >
+        <MdOutlineClose onClick={handleToggle} className="absolute right-4 top-4 text-gray-300 cursor-pointer" size="1.5em" />
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-5 justify-center items-center"
+        >
+          <p>How does the app make you feel?</p>
+          <div className="flex flex-row justify-between items-center gap-4">
 
-          <label className={`${sad ? "ring rounded-full ring-purple-300 ring-offset-2" : ""}`} htmlFor="sad">
-            <input required className="sr-only" checked={sad} name="emotion" onChange={handleSad} type="radio" value="sad" id="sad" />
-            <FaRegSadCry className="hover:animate-pulse hover:text-purple-700 text-purple-600 cursor-pointer" size="3em" />
-          </label>
-          <span className="font-bold text-lg"> or </span>
-          <label className={`${happy ? "ring rounded-full ring-purple-300 ring-offset-2" : ""}`} htmlFor="happy">
-            <input required className="sr-only" checked={happy} name="emotion" onChange={handleHappy} type="radio" value="happy" id="happy" />
-            <FaRegSmileBeam className="hover:animate-pulse hover:text-purple-700 text-purple-600 cursor-pointer" size="3em" />
-          </label>
-        </div>
-        <textarea
-          value={textArea}
-          onChange={handleTextAreaChange}
-          className="p-4 bg-white focus:outline-dashed outline-2 ring-sky-100"
-          rows={4} cols={32}
-          placeholder="Tell us what you really think, no hard feelings we promise"
-        />
-        <button type="submit" disabled={!isFormFilled} className="disabled:bg-gray-400 disabled:outline-gray-400 disabled:cursor-not-allowed group relative w-2/3  h-full bg-violet-600 outline outline-offset-4 hover:animate-pulse hover:animate-none hover:shadow-inner rounded-full hover:outline-offset-0 hover:outline-none transition-all outline-violet-600 text-white flex items-center justify-center px-4 py-[10px]">
-          <span className="group-hover:opacity-0 absolute transition-all">
-            {isSubmitted && 'Sent!'}
-            {!textArea && 'Add some words!'}
-            {textButNoFace && 'Pick a face!'}
-            {textArea && isEmotionSelected && 'Send feedback'}
-          </span>
-          <span className="opacity-0 group-hover:opacity-100 transition-all"><GiPiercedHeart className="inline-block pr-1" size="2em" />{isSubmitted ? 'Sent!' : ''}</span>
-        </button>
-
-      </form>
+            <label className={`${sad ? "ring rounded-full ring-purple-300 ring-offset-2" : ""}`} htmlFor="sad">
+              <input required className="sr-only" checked={sad} name="emotion" onChange={handleSad} type="radio" value="sad" id="sad" />
+              <FaRegSadCry className="hover:animate-pulse hover:text-purple-700 text-purple-600 cursor-pointer" size="3em" />
+            </label>
+            <span className="font-bold text-lg"> or </span>
+            <label className={`${happy ? "ring rounded-full ring-purple-300 ring-offset-2" : ""}`} htmlFor="happy">
+              <input required className="sr-only" checked={happy} name="emotion" onChange={handleHappy} type="radio" value="happy" id="happy" />
+              <FaRegSmileBeam className="hover:animate-pulse hover:text-purple-700 text-purple-600 cursor-pointer" size="3em" />
+            </label>
+          </div>
+          <textarea
+            value={textArea}
+            onChange={handleTextAreaChange}
+            className="p-4 bg-white focus:outline-dashed outline-purple-400 outline-2 ring-sky-100"
+            rows={4} cols={30}
+            placeholder="Tell us what you really think"
+          />
+          <button
+            type="submit"
+            disabled={!(isFormFilled)}
+            className="mt-5 disabled:bg-gray-400 disabled:ring-gray-400 disabled:cursor-not-allowed group relative h-full bg-violet-600 ring-2 ring-offset-4 ring-offset-violet-50 hover:animate-pulse hover:animate-none hover:shadow-inner rounded-full hover:ring-offset-2 transition-all ring-violet-600 text-white flex items-center justify-center px-5 py-[10px]">
+            <span className="relative">
+              {isSubmitted && (
+                <div className="flex flex-col items-center justify-center relative">
+                  <span>Sent!</span>
+                  <IoMdHeartHalf className="fixed animate-ping text-white" size="2em" />
+                </div>
+              )}
+              {(!textArea && !isSubmitted) && 'Add some words!'}
+              {textButNoFace && 'Pick a face!'}
+              {(textArea && isEmotionSelected && !isSubmitted) && 'Send feedback'}
+            </span>
+          </button>
+        </form>
+      </div>
     </div>
-  </div>)
+  )
 }
