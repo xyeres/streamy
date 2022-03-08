@@ -206,10 +206,10 @@ function Player() {
                 <Image priority width={48} height={48} alt="album cover" src={song.coverUrl} className='w-12 h-12' />
                 <div>
                   <div className="flex pl-1">
-                    <p className="font-bold">{song.title.length > 38 ? song.title.slice(0, 38) + '...' : song.title}</p>
+                    <p className="font-bold">{song.title.length > 34 ? song.title.slice(0, 34) + '...' : song.title}</p>
                   </div>
                   <div>
-                    <span className="pl-1">{song.artist.length > 38 ? song.artist.slice(0, 38) + '...' : song.artist}</span>
+                    <span className="pl-1">{song.artist.length > 34 ? song.artist.slice(0, 34) + '...' : song.artist}</span>
                   </div>
                 </div>
               </div>
@@ -223,8 +223,8 @@ function Player() {
 
           {/* Full Screen Player */}
           <div id="player-controls" className={`${isOpen ? "player-show" : "player-hide"}`}>
-            <MdExpandMore size="1.75em" onClick={handleOpen} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[32px] left-5" />
-            <div className="mt-[86px] relative px-8 aspect-square min-w-[240px] min-h-[240px] sm:min-w-[400px] sm:min-h-[400px] max-w-md mx-8">
+            <MdExpandMore size="1.75em" onClick={handleOpen} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[27px] left-5" />
+            <div className="mt-[80px] relative px-8 aspect-square min-w-[240px] min-h-[240px] sm:min-w-[400px] sm:min-h-[400px] max-w-md mx-8">
               <Image priority layout='fill' objectFit='cover' className='my-8' objectPosition="50% 50%" src={song.coverUrl} alt="album cover" />
             </div>
             <div className="px-8 py-2 w-full sm:max-w-screen-sm">

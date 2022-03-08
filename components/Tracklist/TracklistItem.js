@@ -38,7 +38,7 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
         <div className='w-full pr-2'>
           <div className="flex items-start justify-between">
             <p className="font-bold">
-              {song.title.length > 38 ? song.title.slice(0, 38) + '...' : song.title}
+              {song.title.length > 32 ? song.title.slice(0, 32) + '...' : song.title}
             </p>
           </div>
           <div>
