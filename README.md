@@ -4,20 +4,23 @@ streamy lets you create your own music streaming app by uploading your music and
 
 #### Stack
 - React/Next.js
-- Firebase for storage, realtime database, user auth
+- Redux with RTK
+- Algolia Instant Search
+- Firebase for storage, realtime database and user auth
 
 ### Current Features
 - Mobile-first experience
 - Browse playlists and albums
 - Mark an album as 'featured'
-- Custom player built on top of HTML5 <audio> api
+- Custom player built on top of HTML5 <audio> API
 - Pause/play a song, skip, go-back
+- Search artist/album/song
 
 ### Feature roadmap
-- Add to queue
-- Playlist creation
-- Recently played
 - Sharing
 - User auth
 - Subscriptions/paywall
 - More admin features
+- Add to queue
+- Playlist creation
+- Recently played
