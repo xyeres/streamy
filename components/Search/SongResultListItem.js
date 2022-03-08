@@ -18,6 +18,7 @@ export default function SongResultListItem({ song }) {
             <Image
               width={48}
               height={48}
+              alt={`${song.album} album cover`}
               src={song.coverUrl}
               className="shadow-sm flex-shrink-0 bg-yellow-300 object-cover aspect-square rounded-md"
             />
