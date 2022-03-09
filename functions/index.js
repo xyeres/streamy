@@ -7,10 +7,6 @@ admin.initializeApp();
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 
-exports.helloWorld = functions.https.onRequest((req, res) => {
-  res.send("Hello from Firebase!");
-});
-
 exports.incrementPlayCountByOne = functions.https.onCall(async (data) => {
   const { id } = data
   const currentYearMonth = new Date().toISOString().slice(0, 7)
@@ -34,3 +30,15 @@ exports.incrementPlayCountByOne = functions.https.onCall(async (data) => {
   functions.logger.info(`${data.title} play count incremented`, { structuredData: true });
 
 });
+
+exports.aggregateReportPlays = functions.firestore
+  .document('metadata/{monthId}/plays/{playId}')
+  .onWrite(async (change, context) => {
+    const monthRef = admin.firestore().collection('metadata').doc(context.params.monthId)
+
+    await admin.firestore().runTransaction(async (transaction) => {
+      const monthDoc = await transaction.get(monthRef)
+      const newTotalPlays = (monthDoc.data().totalPlays || 0) + 1
+      transaction.update(monthRef, { totalPlays: newTotalPlays })
+    })
+  })
