@@ -8,7 +8,7 @@ admin.initializeApp();
 // https://firebase.google.com/docs/functions/write-firebase-functions
 
 exports.incrementPlayCountByOne = functions.https.onCall(async (data) => {
-  const { id } = data
+  const { id, artistSlug, albumSlug } = data
   const currentYearMonth = new Date().toISOString().slice(0, 7)
   const increment = admin.firestore.FieldValue.increment(1)
   const serverTime = admin.firestore.FieldValue.serverTimestamp()
@@ -19,26 +19,18 @@ exports.incrementPlayCountByOne = functions.https.onCall(async (data) => {
     playCount: increment
   }
 
-  // Make sure the current month's document exists
-  const monthDoc = await admin.firestore().doc(`metadata/${currentYearMonth}`).get()
-  if (!monthDoc.exists) {
-    await admin.firestore().doc(`metadata/${currentYearMonth}`).create({ createdAt: serverTime })
-  }
+  // Increment month's total play count
+  await admin.firestore().doc(`analytics/${currentYearMonth}`)
+    .set({ lastUpdated: serverTime, totalPlays: increment }, { merge: true })
 
-  await admin.firestore().doc(`metadata/${currentYearMonth}/plays/${id}`).set(docData, { merge: true })
+  // Update plays collection doc with data
+  await admin.firestore().doc(`analytics/${currentYearMonth}/plays/${id}`)
+    .set(docData, { merge: true })
+
+  // Update individual song's lifetime playcount
+  await admin.firestore().doc(`artists/${artistSlug}/albums/${albumSlug}/songs/${id}`)
+    .set({ playCount: increment }, { merge: true })
 
   functions.logger.info(`${data.title} play count incremented`, { structuredData: true });
 
 });
-
-exports.aggregateReportPlays = functions.firestore
-  .document('metadata/{monthId}/plays/{playId}')
-  .onWrite(async (change, context) => {
-    const monthRef = admin.firestore().collection('metadata').doc(context.params.monthId)
-
-    await admin.firestore().runTransaction(async (transaction) => {
-      const monthDoc = await transaction.get(monthRef)
-      const newTotalPlays = (monthDoc.data().totalPlays || 0) + 1
-      transaction.update(monthRef, { totalPlays: newTotalPlays })
-    })
-  })
