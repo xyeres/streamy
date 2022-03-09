@@ -8,12 +8,14 @@ import {
   loadPrev,
   selectCurrentlyPlaying,
   selectCurrentTime,
+  selectPlayDuration,
   selectDuration,
   selectIsOpen,
   selectIsPlaying,
   selectPrevPlayed,
   selectUrl,
   setCurrentTime,
+  setPlayDuration,
   setDuration,
   play,
   pause,
@@ -22,6 +24,8 @@ import {
 } from './playerSlice'
 import PlayOrPause from './PlayOrPause'
 import secondsToTime from './secondsToTime'
+import { functions } from '../../lib/firebase'
+import { httpsCallable } from 'firebase/functions'
 
 
 function Player() {
@@ -35,6 +39,7 @@ function Player() {
   const queue = useSelector(selectQueue)
   const prevPlayed = useSelector(selectPrevPlayed)
   const currentTime = useSelector(selectCurrentTime)
+  const playDuration = useSelector(selectPlayDuration)
   const duration = useSelector(selectDuration)
   const url = useSelector(selectUrl)
   const song = useSelector(selectCurrentlyPlaying)
@@ -47,6 +52,27 @@ function Player() {
 
   // Logical
   const isPlayerLoaded = url != null
+
+  // Increment playCount
+  const handleIncrementPlayCount = () => {
+    try {
+      const songMeta = {
+        slug: song.slug,
+        id: song.id,
+        title: song.title,
+        artist: song.artist,
+        artistSlug: song.artistSlug,
+        album: song.album,
+        albumSlug: song.albumSlug
+      }
+
+      const incrementPlayCountByOne = httpsCallable(functions, 'incrementPlayCountByOne')
+      incrementPlayCountByOne(songMeta)
+
+    } catch (err) {
+      console.error('Error incrementing: ', err)
+    }
+  }
 
   // Load a song if url changes
   useEffect(() => {
@@ -88,6 +114,7 @@ function Player() {
   const seek = (time) => {
     // Update state
     dispatch(setCurrentTime(time))
+
     // Move playhead to correct pos
     pRef.current.currentTime = time
   }
@@ -100,13 +127,22 @@ function Player() {
   }
 
   const handleProgress = () => {
+    // This handler is called every 250ms
+
+    const updatedPlayDuration = (parseInt(playDuration) + 1) || 0
+
     // Update State
     dispatch(setCurrentTime(pRef.current.currentTime))
+    dispatch(setPlayDuration(updatedPlayDuration))
 
     // Update Progress Bar 
     const percentage = parseFloat((currentTime / duration) * 100)
     if (progressBarRef.current) {
       progressBarRef.current.style.width = `${percentage}%`
+    }
+
+    if (playDuration === 120) { // approx 30 seconds
+      handleIncrementPlayCount()
     }
   }
 

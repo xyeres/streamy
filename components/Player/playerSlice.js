@@ -9,6 +9,7 @@ export const playerSlice = createSlice({
     volume: 0.0,
     muted: false,
     currentTime: 0,
+    playDuration: 0,
     loaded: 0,
     duration: 0,
     loop: false,
@@ -28,9 +29,6 @@ export const playerSlice = createSlice({
     },
   },
   reducers: {
-    setBetaPlayerUrl: (state, action) => {
-      state.betaUrl = action.payload
-    },
     openClose: (state) => {
       state.open = !state.open
     },
@@ -48,6 +46,9 @@ export const playerSlice = createSlice({
     stopAndUnload: (state) => {
       state.playing = false
       state.url = null
+
+      // Clear playDuration
+      state.playDuration = 0
     },
     setVolume: (state, action) => {
       state.volume = parseFloat(action.payload)
@@ -58,15 +59,21 @@ export const playerSlice = createSlice({
     setCurrentTime: (state, action) => {
       state.currentTime = action.payload
     },
+    setPlayDuration: (state, action) => {
+      state.playDuration = action.payload
+    },
     loadFromList: (state, action) => {
       const { listSongs, listId } = action.payload
       const listIndex = action.payload.index
       const song = listSongs[listIndex]
-      const trackNumber = song.track
+      const trackNumber = song.trackNo
 
       // Clear Queue because we've started a new list
       state.queue = []
       state.prevPlayed = []
+
+      // Clear playDuration
+      state.playDuration = 0
 
       // Populate queue and prevPlayed stack
       const forwardTracks = listSongs.filter(((song, index) => index > listIndex))
@@ -90,6 +97,9 @@ export const playerSlice = createSlice({
       state.url = song.songUrl
     },
     loadNext: (state) => {
+      // Clear playDuration
+      state.playDuration = 0
+
       // Remove first song from queue
       const nextSong = state.queue.shift()
       if (nextSong) {
@@ -104,7 +114,6 @@ export const playerSlice = createSlice({
         state.url = nextSong.songUrl
       } else {
         // If last song
-
         // Stop playing and close player
         // to alert user that the list is over
         state.open = false
@@ -127,8 +136,10 @@ export const playerSlice = createSlice({
       }
     },
     loadPrev: (state) => {
-      let prevSong = state.prevPlayed.pop()
+      // Clear playDuration
+      state.playDuration = 0
 
+      let prevSong = state.prevPlayed.pop()
       if (prevSong) {
         // put current song to front of queue so we can come back
         state.queue.unshift(state.currentlyPlaying)
@@ -145,7 +156,6 @@ export const playerSlice = createSlice({
 })
 
 export const {
-  setBetaPlayerUrl,
   openClose,
   playPause,
   play,
@@ -153,6 +163,7 @@ export const {
   stopAndUnload,
   setVolume,
   setCurrentTime,
+  setPlayDuration,
   loadFromList,
   loadNext,
   loadPrev,
@@ -165,6 +176,7 @@ export const selectIsMuted = (state) => state.player.muted
 export const selectIsPlaying = (state) => state.player.playing
 export const selectCurrentlyPlaying = (state) => state.player.currentlyPlaying
 export const selectCurrentTime = (state) => state.player.currentTime
+export const selectPlayDuration = (state) => state.player.playDuration
 export const selectDuration = (state) => state.player.duration
 export const selectUrl = (state) => state.player.url
 export const selectQueue = (state) => state.player.queue
