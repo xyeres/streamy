@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+    match /playlists/{document} {
+      allow read; 
+      allow write: if false;
+    }
+    match /feedback/{document} {
+      allow create;
+      allow read, delete, update: if false;
+    }
+    match /analytics/{document=**} {
+      allow read, write: if false;
+    }
+    // Collection Group matches:
+    match /{path=**}/albums/{doc} {
+      allow read;
+      allow write: if false;
+    }
+    match /{path=**}/songs/{doc} {
+      allow read;
+      allow write: if false;
+    }
+  }
+}
