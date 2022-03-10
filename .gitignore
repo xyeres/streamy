@@ -30,3 +30,7 @@ yarn-error.log*
 # next.js
 /.next/
 /out/
+
+# firebase
+*firestore*.log
+ui-debug.log
