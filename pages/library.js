@@ -7,7 +7,7 @@ import Feedback from '../components/Library/Feedback';
 export default function Library() {
   const [isOpen, setIsOpen] = useState(false)
   const [sent, setSent] = useState(false)
-  
+
   const handleFeedbackToggle = () => {
     setIsOpen(!isOpen)
   }
@@ -28,8 +28,10 @@ export default function Library() {
         {
           sent && (
             <>
-              <GiCoolSpices size="5em" />
-              <p>Thank you for submitting feedback, we promise to make the app better based on your input. You&apos;re cool!</p>
+              <GiCoolSpices className="text-yellow-500" size="5em" />
+              <p>Thank you for submitting feedback, we promise to make the app better based on your input.
+                <br /><span className="font-bold">You&apos;re cool!</span>
+              </p>
             </>
           )
         }

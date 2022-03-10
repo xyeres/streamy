@@ -121,7 +121,7 @@ export default function Feedback({ isOpen, setIsOpen, setSent }) {
               {(textArea && isEmotionSelected && !isSubmitted) && 'Send feedback'}
             </span>
           </button>
-          {isError && <p>Frowny face, something went wrong <br />{isError.message}</p>}
+          {isError && <p>Frowny face, something went wrong. <br />{isError.message}</p>}
         </form>
       </div>
     </div>
