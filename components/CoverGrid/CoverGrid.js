@@ -1,5 +1,4 @@
 import CoverGridItem from "./CoverGridItem";
-import PropTypes from 'prop-types'
 import useCollection, { useAlbums } from "./useAlbums";
 import ErrMsgHome from "../Layout/ErrMsgHome";
 import LoadingGrid from "../Layout/LoadingGrid";
@@ -11,11 +10,11 @@ function CoverGrid({ coll, path, order, limit, swrkey, keywords }) {
   if (path === '/playlist') useDataFetcher = () => useCollection(coll)
 
   const { data, isLoading, isError } = useDataFetcher()
-  
+
   if (isError) return <ErrMsgHome message={isError.message} />
   if (isLoading) return <LoadingGrid />
-  
-;;  const albumItems = data.map((item, index) => {
+
+  const albumItems = data.map((item, index) => {
     return <CoverGridItem key={index} path={path} item={item} />
   })
 
