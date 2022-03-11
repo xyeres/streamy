@@ -10,13 +10,13 @@ function Grid() {
   const isPlayerLoaded = useSelector(selectUrl)
   return (
     <div className={`relative h-full w-full ${isPlayerLoaded ? 'pb-24' : 'pb-12'}`}>
-      <CategoryHeader title="Recently Added" />
+      <CategoryHeader title="Newly Added" />
       <CoverGrid
         path="/album"
         keywords={{field: 'tags', opStr: 'array-contains', value: 'new'}}
         swrkey="recentlyAdded"
       />
-      <CategoryHeader title="Early Live EPs" />
+      <CategoryHeader title="Recent Live EPs" />
       <CoverGrid
         path="/album"
         keywords={{ field: 'tags', opStr: 'array-contains', value: 'monthlyep' }}
@@ -29,7 +29,7 @@ function Grid() {
         path="/playlist"
         coll="playlists"
       />
-      <CategoryHeader title="Studio albums" />
+      <CategoryHeader title="From the Studio" />
       <CoverGrid
         path="/album"
         limit={12}
