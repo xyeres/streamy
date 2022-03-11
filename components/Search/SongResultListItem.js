@@ -12,23 +12,21 @@ export default function SongResultListItem({ song }) {
   }
   return (
     <li onClick={handleSongClick} className="hover:bg-gray-200 hover:rounded-md p-[6px] text-sm">
-      <Link href={`album/${song.albumSlug}`}>
-        <a className="flex flex-row">
-          <div className="flex-shrink-0">
-            <Image
-              width={48}
-              height={48}
-              alt={`${song.album} album cover`}
-              src={song.coverUrl}
-              className="shadow-sm flex-shrink-0 bg-yellow-300 object-cover aspect-square rounded-md"
-            />
-          </div>
-          <div className="flex flex-col justify-center w-full ml-3">
-            <p className="font-bold">{song.title}</p>
-            <p className="text-gray-500 text-xs">{song.artist}</p>
-          </div>
-        </a>
-      </Link>
+      <div className="flex flex-row">
+        <div className="flex-shrink-0">
+          <Image
+            width={48}
+            height={48}
+            alt={`${song.album} album cover`}
+            src={song.coverUrl}
+            className="shadow-sm flex-shrink-0 bg-yellow-300 object-cover aspect-square rounded-md"
+          />
+        </div>
+        <div className="flex flex-col justify-center w-full ml-3">
+          <p className="font-bold">{song.title}</p>
+          <p className="text-gray-500 text-xs">{song.artist}</p>
+        </div>
+      </div>
     </li>
   )
 }

@@ -7,7 +7,7 @@ function CoverGrid({ coll, path, order, limit, swrkey, keywords }) {
 
   let useDataFetcher;
   if (path === '/album') useDataFetcher = () => useAlbums(keywords, order, limit, swrkey)
-  if (path === '/playlist') useDataFetcher = () => useCollection(coll)
+  if (path === '/playlist') useDataFetcher = () => useCollection(coll, order)
 
   const { data, isLoading, isError } = useDataFetcher()
 
@@ -19,8 +19,8 @@ function CoverGrid({ coll, path, order, limit, swrkey, keywords }) {
   })
 
   return (
-    <div className="flex overflow-x-auto sm:mx-4 flex-nowrap flex-row py-4 pr-4 sm:flex-row sm:gap-4 sm:flex-wrap sm:block sm:columns-2">
-      <ul className="flex flex-row flex-shrink-0 sm:block sm:flex-shrink">
+    <div className="flex overflow-x-auto flex-nowrap flex-row sm:flex-col py-4 pr-4">
+      <ul className="flex flex-row  gap-4 first:ml-4 flex-shrink-0">
         {albumItems}
       </ul>
     </div>
