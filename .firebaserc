@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "streamy-dev-51f11"
-  }
+    "default": "streamy-dev-51f11",
+    "prod": "streamy-prod-8ae57",
+    "dev": "streamy-dev-51f11"
+  },
+  "targets": {}
 }
