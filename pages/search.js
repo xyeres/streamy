@@ -13,7 +13,7 @@ export default function Search() {
   useEffect(() => {
     searchInputRef.current.focus()
   }, [])
-  
+
 
   const NoQuery = () => {
     return (
@@ -52,7 +52,11 @@ export default function Search() {
           onChange={(e) => refine(e.currentTarget.value)}
           className="bg-gray-100 mb-4 focus:outline-2 text-gray-500 focus:outline-gray-400 p-2 px-4 pl-10 rounded-3xl w-full"
         />
-        {currentRefinement ? <MdCancel onClick={clearRefinement} size="1.25em" className="text-gray-300 top-[9px] right-3 absolute" /> : null}
+        {
+          currentRefinement ?
+            <MdCancel onClick={clearRefinement} size="1.25em" className="cursor-pointer text-gray-300 absolute top-[9px] right-3" />
+            : null
+        }
         <MdOutlineSearch size="1.25em" className="text-gray-500 top-3 left-3 absolute" />
       </div>
     )
