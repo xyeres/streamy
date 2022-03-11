@@ -170,7 +170,7 @@ export async function albumSongsFetcher(albumId) {
   const buffer = []
   const qRef = collectionGroup(db, 'songs')
 
-  let q = query(qRef, where('albumSlug', '==', albumId))
+  let q = query(qRef, where('albumSlug', '==', albumId), orderBy('trackNo'))
   const qSnap = await getDocs(q)
   qSnap.forEach((doc) => buffer.push(doc.data()))
 
