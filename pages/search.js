@@ -4,13 +4,20 @@ import Layout from "../components/Layout/Layout"
 import algoliasearch from 'algoliasearch/lite'
 
 import SongResultList from "../components/Search/SongResultList"
+import { useEffect, useRef } from "react"
 
 export default function Search() {
   const searchClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID, process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY)
+  const searchInputRef = useRef()
+
+  useEffect(() => {
+    searchInputRef.current.focus()
+  }, [])
+  
 
   const NoQuery = () => {
     return (
-      <div className="flex flex-col items-center justify-center text-lg text-gray-400 p-10 py-[45%]">
+      <div className="flex flex-col items-center justify-center text-lg text-gray-400 p-10 py-20">
         <MdQueueMusic size="4em" className="text-gray-300 drop-shadow-sm" />
         <h1>Find something good to listen to...</h1>
       </div>
@@ -41,6 +48,7 @@ export default function Search() {
           type="text"
           placeholder="Artist, album, song"
           value={currentRefinement}
+          ref={searchInputRef}
           onChange={(e) => refine(e.currentTarget.value)}
           className="bg-gray-100 mb-4 focus:outline-2 text-gray-500 focus:outline-gray-400 p-2 px-4 pl-10 rounded-3xl w-full"
         />
