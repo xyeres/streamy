@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
     <Head>
-        <title>Stream United Pursuit and friends</title>
+        <title>Stream music from United Pursuit and friends</title>
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@unitedpursuit" />
         <meta name="twitter:title" content="Stream music from United Pursuit" />

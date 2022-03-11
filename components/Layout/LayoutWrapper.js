@@ -8,7 +8,6 @@ export default function LayoutWrapper({ children, home, search, library, bareBon
         <p>App is not yet optimized for large screens, visit on your phone for best results!</p>
       </div>
       {children}
-
       <Player />
       <nav>
         <MenuNav home={home} search={search} library={library} />
