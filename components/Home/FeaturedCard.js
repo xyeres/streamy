@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { MdFiberNew } from 'react-icons/md'
 import { useFeatured } from '../CoverGrid/useAlbums';
-import { MdFeedback } from 'react-icons/md'
 import ErrMsgHome from '../Layout/ErrMsgHome'
 import LoadingFeaturedItem from '../Layout/LoadingFeaturedItem'
 import FeaturedPill from './FeaturedPill';
@@ -23,7 +21,9 @@ export default function FeaturedCard({ item, featuredColl }) {
           <div className="ml-4 mt-1 group-hover:text-white">
             <div className="flex flex-row items-start">
               <h3 className="font-bold">{feature.title}</h3>
-              <div className="absolute right-2 -top-3"><FeaturedPill message="NEW" /></div>
+              <div className="absolute right-2 -top-3">
+                <FeaturedPill message="FEATURED" />
+              </div>
             </div>
             <p className="text-sm mt-2">{feature.promo}</p>
           </div>
