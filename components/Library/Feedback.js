@@ -6,6 +6,7 @@ import { FaRegSadCry, FaRegSmileBeam } from 'react-icons/fa'
 import createFeedbackInDb from './createFeedbackInDb'
 import { GiCoolSpices } from 'react-icons/gi'
 import { useRouter } from 'next/router'
+import RoadMap from './RoadMap'
 
 
 export default function Feedback({ isOpen, setIsOpen }) {
@@ -93,7 +94,7 @@ export default function Feedback({ isOpen, setIsOpen }) {
       }
       >
         <MdOutlineClose onClick={handleToggle} className="absolute right-4 top-4 text-gray-300 cursor-pointer" size="1.5em" />
-        <div className="px-4 pb-[68px]">
+        <div className="pb-[68px] mx-4">
           {
             !isSent && (
               <div className="flex flex-col justify-center items-center">
@@ -152,84 +153,8 @@ export default function Feedback({ isOpen, setIsOpen }) {
               </div>
             )
           }
-          <div className="mt-10 transition-all bg-white text-whtie rounded-lg p-4">
-            <details>
-              <summary className="font-semibold text-lg">Feature Road Map</summary>
-              <div className="pt-6">
-                <div className="flex">
-                  <div className="flex flex-col items-center mr-4">
-                    <div>
-                      <div className="flex items-center justify-center w-10 h-10 border rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24"
-                          stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="w-px h-full bg-gray-300"></div>
-                  </div>
-                  <div className="pb-8">
-                    <p className="mb-2 text-xl font-bold text-gray-600">Step 1</p>
-                    <p className="text-gray-700">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. veniam libero facilis minus reprehenderit.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex">
-                  <div className="flex flex-col items-center mr-4">
-                    <div>
-                      <div className="flex items-center justify-center w-10 h-10 border rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24"
-                          stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="w-px h-full bg-gray-300"></div>
-                  </div>
-                  <div className="pb-8">
-                    <p className="mb-2 text-xl font-bold text-gray-600">Step 2</p>
-                    <p className="text-gray-700">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. veniam libero facilis minus reprehenderit.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex">
-                  <div className="flex flex-col items-center mr-4">
-                    <div>
-                      <div className="flex items-center justify-center w-10 h-10 border rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24"
-                          stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="w-px h-full bg-gray-300"></div>
-                  </div>
-                  <div className="pb-8 ">
-                    <p className="mb-2 text-xl font-bold text-gray-600">Step 3</p>
-                    <p className="text-gray-700">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. veniam libero facilis minus reprehenderit.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex">
-                  <div className="flex flex-col items-center mr-4">
-                    <div>
-                      <div className="flex items-center justify-center w-10 h-10 border rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24"
-                          stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pt-1">
-                    <p className="mb-2 text-lg font-bold text-gray-600">Done</p>
-                  </div>
-                </div>
-              </div>
-            </details>
+          <div className="relative mt-10 bg-white text-whtie p-4 px-6 mx-10 rounded-lg">
+            <RoadMap />
           </div>
         </div>
       </div>
