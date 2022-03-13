@@ -77,7 +77,7 @@ export default function Feedback({ isOpen, setIsOpen }) {
   return (
     <div>
       <div className={
-        `${isOpen ? "translate-x-0" : "translate-y-[220%]"} 
+        `${isOpen ? "translate-x-0" : "-translate-y-[220%]"} 
         bg-violet-50
         text-gray-600
         duration-[350ms]
@@ -153,7 +153,7 @@ export default function Feedback({ isOpen, setIsOpen }) {
               </div>
             )
           }
-          <div className="relative mt-10 bg-white text-whtie p-4 px-6 mx-10 rounded-lg">
+          <div className="relative mt-10 bg-white text-whtie p-5 mx- rounded-lg">
             <RoadMap />
           </div>
         </div>
