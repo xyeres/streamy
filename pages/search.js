@@ -24,7 +24,7 @@ export default function Search() {
           Something missing?
         </h2>
         <p>
-          <br />If we&apos;ve missed an item, please send us some <Link href="/library?feedback=open"><a className="font-bold underline">feedback</a></Link> and we&apos; ll get it uploaded.
+          <br />If we&apos;ve missed an item, please send us some <Link href="/library?feedback=open"><a className="font-bold underline">feedback</a></Link> and we&apos;ll get it uploaded.
         </p>
       </div>
     )
