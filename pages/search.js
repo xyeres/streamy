@@ -5,6 +5,7 @@ import algoliasearch from 'algoliasearch/lite'
 
 import SongResultList from "../components/Search/SongResultList"
 import { useEffect, useRef } from "react"
+import Link from "next/link"
 
 export default function Search() {
   const searchClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID, process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY)
@@ -17,9 +18,14 @@ export default function Search() {
 
   const NoQuery = () => {
     return (
-      <div className="flex flex-col items-center justify-center text-lg text-gray-400 p-10 py-20">
+      <div className="flex flex-col items-center justify-center text-lg text-gray-400 p-4 text-center py-20">
         <MdQueueMusic size="4em" className="text-gray-300 drop-shadow-sm" />
-        <h1>Find something good to listen to...</h1>
+        <h2 className="font-semibold">
+          Something missing?
+        </h2>
+        <p>
+          <br />If we&apos;ve missed an item, please send us some <Link href="/library?feedback=open"><a className="font-bold underline">feedback</a></Link> and we&apos; ll get it uploaded.
+        </p>
       </div>
     )
   }

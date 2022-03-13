@@ -135,10 +135,26 @@ export async function collectionGroupFetcher(path, subColl) {
   const docData = docSnap.data()
   if (!docSnap.exists()) throw new Error('No document with that path')
 
-  // Now get the song docs
-  const q = query(collectionGroup(db, subColl), where('id', 'in', docData[subColl]))
-  const qSnap = await getDocs(q)
-  qSnap.forEach((doc) => buffer.push(doc.data()))
+  const songIds = docData[subColl]
+  const queries = []
+
+  for (let i = 0; i < songIds.length; i += 10) {
+    queries.push(
+      query(collectionGroup(db, subColl), where('id', 'in', songIds.slice(i, i + 10)))
+    )
+  }
+
+  let songsDocsSnaps = []
+
+  for (let i = 0; i < queries.length; i++) {
+    songsDocsSnaps.push(getDocs(queries[i]))
+  }
+
+  songsDocsSnaps = await Promise.all(songsDocsSnaps)
+
+  const songsDocs = [...new Set([].concat(...songsDocsSnaps.map((o)=>o.docs)))]
+
+  songsDocs.forEach((doc) => buffer.push(doc.data()))
 
   if (buffer.length > 0) return buffer
   else throw new Error("Can't seem to find anything here")

@@ -1,8 +1,11 @@
+import Image from "next/image"
+import Link from "next/link"
 import { useSelector } from "react-redux"
 import CoverGrid from "../CoverGrid/CoverGrid"
 import { selectUrl } from "../Player/playerSlice"
 import CategoryHeader from "./CategoryHeader"
 import FeaturedCard from "./FeaturedCard"
+import FeedbackCard from "./FeedbackCard"
 
 
 
@@ -13,7 +16,7 @@ function Grid() {
       <CategoryHeader title="Newly Added" />
       <CoverGrid
         path="/album"
-        keywords={{field: 'tags', opStr: 'array-contains', value: 'new'}}
+        keywords={{ field: 'tags', opStr: 'array-contains', value: 'new' }}
         swrkey="recentlyAdded"
       />
       <CategoryHeader title="Recent Live EPs" />
@@ -36,6 +39,9 @@ function Grid() {
         swrkey="studioAlbums"
         keywords={{ field: 'tags', opStr: 'array-contains', value: 'studio' }}
       />
+
+      <FeedbackCard />
+
     </div>
   )
 }

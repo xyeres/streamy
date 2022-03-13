@@ -9,17 +9,17 @@ export default function MenuNav({ home, search, library }) {
     <div className="flex px-4 items-center justify-around h-12 border-t border-gray-300 bg-white fixed bottom-0 left-0 right-0">
       <Link href="/">
         <a>
-          <MdHomeFilled size="1.25em" className={`${homeIsActive(home)}`} />
+          <MdHomeFilled size="1.45em" className={`${homeIsActive(home)}`} />
         </a>
       </Link>
       <Link href="/search">
         <a>
-          <MdSearch size="1.25em" className={`${homeIsActive(search)}`} />
+          <MdSearch size="1.45em" className={`${homeIsActive(search)}`} />
         </a>
       </Link>
       <Link href="/library">
         <a>
-          <MdLibraryMusic size="1.25em" className={`${homeIsActive(library)}`} />
+          <MdLibraryMusic size="1.45em" className={`${homeIsActive(library)}`} />
         </a>
       </Link>
     </div>
