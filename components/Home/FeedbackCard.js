@@ -6,7 +6,7 @@ export default function FeedbackCard() {
   return (
     <Link href="/library?feedback=open">
       <a>
-        <div className="relative opacity-80 hover:opacity-100 mt-10 flex cursor-pointer justify-start group hover:bg-purple-500 items-start m-4 bg-black bg-opacity-5 p-4 rounded-lg">
+        <div className="relative opacity-80 hover:opacity-100 my-6 flex cursor-pointer justify-start group hover:bg-purple-500 items-start m-4 bg-black bg-opacity-5 p-4 rounded-lg">
           <div className="flex-shrink-1 w-full sm:max-w-[140px]">
             <Image src="/images/StreamyOGImage-1@0.75x.jpg" width={180} height={180} alt="App screenshot" className="rounded-lg object-cover aspect-square" />
           </div>
