@@ -48,6 +48,13 @@ function Grid() {
         swrkey="liveAlbums"
         keywords={{ field: 'tags', opStr: 'array-contains', value: 'live' }}
       />
+      <CategoryHeader title="Classics: Monthly EP Vol. I - X" />
+      <CoverGrid
+        path="/album"
+        limit={10}
+        swrkey="ogEPs"
+        keywords={{ field: 'tags', opStr: 'array-contains', value: 'og' }}
+      />
     </div>
   )
 }
