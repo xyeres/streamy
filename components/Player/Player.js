@@ -92,6 +92,20 @@ function Player() {
   useEffect(() => {
     if (isPlayerLoaded && !isMediaLoading) {
       let playPromise = pRef.current.play()
+      // Setup media session
+      playPromise
+        .then(_ => {
+          if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+              title: song.title,
+              artist: song.artist,
+              album: song.album,
+              artwork: [
+                { src: song.coverUrl }
+              ]
+            })
+          }
+        })
       // Make sure it is safe to pause
       if (!isPlaying) {
         if (playPromise != undefined) {
