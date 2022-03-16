@@ -53,6 +53,20 @@ function Player() {
   // Logical
   const isPlayerLoaded = url != null
 
+  function updateMetadata() {
+    // Setup media session
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: song.title,
+        artist: song.artist,
+        album: song.album,
+        artwork: [
+          { src: song.coverUrl }
+        ]
+      })
+    }
+  }
+
   // Increment playCount
   const handleIncrementPlayCount = () => {
     try {
@@ -91,47 +105,25 @@ function Player() {
   // Manage state when isPlaying changes
   useEffect(() => {
     if (isPlayerLoaded && !isMediaLoading) {
-
-      // Handle media session playback state
       navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused'
-      // Setup action handlers
-      navigator.mediaSession.setActionHandler('nexttrack', handleNextSong)
-      navigator.mediaSession.setActionHandler('previoustrack', handlePrevSong)
-      navigator.mediaSession.setActionHandler('play', handlePlay)
-      navigator.mediaSession.setActionHandler('pause', handlePause)
-
+      
       // Handle Play/Pause of audio element
       let playPromise = pRef.current.play()
-      if (playPromise != undefined) {
-        playPromise
-          .then(_ => {
-            // Setup media session
-            if ('mediaSession' in navigator) {
-              navigator.mediaSession.metadata = new MediaMetadata({
-                title: song.title,
-                artist: song.artist,
-                album: song.album,
-                artwork: [
-                  { src: song.coverUrl }
-                ]
-              })
-            }
-          })
-          .catch(console.log)
-      }
+      playPromise
+        .then(_ => {
+          updateMetadata()
+        })
+        .catch(console.log)
 
       // Make sure it is safe to pause
-      if (!isPlaying) {
-        if (playPromise != undefined) {
-          playPromise
-            .then(_ => {
-              pRef.current.pause()
-              dispatch(pause())
-            })
-            .catch(err => {
-              console.error('Error playing:', err.message)
-            })
-        }
+      if (!isPlaying && playPromise != undefined) {
+        playPromise
+          .then(_ => {
+            pRef.current.pause()
+          })
+          .catch(err => {
+            console.error('Error playing:', err.message)
+          })
       }
     }
   }, [isPlaying, isMediaLoading, isPlayerLoaded, dispatch])
@@ -236,15 +228,42 @@ function Player() {
 
   const handleMediaError = (e) => { }
 
-  if (isPlayerLoaded) {
-    if (isOpen) {
+
+  useEffect(() => {
+    if (isPlayerLoaded) {
+      const actionHandlers = [
+        ['play', handlePlay],
+        ['pause', handlePause],
+        ['previoustrack', handlePrevSong],
+        ['nexttrack', handleNextSong],
+        ['stop', handlePause],
+        // ['seekbackward', (details) => { /* ... */ }],
+        // ['seekforward', (details) => { /* ... */ }],
+        // ['seekto', (details) => { /* ... */ }],
+      ];
+
+      for (const [action, handler] of actionHandlers) {
+        try {
+          console.log('added:', action)
+          navigator.mediaSession.setActionHandler(action, handler);
+        } catch (error) {
+          console.log(`The media session action "${action}" is not supported yet.`);
+        }
+      }
+    }
+  }, [isPlayerLoaded])
+
+
+  useEffect(() => {
+    if (isPlayerLoaded && isOpen) {
       document.body.classList.remove("overflow-auto")
       document.body.classList.add("overflow-hidden")
     } else {
       document.body.classList.add("overflow-auto")
       document.body.classList.remove("overflow-hidden")
     }
-  }
+  }, [isOpen, isPlayerLoaded])
+
 
 
   const audioTag = (
