@@ -94,6 +94,7 @@ function Player() {
       pRef.current.src = url
       pRef.current.title = song.title
       pRef.current.load()
+      updateMetadata()
     }
 
     if (url === null) {
@@ -111,7 +112,7 @@ function Player() {
       let playPromise = pRef.current.play()
       playPromise
         .then(_ => {
-          updateMetadata()
+          // updateMetadata()
         })
         .catch(console.log)
 
