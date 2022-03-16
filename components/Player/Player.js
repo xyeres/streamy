@@ -78,29 +78,29 @@ function Player() {
   useEffect(() => {
     if (url != null) {
       pRef.current.src = url
-      pRef.current.title = `${song.title} by ${song.artist}`
+      pRef.current.title = song.title
       pRef.current.load()
-
-      // Handle Previous track / next track
-      navigator.mediaSession.setActionHandler('previoustrack', function () {
-        handlePrevSong()
-      })
-
-      navigator.mediaSession.setActionHandler('nexttrack', function () {
-        handleNextSong()
-      })
-
     }
 
     if (url === null) {
       pRef.current.src = ''
     }
 
-  }, [url, song])
+  }, [url, song.title])
 
-  // Manage audio state if isPlaying changes
+  // Manage state when isPlaying changes
   useEffect(() => {
     if (isPlayerLoaded && !isMediaLoading) {
+
+      // Handle media session playback state
+      navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused'
+      // Setup action handlers
+      navigator.mediaSession.setActionHandler('nexttrack', handleNextSong)
+      navigator.mediaSession.setActionHandler('previoustrack', handlePrevSong)
+      navigator.mediaSession.setActionHandler('play', handlePlay)
+      navigator.mediaSession.setActionHandler('pause', handlePause)
+      
+      // Handle Play/Pause of audio element
       let playPromise = pRef.current.play()
       if (isPlaying) {
         if (playPromise != undefined) {
@@ -173,6 +173,14 @@ function Player() {
     if (playDuration === 120) { // approx 30 seconds
       handleIncrementPlayCount()
     }
+  }
+
+  const handlePlay = () => {
+    dispatch(play())
+  }
+
+  const handlePause = () => {
+    dispatch(pause())
   }
 
   const handlePrevSong = () => {
