@@ -80,32 +80,47 @@ function Player() {
       pRef.current.src = url
       pRef.current.title = `${song.title} by ${song.artist}`
       pRef.current.load()
+
+      // Handle Previous track / next track
+      navigator.mediaSession.setActionHandler('previoustrack', function () {
+        handlePrevSong()
+      })
+
+      navigator.mediaSession.setActionHandler('nexttrack', function () {
+        handleNextSong()
+      })
+
     }
 
     if (url === null) {
       pRef.current.src = ''
     }
 
-  }, [url, song.title, song.artist])
+  }, [url, song])
 
   // Manage audio state if isPlaying changes
   useEffect(() => {
     if (isPlayerLoaded && !isMediaLoading) {
       let playPromise = pRef.current.play()
-      // Setup media session
-      playPromise
-        .then(_ => {
-          if ('mediaSession' in navigator) {
-            navigator.mediaSession.metadata = new MediaMetadata({
-              title: song.title,
-              artist: song.artist,
-              album: song.album,
-              artwork: [
-                { src: song.coverUrl }
-              ]
+      if (isPlaying) {
+        if (playPromise != undefined) {
+          playPromise
+            .then(_ => {
+              // Setup media session
+              if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                  title: song.title,
+                  artist: song.artist,
+                  album: song.album,
+                  artwork: [
+                    { src: song.coverUrl }
+                  ]
+                })
+              }
             })
-          }
-        })
+            .catch(console.log)
+        }
+      }
       // Make sure it is safe to pause
       if (!isPlaying) {
         if (playPromise != undefined) {
@@ -223,6 +238,7 @@ function Player() {
       document.body.classList.remove("overflow-hidden")
     }
   }
+
 
   const audioTag = (
     <audio
