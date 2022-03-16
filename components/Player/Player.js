@@ -99,28 +99,27 @@ function Player() {
       navigator.mediaSession.setActionHandler('previoustrack', handlePrevSong)
       navigator.mediaSession.setActionHandler('play', handlePlay)
       navigator.mediaSession.setActionHandler('pause', handlePause)
-      
+
       // Handle Play/Pause of audio element
       let playPromise = pRef.current.play()
-      if (isPlaying) {
-        if (playPromise != undefined) {
-          playPromise
-            .then(_ => {
-              // Setup media session
-              if ('mediaSession' in navigator) {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                  title: song.title,
-                  artist: song.artist,
-                  album: song.album,
-                  artwork: [
-                    { src: song.coverUrl }
-                  ]
-                })
-              }
-            })
-            .catch(console.log)
-        }
+      if (playPromise != undefined) {
+        playPromise
+          .then(_ => {
+            // Setup media session
+            if ('mediaSession' in navigator) {
+              navigator.mediaSession.metadata = new MediaMetadata({
+                title: song.title,
+                artist: song.artist,
+                album: song.album,
+                artwork: [
+                  { src: song.coverUrl }
+                ]
+              })
+            }
+          })
+          .catch(console.log)
       }
+
       // Make sure it is safe to pause
       if (!isPlaying) {
         if (playPromise != undefined) {
