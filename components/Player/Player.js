@@ -44,6 +44,7 @@ function Player() {
   const duration = useSelector(selectDuration)
   const url = useSelector(selectUrl)
   const song = useSelector(selectCurrentlyPlaying)
+  const [fired, setFired] = useState('Did not fire')
 
   /* Refs */
   const pRef = useRef()
@@ -75,6 +76,9 @@ function Player() {
     }
     // Media is loaded, set duration
     updatePositionState()
+
+    setFired('Media Session Stuff Fired')
+
   }
 
   function updatePositionState() {
@@ -154,6 +158,11 @@ function Player() {
         pauseAudioElement()
       }
     }
+
+    return () => {
+      setFired('Cleared by useEffect')
+    }
+
   }, [isPlaying, isMediaLoaded])
 
 
@@ -329,6 +338,8 @@ function Player() {
                   </div>
                   <div>
                     <span className="pl-1">{song.artist.length > 34 ? song.artist.slice(0, 34) + '...' : song.artist}</span>
+                    <div>{fired}</div>
+
                   </div>
                 </div>
               </div>
@@ -346,6 +357,8 @@ function Player() {
 
           {/* Full Screen Player */}
           <div id="player-controls" className={`${isOpen ? "player-show" : "player-hide"}`}>
+            <div>{fired}</div>
+
             <MdExpandMore size="1.75em" onClick={handleOpenClose} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[27px] left-5" />
             <div className="mt-[80px] relative px-8 aspect-square min-w-[240px] min-h-[240px] sm:min-w-[400px] sm:min-h-[400px] max-w-md mx-8">
               <Image priority layout='fill' objectFit='cover' className='my-8' objectPosition="50% 50%" src={song.coverUrl} alt="album cover" />
