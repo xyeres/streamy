@@ -20,7 +20,8 @@ import {
   play,
   pause,
   selectQueue,
-  stopAndUnload
+  stopAndUnload,
+  close
 } from './playerSlice'
 import PlayOrPause from './PlayOrPause'
 import secondsToTime from './secondsToTime'
@@ -31,7 +32,7 @@ import { httpsCallable } from 'firebase/functions'
 function Player() {
   const dispatch = useDispatch()
   // Local State
-  const [isMediaLoading, setIsMediaLoading] = useState(false)
+  const [isMediaLoaded, setisMediaLoaded] = useState(false)
 
   // Selectors
   const isPlaying = useSelector(selectIsPlaying)
@@ -113,24 +114,33 @@ function Player() {
   }, [url, song.title])
 
   /* Manage Play/Pause State */
+
+  const playAudioElement = async () => {
+    const audio = pRef.current
+    try {
+      await audio.play()
+      updateMetadata()
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const pauseAudioElement = () => {
+    const audio = pRef.current
+    if (audio.src && !audio.paused) audio.pause()
+  }
+
   useEffect(() => {
-    if (isPlayerLoaded && !isMediaLoading) {
-      navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused'
-
-      // Handle Play/Pause of audio element
-      let playPromise = pRef.current.play()
-      playPromise
-        .then(_ => updateMetadata())
-        .catch(console.error)
-
-      // Make sure it is safe to pause
-      if (!isPlaying && playPromise != undefined) {
-        playPromise
-          .then(_ => pRef.current.pause())
-          .catch(err => console.error('Error playing:', err.message))
+    if (isPlayerLoaded && isMediaLoaded) {
+      if (isPlaying) {
+        navigator.mediaSession.playbackState = 'playing'
+        playAudioElement()
+      } else {
+        navigator.mediaSession.playbackState = 'paused'
+        pauseAudioElement()
       }
     }
-  }, [isPlaying, isMediaLoading, isPlayerLoaded, dispatch])
+  }, [isPlaying, isMediaLoaded, isPlayerLoaded])
 
 
   /* Handle various UI clicks */
@@ -138,7 +148,8 @@ function Player() {
 
   const handleSeekClick = (e) => {
     // Calculate normalized position
-    let clickPosition = (e.pageX - progBarContainerRef.current.offsetLeft) / progBarContainerRef.current.offsetWidth
+    const progBar = progBarContainerRef.current
+    let clickPosition = (e.pageX - progBar.offsetLeft) / progBar.offsetWidth
     let clickTime = parseFloat(clickPosition * duration)
     seek(clickTime)
   }
@@ -161,11 +172,12 @@ function Player() {
       dispatch(loadPrev())
       dispatch(play())
     }
+    console.log('prevPlayed', prevPlayed)
   }
 
-  const handleNextSong = () => {
+  function handleNextSong() {
     if (queue.length < 1) {
-      dispatch(openClose())
+      dispatch(close())
       setTimeout(function () {
         dispatch(stopAndUnload())
       }, 350)
@@ -173,7 +185,9 @@ function Player() {
       dispatch(loadNext())
       dispatch(play())
     }
+    console.log('queue', queue)
   }
+
 
   const handleTimeUpdate = () => {
     // This handler is called every 250ms
@@ -202,11 +216,11 @@ function Player() {
 
   // Data Loading Handlers
   const handleLoadStart = () => {
-    setIsMediaLoading(true)
+    setisMediaLoaded(false)
   }
 
   const handleCanPlay = () => {
-    setIsMediaLoading(false)
+    setisMediaLoaded(true)
   }
 
   // This handles load progress, not listen progress
@@ -232,6 +246,11 @@ function Player() {
       return
     }
     seek(details.seekTime)
+    navigator.mediaSession.setPositionState({
+      duration: duration,
+      playbackRate: pRef.current.playbackRate,
+      position: pRef.current.currentTime
+    })
   }
 
 
@@ -243,21 +262,18 @@ function Player() {
         ['previoustrack', handlePrevSong],
         ['nexttrack', handleNextSong],
         ['stop', handlePause],
-        // ['seekbackward', (details) => { /* ... */ }],
-        // ['seekforward', (details) => { /* ... */ }],
         ['seekto', handleSeekTo],
       ];
 
       for (const [action, handler] of actionHandlers) {
         try {
-          console.log('added:', action)
           navigator.mediaSession.setActionHandler(action, handler);
         } catch (error) {
           console.log(`The media session action "${action}" is not supported yet.`);
         }
       }
     }
-  }, [isPlayerLoaded])
+  }, [isPlayerLoaded, queue, prevPlayed])
 
 
   useEffect(() => {
@@ -268,7 +284,7 @@ function Player() {
       document.body.classList.add("overflow-auto")
       document.body.classList.remove("overflow-hidden")
     }
-  }, [isOpen, isPlayerLoaded])
+  }, [isPlayerLoaded, isOpen])
 
 
 
@@ -311,9 +327,9 @@ function Player() {
                 </div>
               </div>
               <div onClick={(e) => e.stopPropagation()} className='flex items-center justify-center mr-4'>
-                {isMediaLoading ? <MdHourglassBottom className="animate-spin text-gray-700" size="1.5em" /> : (
-                  <PlayOrPause styles="text-gray-800 drop-shadow-lg cursor-pointer" size="2em" />
-                )}
+                {isMediaLoaded ? <PlayOrPause styles="text-gray-800 drop-shadow-lg cursor-pointer" size="2em" />
+                  : (<MdHourglassBottom className="animate-spin text-gray-700" size="1.5em" />)
+                }
               </div>
             </div>
           </div>
@@ -344,14 +360,19 @@ function Player() {
 
               {/* Prev/Play/Next Controls */}
               <div className="flex items-center px-8 justify-around mt-5 drop-shadow-lg">
-                <MdSkipPrevious onClick={handlePrevSong} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+                <button aria-label="previous song" onClick={handlePrevSong}>
+                  <MdSkipPrevious size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+                </button>
                 <PlayOrPause size="3em" styles={"cursor-pointerfill-white opacity-90 hover:opacity-100"} />
-                <MdSkipNext onClick={handleNextSong} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+                <button aria-label="next song" onClick={handleNextSong}>
+                  <MdSkipNext size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+                </button>
               </div>
             </div>
           </div>
         </>
-      )}
+      )
+      }
     </>
   );
 }

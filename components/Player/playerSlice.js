@@ -29,6 +29,12 @@ export const playerSlice = createSlice({
     },
   },
   reducers: {
+    open: (state) => {
+      state.open = true
+    },
+    close: (state) => {
+      state.open = false
+    },
     openClose: (state) => {
       state.open = !state.open
     },
@@ -68,6 +74,8 @@ export const playerSlice = createSlice({
       const song = listSongs[listIndex]
       const trackNumber = song.trackNo
 
+      // Ensure player is closed
+      state.open = false
       // Clear Queue because we've started a new list
       state.queue = []
       state.prevPlayed = []
@@ -156,6 +164,8 @@ export const playerSlice = createSlice({
 })
 
 export const {
+  open,
+  close,
   openClose,
   playPause,
   play,
