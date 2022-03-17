@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { MdExpandMore, MdHourglassBottom, MdSkipNext, MdSkipPrevious } from 'react-icons/md'
+import { MdExpandMore, MdSkipNext, MdSkipPrevious } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   openClose,
@@ -23,7 +23,6 @@ import {
   stopAndUnload,
   close
 } from './playerSlice'
-import PlayOrPause from './PlayOrPause'
 import secondsToTime from './secondsToTime'
 import { functions } from '../../lib/firebase'
 import { httpsCallable } from 'firebase/functions'
@@ -120,7 +119,6 @@ function Player() {
     const audio = pRef.current
     try {
       await audio.play()
-      updateMetadata()
     } catch (err) {
       console.error(err)
     }
@@ -134,6 +132,7 @@ function Player() {
   useEffect(() => {
     if (isPlayerLoaded && isMediaLoaded) {
       if (isPlaying) {
+        updateMetadata()
         navigator.mediaSession.playbackState = 'playing'
         playAudioElement()
       } else {
