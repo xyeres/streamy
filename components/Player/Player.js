@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { MdExpandMore, MdHourglassBottom, MdSkipNext, MdSkipPrevious } from 'react-icons/md'
+import { MdExpandMore, MdSkipNext, MdSkipPrevious } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   openClose,
@@ -20,18 +20,19 @@ import {
   play,
   pause,
   selectQueue,
-  stopAndUnload
+  stopAndUnload,
+  close
 } from './playerSlice'
-import PlayOrPause from './PlayOrPause'
 import secondsToTime from './secondsToTime'
 import { functions } from '../../lib/firebase'
 import { httpsCallable } from 'firebase/functions'
+import LoadingOrPlay from './LoadingOrPlay'
 
 
 function Player() {
   const dispatch = useDispatch()
   // Local State
-  const [isMediaLoading, setIsMediaLoading] = useState(false)
+  const [isMediaLoaded, setisMediaLoaded] = useState(false)
 
   // Selectors
   const isPlaying = useSelector(selectIsPlaying)
@@ -44,16 +45,58 @@ function Player() {
   const url = useSelector(selectUrl)
   const song = useSelector(selectCurrentlyPlaying)
 
-  // Refs
+  /* Refs */
   const pRef = useRef()
   const progressBarRef = useRef()
   const bufferBarRef = useRef()
   const progBarContainerRef = useRef()
 
-  // Logical
+  /* Logical */
   const isPlayerLoaded = url != null
 
-  // Increment playCount
+
+  /* Helpers */
+  function updateMetadata() {
+    // Setup media session
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: song.title,
+        artist: song.artist,
+        album: song.album,
+        artwork: [
+          { src: song.coverUrl, sizes: '96x96' },
+          { src: song.coverUrl, sizes: '128x128' },
+          { src: song.coverUrl, sizes: '192x192' },
+          { src: song.coverUrl, sizes: '256x256' },
+          { src: song.coverUrl, sizes: '384x384' },
+          { src: song.coverUrl, sizes: '512x512' },
+        ]
+      })
+    }
+    // Media is loaded, set duration
+    updatePositionState()
+  }
+
+  function updatePositionState() {
+    if ('setPositionState' in navigator.mediaSession) {
+      const audio = pRef.current
+      navigator.mediaSession.setPositionState({
+        duration: audio.duration,
+        playbackRate: audio.playbackRate,
+        position: audio.currentTime
+      })
+    }
+  }
+
+  function seek(time) {
+    // Update state
+    dispatch(setCurrentTime(time))
+
+    // Move playhead to correct pos
+    pRef.current.currentTime = time
+  }
+
+  /* Cloud Function Handler */
   const handleIncrementPlayCount = () => {
     try {
       const songMeta = {
@@ -74,11 +117,11 @@ function Player() {
     }
   }
 
-  // Load a song if url changes
+  /* Load Song */
   useEffect(() => {
     if (url != null) {
       pRef.current.src = url
-      pRef.current.title = `${song.title} by ${song.artist}`
+      pRef.current.title = song.title
       pRef.current.load()
     }
 
@@ -86,47 +129,78 @@ function Player() {
       pRef.current.src = ''
     }
 
-  }, [url, song.title, song.artist])
+  }, [url, song.title])
 
-  // Manage audio state if isPlaying changes
+  /* Manage Play/Pause State */
+  function playAudioElement() {
+    const audio = pRef.current
+    audio.play()
+      .then(_ => {
+        navigator.mediaSession.playbackState = 'playing'
+        updateMetadata()
+      })
+      .catch(console.error)
+  }
+
+  const pauseAudioElement = () => {
+    const audio = pRef.current
+    if (audio.src && !audio.paused) {
+      audio.pause()
+      navigator.mediaSession.playbackState = 'paused'
+    }
+  }
+
   useEffect(() => {
-    if (isPlayerLoaded && !isMediaLoading) {
-      let playPromise = pRef.current.play()
-      // Make sure it is safe to pause
-      if (!isPlaying) {
-        if (playPromise != undefined) {
-          playPromise
-            .then(_ => {
-              pRef.current.pause()
-              dispatch(pause())
-            })
-            .catch(err => {
-              console.error('Error playing:', err.message)
-            })
-        }
+    if (isPlayerLoaded && isMediaLoaded) {
+      if (isPlaying) {
+        playAudioElement()
+      } else {
+        pauseAudioElement()
       }
     }
-  }, [isPlaying, isMediaLoading, isPlayerLoaded, dispatch])
 
-  // Handle various UI clicks
-  const handleOpen = () => dispatch(openClose())
+  }, [isPlaying, isPlayerLoaded, isMediaLoaded])
 
-  const seek = (time) => {
-    // Update state
-    dispatch(setCurrentTime(time))
 
-    // Move playhead to correct pos
-    pRef.current.currentTime = time
-  }
+  /* Handle various UI clicks */
+  const handleOpenClose = () => dispatch(openClose())
 
   const handleSeekClick = (e) => {
     // Calculate normalized position
-    let clickPosition = (e.pageX - progBarContainerRef.current.offsetLeft) / progBarContainerRef.current.offsetWidth
+    const progBar = progBarContainerRef.current
+    let clickPosition = (e.pageX - progBar.offsetLeft) / progBar.offsetWidth
     let clickTime = parseFloat(clickPosition * duration)
     seek(clickTime)
   }
 
-  const handleProgress = () => {
+  const handlePrevSong = () => {
+    // Play song from beginning if this is
+    // first song in the playlist
+    if (prevPlayed.length < 1) {
+      seek(0.00)
+      dispatch(play())
+    } else {
+      dispatch(loadPrev())
+      dispatch(play())
+    }
+  }
+
+  function handleNextSong() {
+    // If we're at the last song, 
+    // close player and unload media
+    if (queue.length < 1) {
+      dispatch(close())
+      setTimeout(function () {
+        dispatch(stopAndUnload())
+      }, 350)
+    } else {
+      dispatch(loadNext())
+      dispatch(play())
+    }
+  }
+
+
+  const handleTimeUpdate = () => {
     // This handler is called every 250ms
 
     const updatedPlayDuration = (parseInt(playDuration) + 1) || 0
@@ -146,30 +220,6 @@ function Player() {
     }
   }
 
-  const handlePrevSong = () => {
-    // Play song from beginning if this is
-    // first song in the playlist
-    if (prevPlayed.length < 1) {
-      seek(0.00)
-      dispatch(play())
-    } else {
-      dispatch(loadPrev())
-      dispatch(play())
-    }
-  }
-
-  const handleNextSong = () => {
-    if (queue.length < 1) {
-      dispatch(openClose())
-      setTimeout(function () {
-        dispatch(stopAndUnload())
-      }, 350)
-    } else {
-      dispatch(loadNext())
-      dispatch(play())
-    }
-  }
-
   const handleDurationChange = () => {
     const audioDuration = pRef.current.duration
     dispatch(setDuration(audioDuration))
@@ -177,13 +227,14 @@ function Player() {
 
   // Data Loading Handlers
   const handleLoadStart = () => {
-    setIsMediaLoading(true)
+    setisMediaLoaded(false)
   }
 
   const handleCanPlay = () => {
-    setIsMediaLoading(false)
+    setisMediaLoaded(true)
   }
 
+  // This handles load progress, not listen progress
   const handleOnProgress = () => {
     const audio = pRef.current
     if (duration > 0) {
@@ -198,18 +249,56 @@ function Player() {
     }
   }
 
-  const handleMediaError = (e) => { }
+  /* For Media Session */
+  const handlePlay = () => dispatch(play())
+  const handlePause = () => dispatch(pause())
+  const handleSeekTo = (details) => {
+    const audio = pRef.current
+    if (details.fastSeek && ('fastSeek' in audio)) {
+      audio.fastSeek(details.seekTime)
+      return
+    }
+    seek(details.seekTime)
+    updatePositionState()
+  }
 
-  if (isPlayerLoaded) {
-    if (isOpen) {
+  /* Media Session action handlers */
+  useEffect(() => {
+    if (isPlayerLoaded) {
+      const actionHandlers = [
+        ['play', handlePlay],
+        ['pause', handlePause],
+        ['previoustrack', handlePrevSong],
+        ['nexttrack', handleNextSong],
+        ['stop', handlePause],
+        ['seekto', handleSeekTo],
+      ];
+
+      for (const [action, handler] of actionHandlers) {
+        try {
+          navigator.mediaSession.setActionHandler(action, handler);
+        } catch (error) {
+          console.log(`The media session action "${action}" is not supported yet.`);
+        }
+      }
+    }
+  }, [isPlayerLoaded, queue, prevPlayed])
+
+
+  /* Ensure parent document can't 
+      scroll when player is open */
+  useEffect(() => {
+    if (isPlayerLoaded && isOpen) {
       document.body.classList.remove("overflow-auto")
       document.body.classList.add("overflow-hidden")
     } else {
       document.body.classList.add("overflow-auto")
       document.body.classList.remove("overflow-hidden")
     }
-  }
+  }, [isPlayerLoaded, isOpen])
 
+
+  /* Build audio element */
   const audioTag = (
     <audio
       src={url}
@@ -217,9 +306,8 @@ function Player() {
       onProgress={handleOnProgress}
       onCanPlay={handleCanPlay}
       onLoadStart={handleLoadStart}
-      onError={handleMediaError}
       onDurationChange={handleDurationChange}
-      onTimeUpdate={handleProgress}
+      onTimeUpdate={handleTimeUpdate}
       onEnded={handleNextSong}
     >
       Your browser does not support the
@@ -233,7 +321,7 @@ function Player() {
       {isPlayerLoaded && (
         <>
           {/* Control Bar */}
-          <div aria-controls="player-controls" aria-expanded={isOpen} onClick={handleOpen}
+          <div aria-controls="player-controls" aria-expanded={isOpen} onClick={handleOpenClose}
             className={isOpen ? "control-bar-hide" : "control-bar-show"}>
             <span className="sr-only">Player Controls</span>
             <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100">
@@ -250,16 +338,20 @@ function Player() {
                 </div>
               </div>
               <div onClick={(e) => e.stopPropagation()} className='flex items-center justify-center mr-4'>
-                {isMediaLoading ? <MdHourglassBottom className="animate-spin text-gray-700" size="1.5em" /> : (
-                  <PlayOrPause styles="text-gray-800 drop-shadow-lg cursor-pointer" size="2em" />
-                )}
+                <LoadingOrPlay
+                  isLoading={isMediaLoaded}
+                  playPauseIconSize="2em"
+                  loadIconSize="1.5em"
+                  playOrPauseStyles="text-gray-800 drop-shadow-lg cursor-pointer"
+                  loadIconStyles="animate-spin text-gray-700"
+                />
               </div>
             </div>
           </div>
 
           {/* Full Screen Player */}
           <div id="player-controls" className={`${isOpen ? "player-show" : "player-hide"}`}>
-            <MdExpandMore size="1.75em" onClick={handleOpen} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[27px] left-5" />
+            <MdExpandMore size="1.75em" onClick={handleOpenClose} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[27px] left-5" />
             <div className="mt-[80px] relative px-8 aspect-square min-w-[240px] min-h-[240px] sm:min-w-[400px] sm:min-h-[400px] max-w-md mx-8">
               <Image priority layout='fill' objectFit='cover' className='my-8' objectPosition="50% 50%" src={song.coverUrl} alt="album cover" />
             </div>
@@ -278,19 +370,30 @@ function Player() {
               {/* Time Indicators */}
               <div className="flex flex-row justify-between text-xs pt-2">
                 <p>{secondsToTime(currentTime)}</p>
-                <p>{secondsToTime(duration - currentTime)}</p>
+                <p>{secondsToTime(duration)}</p>
               </div>
 
               {/* Prev/Play/Next Controls */}
               <div className="flex items-center px-8 justify-around mt-5 drop-shadow-lg">
-                <MdSkipPrevious onClick={handlePrevSong} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
-                <PlayOrPause size="3em" styles={"cursor-pointerfill-white opacity-90 hover:opacity-100"} />
-                <MdSkipNext onClick={handleNextSong} size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+                <button aria-label="previous song" onClick={handlePrevSong}>
+                  <MdSkipPrevious size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+                </button>
+                <LoadingOrPlay
+                  isLoading={isMediaLoaded}
+                  playPauseIconSize="3em"
+                  loadIconSize="1.85em"
+                  playOrPauseStyles="cursor-pointer fill-white opacity-90 hover:opacity-100"
+                  loadIconStyles="animate-spin fill-white"
+                />
+                <button aria-label="next song" onClick={handleNextSong}>
+                  <MdSkipNext size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
+                </button>
               </div>
             </div>
           </div>
         </>
-      )}
+      )
+      }
     </>
   );
 }
