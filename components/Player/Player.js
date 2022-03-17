@@ -119,6 +119,7 @@ function Player() {
     const audio = pRef.current
     try {
       await audio.play()
+      updateMetadata()
     } catch (err) {
       console.error(err)
     }
@@ -130,21 +131,25 @@ function Player() {
   }
 
   useEffect(() => {
-    if (isPlayerLoaded && isMediaLoaded) {
+    if (isMediaLoaded) {
       if (isPlaying) {
-        updateMetadata()
-        navigator.mediaSession.playbackState = 'playing'
         playAudioElement()
+        navigator.mediaSession.playbackState = 'playing'
+        navigator.mediaSession.setPositionState({
+          duration: duration,
+          playbackRate: pRef.current.playbackRate,
+          position: currentTime
+        });
       } else {
         navigator.mediaSession.playbackState = 'paused'
         pauseAudioElement()
       }
     }
-  }, [isPlaying, isMediaLoaded, isPlayerLoaded])
+  }, [isPlaying, isMediaLoaded])
 
 
   /* Handle various UI clicks */
-  const handleOpen = () => dispatch(openClose())
+  const handleOpenClose = () => dispatch(openClose())
 
   const handleSeekClick = (e) => {
     // Calculate normalized position
@@ -153,7 +158,6 @@ function Player() {
     let clickTime = parseFloat(clickPosition * duration)
     seek(clickTime)
   }
-
 
   const handlePrevSong = () => {
     // Play song from beginning if this is
@@ -165,10 +169,11 @@ function Player() {
       dispatch(loadPrev())
       dispatch(play())
     }
-    console.log('prevPlayed', prevPlayed)
   }
 
   function handleNextSong() {
+    // If we're at the last song, 
+    // close player and unload media
     if (queue.length < 1) {
       dispatch(close())
       setTimeout(function () {
@@ -178,7 +183,6 @@ function Player() {
       dispatch(loadNext())
       dispatch(play())
     }
-    console.log('queue', queue)
   }
 
 
@@ -248,6 +252,7 @@ function Player() {
     })
   }
 
+  /* Media Session action handlers */
   useEffect(() => {
     if (isPlayerLoaded) {
       const actionHandlers = [
@@ -272,7 +277,6 @@ function Player() {
 
   /* Ensure parent document can't 
       scroll when player is open */
-
   useEffect(() => {
     if (isPlayerLoaded && isOpen) {
       document.body.classList.remove("overflow-auto")
@@ -282,7 +286,6 @@ function Player() {
       document.body.classList.remove("overflow-hidden")
     }
   }, [isPlayerLoaded, isOpen])
-
 
 
   /* Build audio element */
@@ -308,7 +311,7 @@ function Player() {
       {isPlayerLoaded && (
         <>
           {/* Control Bar */}
-          <div aria-controls="player-controls" aria-expanded={isOpen} onClick={handleOpen}
+          <div aria-controls="player-controls" aria-expanded={isOpen} onClick={handleOpenClose}
             className={isOpen ? "control-bar-hide" : "control-bar-show"}>
             <span className="sr-only">Player Controls</span>
             <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100">
@@ -338,7 +341,7 @@ function Player() {
 
           {/* Full Screen Player */}
           <div id="player-controls" className={`${isOpen ? "player-show" : "player-hide"}`}>
-            <MdExpandMore size="1.75em" onClick={handleOpen} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[27px] left-5" />
+            <MdExpandMore size="1.75em" onClick={handleOpenClose} className="cursor-pointer hover:bg-white rounded-2xl hover:fill-black hover:bg-opacity-50 transition-all duration-150 absolute top-[27px] left-5" />
             <div className="mt-[80px] relative px-8 aspect-square min-w-[240px] min-h-[240px] sm:min-w-[400px] sm:min-h-[400px] max-w-md mx-8">
               <Image priority layout='fill' objectFit='cover' className='my-8' objectPosition="50% 50%" src={song.coverUrl} alt="album cover" />
             </div>
@@ -357,7 +360,7 @@ function Player() {
               {/* Time Indicators */}
               <div className="flex flex-row justify-between text-xs pt-2">
                 <p>{secondsToTime(currentTime)}</p>
-                <p>{secondsToTime(duration - currentTime)}</p>
+                <p>{secondsToTime(duration)}</p>
               </div>
 
               {/* Prev/Play/Next Controls */}
