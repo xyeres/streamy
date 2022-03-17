@@ -64,8 +64,26 @@ function Player() {
         artist: song.artist,
         album: song.album,
         artwork: [
-          { src: song.coverUrl }
+          { src: song.coverUrl, sizes: '96x96' },
+          { src: song.coverUrl, sizes: '128x128' },
+          { src: song.coverUrl, sizes: '192x192' },
+          { src: song.coverUrl, sizes: '256x256' },
+          { src: song.coverUrl, sizes: '384x384' },
+          { src: song.coverUrl, sizes: '512x512' },
         ]
+      })
+    }
+    // Media is loaded, set duration
+    updatePositionState()
+  }
+
+  function updatePositionState() {
+    if ('setPositionState' in navigator.mediaSession) {
+      const audio = pRef.current
+      navigator.mediaSession.setPositionState({
+        duration: audio.duration,
+        playbackRate: audio.playbackRate,
+        position: audio.currentTime
       })
     }
   }
@@ -114,15 +132,11 @@ function Player() {
   }, [url, song.title])
 
   /* Manage Play/Pause State */
-
-  const playAudioElement = async () => {
+  function playAudioElement() {
     const audio = pRef.current
-    try {
-      await audio.play()
-      updateMetadata()
-    } catch (err) {
-      console.error(err)
-    }
+    audio.play()
+      .then(_ => updateMetadata())
+      .catch(console.error)
   }
 
   const pauseAudioElement = () => {
@@ -135,11 +149,6 @@ function Player() {
       if (isPlaying) {
         playAudioElement()
         navigator.mediaSession.playbackState = 'playing'
-        navigator.mediaSession.setPositionState({
-          duration: duration,
-          playbackRate: pRef.current.playbackRate,
-          position: currentTime
-        });
       } else {
         navigator.mediaSession.playbackState = 'paused'
         pauseAudioElement()
@@ -245,11 +254,7 @@ function Player() {
       return
     }
     seek(details.seekTime)
-    navigator.mediaSession.setPositionState({
-      duration: duration,
-      playbackRate: pRef.current.playbackRate,
-      position: pRef.current.currentTime
-    })
+    updatePositionState()
   }
 
   /* Media Session action handlers */
