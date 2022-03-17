@@ -27,6 +27,7 @@ import PlayOrPause from './PlayOrPause'
 import secondsToTime from './secondsToTime'
 import { functions } from '../../lib/firebase'
 import { httpsCallable } from 'firebase/functions'
+import LoadingOrPlay from './LoadingOrPlay'
 
 
 function Player() {
@@ -154,13 +155,6 @@ function Player() {
     seek(clickTime)
   }
 
-  const handlePlay = () => {
-    dispatch(play())
-  }
-
-  const handlePause = () => {
-    dispatch(pause())
-  }
 
   const handlePrevSong = () => {
     // Play song from beginning if this is
@@ -238,7 +232,9 @@ function Player() {
     }
   }
 
-  // For Media Session
+  /* For Media Session */
+  const handlePlay = () => dispatch(play())
+  const handlePause = () => dispatch(pause())
   const handleSeekTo = (details) => {
     const audio = pRef.current
     if (details.fastSeek && ('fastSeek' in audio)) {
@@ -252,7 +248,6 @@ function Player() {
       position: pRef.current.currentTime
     })
   }
-
 
   useEffect(() => {
     if (isPlayerLoaded) {
@@ -276,6 +271,9 @@ function Player() {
   }, [isPlayerLoaded, queue, prevPlayed])
 
 
+  /* Ensure parent document can't 
+      scroll when player is open */
+
   useEffect(() => {
     if (isPlayerLoaded && isOpen) {
       document.body.classList.remove("overflow-auto")
@@ -288,6 +286,7 @@ function Player() {
 
 
 
+  /* Build audio element */
   const audioTag = (
     <audio
       src={url}
@@ -327,9 +326,13 @@ function Player() {
                 </div>
               </div>
               <div onClick={(e) => e.stopPropagation()} className='flex items-center justify-center mr-4'>
-                {isMediaLoaded ? <PlayOrPause styles="text-gray-800 drop-shadow-lg cursor-pointer" size="2em" />
-                  : (<MdHourglassBottom className="animate-spin text-gray-700" size="1.5em" />)
-                }
+                <LoadingOrPlay
+                  isLoading={isMediaLoaded}
+                  playPauseIconSize="2em"
+                  loadIconSize="1.5em"
+                  playOrPauseStyles="text-gray-800 drop-shadow-lg cursor-pointer"
+                  loadIconStyles="animate-spin text-gray-700"
+                />
               </div>
             </div>
           </div>
@@ -363,7 +366,13 @@ function Player() {
                 <button aria-label="previous song" onClick={handlePrevSong}>
                   <MdSkipPrevious size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
                 </button>
-                <PlayOrPause size="3em" styles={"cursor-pointerfill-white opacity-90 hover:opacity-100"} />
+                <LoadingOrPlay
+                  isLoading={isMediaLoaded}
+                  playPauseIconSize="3em"
+                  loadIconSize="1.85em"
+                  playOrPauseStyles="cursor-pointer fill-white opacity-90 hover:opacity-100"
+                  loadIconStyles="animate-spin fill-white"
+                />
                 <button aria-label="next song" onClick={handleNextSong}>
                   <MdSkipNext size="3em" className="cursor-pointer fill-white opacity-90 hover:opacity-100" />
                 </button>
