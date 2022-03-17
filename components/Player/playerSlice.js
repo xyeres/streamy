@@ -9,7 +9,7 @@ export const playerSlice = createSlice({
     volume: 0.0,
     muted: false,
     currentTime: 0,
-    playDuration: 0,
+    playDuration: 0, // for tracking user engagement
     loaded: 0,
     duration: 0,
     loop: false,
@@ -107,6 +107,8 @@ export const playerSlice = createSlice({
     loadNext: (state) => {
       // Clear playDuration
       state.playDuration = 0
+      state.currentTime = null
+      state.duration = null
 
       // Remove first song from queue
       const nextSong = state.queue.shift()
