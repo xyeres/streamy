@@ -149,8 +149,11 @@ function Player() {
   }
 
   useEffect(() => {
-    if (isMediaLoaded) {
+    // console.log('Outer')
+    if (isPlayerLoaded && isMediaLoaded) {
+      // console.log('isPlayerLoaded, isMediaLoaded', isPlayerLoaded, isMediaLoaded)
       if (isPlaying) {
+        // console.log('isPlaying (Inner)', isPlaying)
         playAudioElement()
         navigator.mediaSession.playbackState = 'playing'
       } else {
@@ -163,7 +166,7 @@ function Player() {
       setFired('Cleared by useEffect')
     }
 
-  }, [isPlaying, isMediaLoaded])
+  })
 
 
   /* Handle various UI clicks */
