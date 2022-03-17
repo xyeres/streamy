@@ -44,15 +44,17 @@ function Player() {
   const url = useSelector(selectUrl)
   const song = useSelector(selectCurrentlyPlaying)
 
-  // Refs
+  /* Refs */
   const pRef = useRef()
   const progressBarRef = useRef()
   const bufferBarRef = useRef()
   const progBarContainerRef = useRef()
 
-  // Logical
+  /* Logical */
   const isPlayerLoaded = url != null
 
+
+  /* Helpers */
   function updateMetadata() {
     // Setup media session
     if ('mediaSession' in navigator) {
@@ -67,7 +69,15 @@ function Player() {
     }
   }
 
-  // Increment playCount
+  function seek(time) {
+    // Update state
+    dispatch(setCurrentTime(time))
+
+    // Move playhead to correct pos
+    pRef.current.currentTime = time
+  }
+
+  /* Cloud Function Handler */
   const handleIncrementPlayCount = () => {
     try {
       const songMeta = {
@@ -88,13 +98,12 @@ function Player() {
     }
   }
 
-  // Load a song if url changes
+  /* Load Song */
   useEffect(() => {
     if (url != null) {
       pRef.current.src = url
       pRef.current.title = song.title
       pRef.current.load()
-      updateMetadata()
     }
 
     if (url === null) {
@@ -103,68 +112,35 @@ function Player() {
 
   }, [url, song.title])
 
-  // Manage state when isPlaying changes
+  /* Manage Play/Pause State */
   useEffect(() => {
     if (isPlayerLoaded && !isMediaLoading) {
       navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused'
-      
+
       // Handle Play/Pause of audio element
       let playPromise = pRef.current.play()
       playPromise
-        .then(_ => {
-          // updateMetadata()
-        })
-        .catch(console.log)
+        .then(_ => updateMetadata())
+        .catch(console.error)
 
       // Make sure it is safe to pause
       if (!isPlaying && playPromise != undefined) {
         playPromise
-          .then(_ => {
-            pRef.current.pause()
-          })
-          .catch(err => {
-            console.error('Error playing:', err.message)
-          })
+          .then(_ => pRef.current.pause())
+          .catch(err => console.error('Error playing:', err.message))
       }
     }
   }, [isPlaying, isMediaLoading, isPlayerLoaded, dispatch])
 
-  // Handle various UI clicks
+
+  /* Handle various UI clicks */
   const handleOpen = () => dispatch(openClose())
-
-  const seek = (time) => {
-    // Update state
-    dispatch(setCurrentTime(time))
-
-    // Move playhead to correct pos
-    pRef.current.currentTime = time
-  }
 
   const handleSeekClick = (e) => {
     // Calculate normalized position
     let clickPosition = (e.pageX - progBarContainerRef.current.offsetLeft) / progBarContainerRef.current.offsetWidth
     let clickTime = parseFloat(clickPosition * duration)
     seek(clickTime)
-  }
-
-  const handleProgress = () => {
-    // This handler is called every 250ms
-
-    const updatedPlayDuration = (parseInt(playDuration) + 1) || 0
-
-    // Update State
-    dispatch(setCurrentTime(pRef.current.currentTime))
-    dispatch(setPlayDuration(updatedPlayDuration))
-
-    // Update Progress Bar 
-    const percentage = parseFloat((currentTime / duration) * 100)
-    if (progressBarRef.current) {
-      progressBarRef.current.style.width = `${percentage}%`
-    }
-
-    if (playDuration === 120) { // approx 30 seconds
-      handleIncrementPlayCount()
-    }
   }
 
   const handlePlay = () => {
@@ -199,6 +175,26 @@ function Player() {
     }
   }
 
+  const handleTimeUpdate = () => {
+    // This handler is called every 250ms
+
+    const updatedPlayDuration = (parseInt(playDuration) + 1) || 0
+
+    // Update State
+    dispatch(setCurrentTime(pRef.current.currentTime))
+    dispatch(setPlayDuration(updatedPlayDuration))
+
+    // Update Progress Bar 
+    const percentage = parseFloat((currentTime / duration) * 100)
+    if (progressBarRef.current) {
+      progressBarRef.current.style.width = `${percentage}%`
+    }
+
+    if (playDuration === 120) { // approx 30 seconds
+      handleIncrementPlayCount()
+    }
+  }
+
   const handleDurationChange = () => {
     const audioDuration = pRef.current.duration
     dispatch(setDuration(audioDuration))
@@ -213,6 +209,7 @@ function Player() {
     setIsMediaLoading(false)
   }
 
+  // This handles load progress, not listen progress
   const handleOnProgress = () => {
     const audio = pRef.current
     if (duration > 0) {
@@ -227,7 +224,15 @@ function Player() {
     }
   }
 
-  const handleMediaError = (e) => { }
+  // For Media Session
+  const handleSeekTo = (details) => {
+    const audio = pRef.current
+    if (details.fastSeek && ('fastSeek' in audio)) {
+      audio.fastSeek(details.seekTime)
+      return
+    }
+    seek(details.seekTime)
+  }
 
 
   useEffect(() => {
@@ -240,7 +245,7 @@ function Player() {
         ['stop', handlePause],
         // ['seekbackward', (details) => { /* ... */ }],
         // ['seekforward', (details) => { /* ... */ }],
-        // ['seekto', (details) => { /* ... */ }],
+        ['seekto', handleSeekTo],
       ];
 
       for (const [action, handler] of actionHandlers) {
@@ -274,9 +279,8 @@ function Player() {
       onProgress={handleOnProgress}
       onCanPlay={handleCanPlay}
       onLoadStart={handleLoadStart}
-      onError={handleMediaError}
       onDurationChange={handleDurationChange}
-      onTimeUpdate={handleProgress}
+      onTimeUpdate={handleTimeUpdate}
       onEnded={handleNextSong}
     >
       Your browser does not support the
