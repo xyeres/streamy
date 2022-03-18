@@ -3,12 +3,13 @@ import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { loadFromList, play, selectCurrentlyPlaying, selectIsPlaying } from "../Player/playerSlice";
 import { CgLoadbarSound } from 'react-icons/cg'
+import secondsToTime from '../Player/secondsToTime';
 
 export default function TracklistItem({ song, index, listId, listSongs, thumbnail }) {
   const dispatch = useDispatch()
 
-  const queue = useSelector(state => state.player.queue)
-  const prevPlayed = useSelector(state => state.player.prevPlayed)
+  // const queue = useSelector(state => state.player.queue)
+  // const prevPlayed = useSelector(state => state.player.prevPlayed)
   // console.log('queue', queue, 'prevPlayed', prevPlayed)
 
   const handleItemClick = () => {
@@ -20,7 +21,7 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
   const isPlaying = useSelector(selectIsPlaying)
 
   const trackNo = useMemo(() => index + 1, [index])
-  const duration = useMemo(() => (song.format.duration / 60).toFixed(2).replace('.', ':'), [song])
+  const duration = useMemo(() => secondsToTime(song.format.duration), [song])
 
   return (
     <li onClick={handleItemClick} className="list-none cursor-pointer hover:bg-gray-100 transition-colors duration-200 
@@ -31,7 +32,7 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
 
       {thumbnail &&
         <div className="p-1">
-          <Image width={28} height={28} className="rounded-none flex-grow object-cover h-7 w-7" src={song.coverUrl} alt={song.album} />
+          <Image data-testid="thumbnail-image" width={28} height={28} className="rounded-none flex-grow object-cover h-7 w-7" src={song.coverUrl} alt={song.album} />
         </div>
       }
       <div className="flex-grow flex items-center justify-between ml-2">

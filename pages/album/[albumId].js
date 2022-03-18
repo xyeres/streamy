@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useAlbum, useAlbumSongs } from "../../components/CoverGrid/useAlbums";
 import Layout from '../../components/Layout/Layout';
-import Tracklist from '../../components/Tracklist/Tracklist';
+import { Tracklist } from '../../components/Tracklist';
 
 export default function Albumlist() {
   const router = useRouter()
@@ -9,14 +9,14 @@ export default function Albumlist() {
 
   const album = useAlbum(albumId)
   const tracks = useAlbumSongs(albumId)
-  
+
   return (
     <Layout>
       <Tracklist
         listId={albumId}
         listDoc={album}
         tracks={tracks}
-        />
+      />
     </Layout>
   )
 }
