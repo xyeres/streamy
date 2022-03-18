@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { MdExpandMore, MdSkipNext, MdSkipPrevious } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -56,26 +56,30 @@ function Player() {
 
 
   /* Helpers */
-  function updateMetadata() {
-    // Setup media session
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: song.title,
-        artist: song.artist,
-        album: song.album,
-        artwork: [
-          { src: song.coverUrl, sizes: '96x96' },
-          { src: song.coverUrl, sizes: '128x128' },
-          { src: song.coverUrl, sizes: '192x192' },
-          { src: song.coverUrl, sizes: '256x256' },
-          { src: song.coverUrl, sizes: '384x384' },
-          { src: song.coverUrl, sizes: '512x512' },
-        ]
-      })
-    }
-    // Media is loaded, set duration
-    updatePositionState()
-  }
+  const updateMetadata = useCallback(
+    function() {
+      // Setup media session
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: song.title,
+          artist: song.artist,
+          album: song.album,
+          artwork: [
+            { src: song.coverUrl, sizes: '96x96' },
+            { src: song.coverUrl, sizes: '128x128' },
+            { src: song.coverUrl, sizes: '192x192' },
+            { src: song.coverUrl, sizes: '256x256' },
+            { src: song.coverUrl, sizes: '384x384' },
+            { src: song.coverUrl, sizes: '512x512' },
+          ]
+        })
+      }
+      // Media is loaded, set duration
+      updatePositionState()
+    },
+    [song],
+  )
+  
 
   function updatePositionState() {
     if ('setPositionState' in navigator.mediaSession) {
@@ -132,15 +136,18 @@ function Player() {
   }, [url, song.title])
 
   /* Manage Play/Pause State */
-  function playAudioElement() {
-    const audio = pRef.current
-    audio.play()
-      .then(_ => {
-        navigator.mediaSession.playbackState = 'playing'
-        updateMetadata()
-      })
-      .catch(console.error)
-  }
+  const playAudioElement = useCallback(
+    function () {
+      const audio = pRef.current
+      audio.play()
+        .then(_ => {
+          navigator.mediaSession.playbackState = 'playing'
+          updateMetadata()
+        })
+        .catch(console.error)
+    }, [updateMetadata]
+  )
+
 
   const pauseAudioElement = () => {
     const audio = pRef.current
@@ -159,7 +166,7 @@ function Player() {
       }
     }
 
-  }, [isPlaying, isPlayerLoaded, isMediaLoaded])
+  }, [isPlaying, isPlayerLoaded, isMediaLoaded, playAudioElement])
 
 
   /* Handle various UI clicks */
@@ -282,7 +289,7 @@ function Player() {
         }
       }
     }
-  }, [isPlayerLoaded, queue, prevPlayed])
+  }, [isPlayerLoaded, queue, prevPlayed, handleSeekTo, handlePlay, handlePause, handlePrevSong, handleNextSong])
 
 
   /* Ensure parent document can't 

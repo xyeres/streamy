@@ -51,6 +51,8 @@ export default function Search() {
     return (
       <div className="relative">
         <input
+          name="search"
+          data-testid="searchInput"
           type="text"
           placeholder="Artist, album, song"
           value={currentRefinement}

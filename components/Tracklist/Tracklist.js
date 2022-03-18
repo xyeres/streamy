@@ -45,7 +45,7 @@ export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
         <div className="absolute right-5 top-16">{listDoc.data.featured ? <FeaturedPill message="Featured" /> : null}</div>
       </div>
       <h1 className="font-bold text-lg">{listDoc.data.title}</h1>
-      <p className="text-xs mb-5">{isPlaylist ? `Playlist featuring ${Array.from(artists).join(', ')}` : listDoc.data.artist}</p>
+      <h2 className="text-xs mb-5">{isPlaylist ? `Playlist featuring ${Array.from(artists).join(', ')}` : listDoc.data.artist}</h2>
       <div className="max-w-lg w-full pb-24">
         <ul className="divide w-full pb-2">
           {tracklistItems}
