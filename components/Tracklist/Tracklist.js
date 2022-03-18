@@ -50,7 +50,7 @@ export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
         <ul className="divide w-full pb-2">
           {tracklistItems}
         </ul>
-        {!isPlaylist &&
+        {listDate &&
           <div className="border-t border-gray-300 text-gray-500 pt-2 self-start text-xs">
             <p>&copy;{listDate} {listDoc.data.artist}</p>
           </div>
