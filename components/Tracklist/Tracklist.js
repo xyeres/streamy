@@ -13,11 +13,12 @@ export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
 
   const isPlaylist = !!listDoc.data.listType
   const artists = new Set()
-  let coverArt = listDoc.data.coverUrl
+  const coverArt = listDoc.data.coverUrl
+  const listDate = listDoc.data.year
 
   const tracklistItems = tracks.data.map((song, index) => {
     artists.add(song.artist)
-    
+
     delete song.lastUpdated
 
     return <TracklistItem
@@ -45,9 +46,17 @@ export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
       </div>
       <h1 className="font-bold text-lg">{listDoc.data.title}</h1>
       <p className="text-xs mb-5">{isPlaylist ? `Playlist featuring ${Array.from(artists).join(', ')}` : listDoc.data.artist}</p>
-      <ul className="divide max-w-lg w-full pb-28">
-        {tracklistItems}
-      </ul>
+      <div className="max-w-lg w-full pb-24">
+        <ul className="divide w-full pb-2">
+          {tracklistItems}
+        </ul>
+        {listDate &&
+          <div className="border-t border-gray-300 text-gray-500 pt-2 self-start text-xs">
+            <p>&copy;{listDate} {listDoc.data.artist}</p>
+          </div>
+        }
+      </div>
     </div>
+
   )
 }

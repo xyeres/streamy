@@ -82,16 +82,6 @@ export function useCollectionGroup(path, subColl) {
   }
 }
 
-
-export function useAlbumsTesting(albumId) {
-  const { data, error } = useSWR(albumId, albumsTesting)
-  return {
-    data,
-    isLoading: !error && !data,
-    isError: error
-  }
-}
-
 export function useFeatured(coll) {
   const { data, error } = useSWR(`${coll}/featured`, () => featuredFetcher(coll))
   return {
@@ -221,42 +211,6 @@ export async function albumsFetcher(keywords, order, itemLimit) {
 
   if (buffer.length > 0) return buffer
   else throw new Error("Woops, no albums here yet")
-}
-
-/**
- * Function to test queries
- * @param {*} albumId 
- * @returns 
- */
-export async function albumsTesting(albumId) {
-  // get an album
-  const docRef = doc(db, `albums/${albumId}`)
-  const docSnap = await getDoc(docRef)
-
-  if (docSnap.exists()) {
-    // get an albums songs
-    const album = docSnap.data()
-    const q = query(collection(db, `albums/${albumId}/songs`), orderBy('title'))
-
-    const qSnapshot = await getDocs(q)
-    const songs = []
-    qSnapshot.forEach((doc) => songs.push(doc.data()))
-
-
-    // Get a playlist and all of its songs
-    const playlist = []
-    const playlistDocRef = doc(db, `playlists/EOsTVelueb8nchPRUvug`)
-    const playlistSnap = await getDoc(playlistDocRef)
-    const playlistToQuery = playlistSnap.data()
-    if (!playlistSnap.exists()) throw new Error('No playlist available')
-
-    const playlistQuery = query(collectionGroup(db, 'songs'), where('id', 'in', playlistToQuery.songs))
-    const playlistQSnap = await getDocs(playlistQuery)
-    playlistQSnap.forEach((doc) => playlist.push(doc.data()))
-
-    return { album, songs, playlist }
-
-  } else throw new Error(`URL for "${albumId}" does not exist.`)
 }
 
 /**

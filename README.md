@@ -11,16 +11,16 @@ streamy lets you create your own music streaming app by uploading your music and
 ### Current Features
 - Mobile-first experience
 - Browse playlists and albums
-- Mark an album as 'featured'
-- Custom player built on top of HTML5 <audio> API
+- Custom player built on top of HTML5 <audio>
 - Pause/play a song, skip, go-back
 - Search artist/album/song
 
 ### Feature roadmap
-- Sharing
-- User auth
-- Subscriptions/paywall
-- More admin features
 - Add to queue
-- Playlist creation
-- Recently played
+- User auth
+  - favorites
+  - Subscriptions/paywall
+  - Playlist creation
+  - Recently played
+- Sharing
+- More admin features
