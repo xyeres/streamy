@@ -7,16 +7,19 @@ export default function Albumlist() {
   const router = useRouter()
   const { albumId } = router.query
 
-  const album = useAlbum(albumId)
-  const tracks = useAlbumSongs(albumId)
+  if (albumId) {
+    const album = useAlbum(albumId)
+    const tracks = useAlbumSongs(albumId)
 
-  return (
-    <Layout>
-      <Tracklist
-        listId={albumId}
-        listDoc={album}
-        tracks={tracks}
-      />
-    </Layout>
-  )
+    return (
+      <Layout>
+        <Tracklist
+          listId={albumId}
+          listDoc={album}
+          tracks={tracks}
+        />
+      </Layout>
+    )
+  }
+  return null
 }
