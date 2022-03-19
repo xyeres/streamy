@@ -14,7 +14,7 @@ export default function FeedbackCard() {
             <div className="flex flex-row items-start">
               <h3 className="font-bold">Enjoying the App?</h3>
             </div>
-            <p className="text-sm mt-2">We&apos;d love to hear your feedback. Tap here to drop us note or to check out the <span className="font-semibold">Feature Road Map</span> if you&apos; re curious about what we&apos;re cooking up.</p>
+            <p className="text-sm mt-2">We&apos;d love to hear your feedback. Tap here to drop us note or to check out the <span className="font-semibold">Feature Road Map</span> if you&apos;re curious about what we&apos;re cooking up.</p>
           </div>
         </div>
       </a>
