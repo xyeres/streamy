@@ -22,7 +22,7 @@ export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
     delete song.lastUpdated
 
     return <TracklistItem
-      key={index}
+      key={song.id}
       index={index}
       song={song}
       listId={listId}
