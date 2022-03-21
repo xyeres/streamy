@@ -1,22 +1,19 @@
-import { render, screen } from 'test-utils'
-
-import Grid from '../components/Home/Grid';
-import * as nextRouter from 'next/router';
-
-nextRouter.useRouter = jest.fn();
-nextRouter.useRouter.mockImplementation(() => ({ route: '/search' }));
+import { render } from 'test-utils'
+import { CoverGrid } from '../components/CoverGrid';
 
 describe('Home', () => {
-  it('renders a grid of albums', () => {
-    render(
-      <Grid />
+  it('renders a skeleton grid of albums', () => {
+    const { getByText } = render(
+      <CoverGrid
+        path="/album"
+        keywords={{ field: 'tags', opStr: 'array-contains', value: 'new' }}
+        swrkey="recentlyAdded"
+      />
     )
 
-    const heading = screen.getByRole('heading', {
-      name: /newly added/i,
-    })
+    const album = getByText(/Mystic river/i)
 
+    expect(album).toBeInTheDocument()
 
-    expect(heading).toBeInTheDocument()
   })
 })

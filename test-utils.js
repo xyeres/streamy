@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import store from './app/store'
+import store from './src/store'
 import { Provider } from 'react-redux'
 import LayoutWrapper from './components/Layout/LayoutWrapper'
 
