@@ -1,7 +1,6 @@
 import { render, fireEvent } from 'test-utils'
-import LayoutWrapper from '../components/Layout/LayoutWrapper'
-import { Layout } from '../components/Layout'
-import TracklistItem from '../components/Tracklist/TracklistItem'
+import { Layout } from '../../Layout'
+import TracklistItem from '../../Tracklist/TracklistItem'
 import * as nextRouter from 'next/router';
 import { act } from 'react-dom/test-utils';
 
@@ -56,22 +55,22 @@ describe('Player', () => {
       .spyOn(window.HTMLMediaElement.prototype, 'load')
       .mockImplementation(() => { })
 
-    const { queryByTestId, getByText } = render(
+    render(
       <Layout>
         <TracklistItem song={song} index={0} listId="23j4kl2j42l3" listSongs={[song]} thumbnail />
       </Layout>
     )
 
-    const songItem = getByText(/Bed Of Humility/i)
+    const songItem = screen.getByText(/Bed Of Humility/i)
     
-    let playerBar = queryByTestId('player-control-bar')
+    let playerBar = screen.queryByTestId('player-control-bar')
     expect(playerBar).not.toBeInTheDocument()
 
     await act(async () => {
       fireEvent.click(songItem)
     })
 
-    playerBar = queryByTestId('player-control-bar')
+    playerBar = screen.queryByTestId('player-control-bar')
     expect(playerBar).toBeInTheDocument()
     expect(loadStub).toHaveBeenCalled()
     loadStub.mockRestore()
