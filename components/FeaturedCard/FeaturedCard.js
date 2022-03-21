@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useFeatured } from '../CoverGrid/useAlbums';
 import ErrMsgHome from '../Layout/ErrMsgHome'
 import LoadingFeaturedItem from '../Layout/LoadingFeaturedItem'
-import FeaturedPill from './FeaturedPill';
+import { FeaturedPill } from '../FeaturedPill';
 
 export default function FeaturedCard({ item, featuredColl }) {
   const { data, isError, isLoading } = useFeatured(featuredColl)
