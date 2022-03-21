@@ -1,5 +1,5 @@
 import { query, orderBy, collection, getDocs, doc, getDoc, where, collectionGroup, limit } from "firebase/firestore";
-import { db } from "../../lib/firebase";
+import { db } from "../../src/firebase";
 import useSWR from "swr";
 
 /**

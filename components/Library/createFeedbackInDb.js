@@ -1,5 +1,5 @@
 import { addDoc, collection, doc, serverTimestamp } from "firebase/firestore";
-import { db } from "../../lib/firebase";
+import { db } from "../../src/firebase";
 
 
 // Creates feedback document
