@@ -10,7 +10,14 @@ import useSWR from "swr";
  * @returns 
  */
 export default function useCollection(coll, order = null, limit = 20) {
-  const { data, error } = useSWR(`${coll}/${order}`, () => collectionFetcher(coll, order, limit))
+  const key = `${coll}/${order}`
+  const fetcher = () => collectionFetcher(coll, order, limit)
+  const { data, error } = useSWR(key, fetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false
+  })
+
   return {
     data,
     isLoading: !error && !data,
@@ -23,11 +30,17 @@ export default function useCollection(coll, order = null, limit = 20) {
  * @param {*} keywords 
  * @param {*} order 
  * @param {*} itemLimit 
- * @param {*} swrkey 
+ * @param {*} key 
  * @returns 
  */
-export function useAlbums(keywords = null, order = null, itemLimit = 12, swrkey) {
-  const { data, error } = useSWR(swrkey, () => albumsFetcher(keywords, order, itemLimit))
+export function useAlbums(keywords = null, order = null, itemLimit = 12, key) {
+  const fetcher = () => albumsFetcher(keywords, order, itemLimit)
+  const { data, error } = useSWR(key, fetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false
+  })
+
   return {
     data,
     isLoading: !error && !data,
@@ -41,7 +54,14 @@ export function useAlbums(keywords = null, order = null, itemLimit = 12, swrkey)
  * @returns 
  */
 export function useAlbum(albumId) {
-  const { data, error } = useSWR(`${albumId}/album`, () => albumFetcher(albumId))
+  const fetcher = () => albumFetcher(albumId)
+  const key = `${albumId}/album`
+  const { data, error } = useSWR(key, fetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false
+  })
+
   return {
     data,
     isLoading: !error && !data,
@@ -55,7 +75,12 @@ export function useAlbum(albumId) {
  * @returns 
  */
 export function useAlbumSongs(albumId) {
-  const { data, error } = useSWR(`${albumId}/songs`, () => albumSongsFetcher(albumId))
+  const { data, error } = useSWR(`${albumId}/songs`, () => albumSongsFetcher(albumId), {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false
+  })
+
   return {
     data,
     isLoading: !error && !data,
@@ -65,7 +90,12 @@ export function useAlbumSongs(albumId) {
 
 
 export function useDocument(collection, id) {
-  const { data, error } = useSWR(`${collection}/${id}`, documentFetcher)
+  const { data, error } = useSWR(`${collection}/${id}`, documentFetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false
+  })
+
   return {
     data,
     isLoading: !error && !data,
@@ -74,7 +104,15 @@ export function useDocument(collection, id) {
 }
 
 export function useCollectionGroup(path, subColl) {
-  const { data, error } = useSWR(`${path}/${subColl}`, () => collectionGroupFetcher(path, subColl))
+  const key = `${path}/${subColl}`
+  const fetcher = () => collectionGroupFetcher(path, subColl)
+
+  const { data, error } = useSWR(key, fetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false
+  })
+
   return {
     data,
     isLoading: !error && !data,
@@ -83,7 +121,14 @@ export function useCollectionGroup(path, subColl) {
 }
 
 export function useFeatured(coll) {
-  const { data, error } = useSWR(`${coll}/featured`, () => featuredFetcher(coll))
+  const fetcher = () => featuredFetcher(coll)
+  const key = `${coll}/featured`
+  const { data, error } = useSWR(key, fetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false
+  })
+  
   return {
     data,
     isLoading: !error && !data,
@@ -142,7 +187,7 @@ export async function collectionGroupFetcher(path, subColl) {
 
   songsDocsSnaps = await Promise.all(songsDocsSnaps)
 
-  const songsDocs = [...new Set([].concat(...songsDocsSnaps.map((o)=>o.docs)))]
+  const songsDocs = [...new Set([].concat(...songsDocsSnaps.map((o) => o.docs)))]
 
   songsDocs.forEach((doc) => buffer.push(doc.data()))
 
