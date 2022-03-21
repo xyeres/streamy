@@ -1,6 +1,5 @@
 import { render, screen } from 'test-utils'
 import Search from '../pages/search';
-
 import * as nextRouter from 'next/router';
 
 nextRouter.useRouter = jest.fn();
@@ -11,7 +10,6 @@ describe('Search', () => {
     render(
       <Search />
     )
-
 
     const heading = screen.getByRole('heading', {
       name: /something missing/i,

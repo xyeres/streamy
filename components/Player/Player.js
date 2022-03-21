@@ -328,7 +328,7 @@ function Player() {
       {isPlayerLoaded && (
         <>
           {/* Control Bar */}
-          <div aria-controls="player-controls" aria-expanded={isOpen} onClick={handleOpenClose}
+          <div data-testid="player-control-bar" aria-controls="player-controls" aria-expanded={isOpen} onClick={handleOpenClose}
             className={isOpen ? "control-bar-hide" : "control-bar-show"}>
             <span className="sr-only">Player Controls</span>
             <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100">
