@@ -1,4 +1,4 @@
-import Player from "../Player/Player";
+import { Player } from "../Player";
 import MenuNav from "./MenuNav";
 
 export default function LayoutWrapper({ children, home, search, library, bareBones }) {
