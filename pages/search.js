@@ -1,6 +1,6 @@
 import { MdOutlineSearch, MdCancel, MdOutlineMusicNote, MdQueueMusic } from "react-icons/md"
 import { InstantSearch, connectHits, connectSearchBox, connectStateResults } from 'react-instantsearch-dom'
-import Layout from "../components/Layout/Layout"
+import { Layout } from "../components/Layout/"
 import algoliasearch from 'algoliasearch/lite'
 
 import SongResultList from "../components/Search/SongResultList"

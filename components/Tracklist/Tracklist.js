@@ -2,7 +2,7 @@ import Image from "next/image";
 import ErrorMessage from "../../components/Layout/ErrorMessage";
 import LoadingMsg from "../../components/Layout/LoadingMsg";
 import TracklistItem from "../../components/Tracklist/TracklistItem";
-import FeaturedPill from "../Home/FeaturedPill";
+import { FeaturedPill } from "../FeaturedPill";
 
 export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
   const isError = listDoc.isError || tracks.isError

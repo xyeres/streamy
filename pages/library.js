@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { GiHeartBottle, GiTechnoHeart } from 'react-icons/gi';
-import Layout from "../components/Layout/Layout";
+import { Layout } from "../components/Layout";
 import Feedback from '../components/Library/Feedback';
 
 export default function Library() {
@@ -8,7 +8,7 @@ export default function Library() {
   const handleFeedbackToggle = () => {
     setIsOpen(!isOpen)
   }
-  
+
   return (
     <Layout library>
       <div className="overflow-hidden text-center m-4 gap-6 text-slate-600 flex flex-col items-center justify-center h-[76vh]">
