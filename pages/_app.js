@@ -1,13 +1,13 @@
 import Head from 'next/head'
 import { Provider } from 'react-redux'
-import store from '../app/store'
+import store from '../src/store'
 import LayoutWrapper from '../components/Layout/LayoutWrapper'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
-    <Head>
+      <Head>
         <title>Stream music from United Pursuit and friends</title>
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@unitedpursuit" />
@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
         <meta property="og:image:height" content="400" />
         <meta property="og:image:alt" content="Music streaming app screenshots" />
 
-    </Head>
+      </Head>
       <LayoutWrapper>
         <Component {...pageProps} />
       </LayoutWrapper>

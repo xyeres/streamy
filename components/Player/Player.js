@@ -24,7 +24,7 @@ import {
   close
 } from './playerSlice'
 import secondsToTime from './secondsToTime'
-import { functions } from '../../lib/firebase'
+import { functions } from '../../src/firebase'
 import { httpsCallable } from 'firebase/functions'
 import LoadingOrPlay from './LoadingOrPlay'
 
