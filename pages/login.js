@@ -50,18 +50,16 @@ export default function Login() {
 }
 
 function SignInButtonGoogle() {
-  const router = useRouter()
-
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = () => {
     signInWithRedirect(auth, googleAuthProvider)
   }
 
   return (
-    <button
+    <div
       className="w-72 h-10 p-2 rounded-lg border border-gray-500 flex flex-row justify-center items-center"
       onClick={signInWithGoogle}>
       <Image alt='Sign in with Google' height={24} width={24} src={'/images/google.png'} />
       <p className="font-semibold pl-2 text-sm">Continue with Google</p>
-    </button>
+    </div>
   )
 }
