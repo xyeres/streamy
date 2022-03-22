@@ -1,9 +1,7 @@
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser, logoutUser, selectUser, selectUsername } from '../features/user/userSlice'
-import { auth, googleAuthProvider, db } from '../src/firebase'
-import { setDoc, collection, writeBatch, doc, serverTimestamp, getDoc } from "firebase/firestore";
-
+import { loginUser, selectUser } from '../features/user/userSlice'
+import { auth, googleAuthProvider } from '../src/firebase'
 import { Layout } from '../components/Layout'
 import setUserDoc from '../features/user/setUserDoc';
 import { useRouter } from 'next/router';
