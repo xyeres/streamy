@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth'
+import { getRedirectResult, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, selectUser } from '../features/user/userSlice'
 import { auth, googleAuthProvider } from '../src/firebase'
@@ -32,6 +32,7 @@ function SignInButtonGoogle() {
 
   const signInWithGoogle = async () => {
     signInWithRedirect(auth, googleAuthProvider)
+    getRedirectResult
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
