@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { useRouter } from "next/router"
 import { useDispatch, useSelector } from "react-redux"
 import { Layout } from "../components/Layout"
 import AuthCheck from "../components/Layout/AuthCheck"
@@ -6,8 +7,6 @@ import { logoutUser, selectUser } from "../features/user/userSlice"
 import { auth } from "../src/firebase"
 
 export default function Profile() {
-  const user = useSelector(selectUser)
-
   return (
     <Layout>
       <main className="m-4 mt-20 flex flex-col items-center gap-5">
@@ -20,7 +19,6 @@ export default function Profile() {
 }
 
 function UserProfile() {
-  const dispatch = useDispatch()
   const user = useSelector(selectUser)
 
   return (
@@ -37,11 +35,13 @@ function UserProfile() {
 
 function SignOutButton() {
   const dispatch = useDispatch()
+  const router = useRouter()
   const user = useSelector(selectUser)
 
-  function signOut() {
-    auth.signOut()
+  async function signOut() {
+    await auth.signOut()
     dispatch(logoutUser())
+    router.push('/')
   }
 
   return (

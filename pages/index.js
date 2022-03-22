@@ -5,7 +5,7 @@ import { CategoryHeader } from "../components/CategoryHeader"
 import { FeaturedCard } from "../components/FeaturedCard"
 import { FeedbackCard } from "../components/FeedbackCard"
 import { Layout } from '../components/Layout';
-import { UserIcon } from "../components/UserIcon"
+import { AccountBar } from "../components/AccountBar"
 
 
 export default function Home() {
@@ -13,7 +13,9 @@ export default function Home() {
 
   return (
     <Layout home>
-      <UserIcon />
+      <div className="absolute top-4 right-4 z-10">
+        <AccountBar />
+      </div>
       <div className={`relative h-full w-full ${isPlayerLoaded ? 'pb-24' : 'pb-12'}`}>
         <CategoryHeader title="Newly Added" />
         <CoverGrid
@@ -57,6 +59,6 @@ export default function Home() {
           keywords={{ field: 'tags', opStr: 'array-contains', value: 'og' }}
         />
       </div>
-    </Layout>
+    </Layout >
   );
 }
