@@ -28,7 +28,7 @@ function UserProfile() {
       </div>
       <h1 className="text-2xl">Hi {user.displayName} 👋</h1>
       <SignOutButton />
-      <FeedbackCard customHeader={<>Profiles!</>} customMessage={<>We&apos;re just getting profiles setup. Soon you'll be able to favorite songs and do other nifty things. Stay tuned. Tap here to drop us some feedback.</>} />
+      <FeedbackCard customHeader={<>Profiles!</>} customMessage={<>We&apos;re just getting profiles setup.Soon you&apos;ll be able to favorite songs and do other nifty things. Stay tuned. Tap here to drop us some feedback.</>} />
     </div>
   )
 }
