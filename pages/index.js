@@ -5,12 +5,15 @@ import { CategoryHeader } from "../components/CategoryHeader"
 import { FeaturedCard } from "../components/FeaturedCard"
 import { FeedbackCard } from "../components/FeedbackCard"
 import { Layout } from '../components/Layout';
+import { UserIcon } from "../components/UserIcon"
+
 
 export default function Home() {
   const isPlayerLoaded = useSelector(selectUrl)
 
   return (
     <Layout home>
+      <UserIcon />
       <div className={`relative h-full w-full ${isPlayerLoaded ? 'pb-24' : 'pb-12'}`}>
         <CategoryHeader title="Newly Added" />
         <CoverGrid
