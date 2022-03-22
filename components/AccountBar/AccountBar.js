@@ -5,7 +5,7 @@ import { MdAccountCircle } from 'react-icons/md'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../../features/user/userSlice'
 
-const AccountBtn = forwardRef(({ onClick, href, msg, photoURL }, ref) => {
+export const AccountBtn = forwardRef(function AccountBtn({ onClick, href, msg, photoURL }, ref) {
   return (
     <a aria-label="View account" href={href} onClick={onClick} ref={ref} className="text-purple-500 hover:text-purple-700">
       <span className="sr-only">{msg}</span>
@@ -18,9 +18,8 @@ const AccountBtn = forwardRef(({ onClick, href, msg, photoURL }, ref) => {
   )
 })
 
-export default function UserIcon() {
+export default function AccountBar() {
   const user = useSelector(selectUser)
-
   return (
     <nav>
       {user ?
