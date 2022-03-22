@@ -5,6 +5,7 @@ import { auth, googleAuthProvider } from '../src/firebase'
 import { Layout } from '../components/Layout'
 import setUserDoc from '../features/user/setUserDoc';
 import { useRouter } from 'next/router';
+import Image from 'next/image'
 
 export default function Login() {
   const user = useSelector(selectUser)
@@ -64,8 +65,8 @@ function SignInButtonGoogle() {
     <button
       className="w-72 h-10 p-2 rounded-lg border border-gray-500 flex flex-row justify-center items-center"
       onClick={signInWithGoogle}>
-      <img className="h-6 pr-2" src={'/images/google.png'} />
-      <p className="font-semibold text-sm">Continue with Google</p>
+      <Image alt='Sign in with Google' height={24} width={24} src={'/images/google.png'} />
+      <p className="font-semibold pl-2 text-sm">Continue with Google</p>
     </button>
   )
 }

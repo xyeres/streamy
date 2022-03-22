@@ -24,7 +24,7 @@ function UserProfile() {
   return (
     <>
       <div className="w-48 h-48 rounded-full relative">
-        <Image src={user.photoURL} layout="fill" className="rounded-full" />
+        <Image alt="user profile" src={user.photoURL} layout="fill" className="rounded-full" />
       </div>
       <div className="text-2xl">Hi {user.displayName} 👋</div><div className="mt-20">
         <SignOutButton />
