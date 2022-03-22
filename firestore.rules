@@ -1,8 +1,8 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{allPaths=**} {
-      allow read, write: if false;
+  	match /users/{uid} {
+			allow read, write: if request.auth.uid == uid;
     }
     match /playlists/{document} {
       allow read; 

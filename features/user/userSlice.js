@@ -7,7 +7,8 @@ export const userAuthSlice = createSlice({
   },
   reducers: {
     loginUser: (state, action) => {
-      state.user = action.payload
+      const json = JSON.parse(JSON.stringify(action.payload))
+      state.user = json
     },
     logoutUser: (state) => {
       state.user = null

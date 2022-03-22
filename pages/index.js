@@ -43,7 +43,9 @@ export default function Home() {
           swrkey="studioAlbums"
           keywords={{ field: 'tags', opStr: 'array-contains', value: 'studio' }}
         />
-        <FeedbackCard />
+        <div className="m-4 my-6">
+          <FeedbackCard />
+        </div>
         <CategoryHeader title="Live albums" />
         <CoverGrid
           path="/album"
