@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { useDispatch, useSelector } from "react-redux"
+import FeedbackCard from "../components/FeedbackCard/FeedbackCard"
 import { Layout } from "../components/Layout"
 import AuthCheck from "../components/Layout/AuthCheck"
 import { logoutUser, selectUser } from "../features/user/userSlice"
@@ -9,34 +10,32 @@ import { auth } from "../src/firebase"
 export default function Profile() {
   return (
     <Layout>
-      <main className="m-4 mt-20 flex flex-col items-center gap-5">
+      <div className="mt-16 flex flex-col items-center w-full">
         <AuthCheck>
           <UserProfile />
         </AuthCheck>
-      </main>
+      </div>
     </Layout>
   )
 }
 
 function UserProfile() {
   const user = useSelector(selectUser)
-
   return (
-    <>
+    <div className="max-w-lg p-6 flex flex-col items-center gap-8 w-full">
       <div className="w-48 h-48 rounded-full relative">
-        <Image alt="user profile" src={user.photoURL} layout="fill" className="rounded-full" />
+        <Image priority alt="user profile" src={user.photoURL} layout="fill" className="rounded-full" />
       </div>
-      <div className="text-2xl">Hi {user.displayName} 👋</div><div className="mt-20">
-        <SignOutButton />
-      </div>
-    </>
+      <h1 className="text-2xl">Hi {user.displayName} 👋</h1>
+      <SignOutButton />
+      <FeedbackCard customHeader={<>Profiles!</>} customMessage={<>We&apos;re just getting profiles setup. Soon you'll be able to favorite songs and do other nifty things. Stay tuned. Tap here to drop us some feedback.</>} />
+    </div>
   )
 }
 
 function SignOutButton() {
   const dispatch = useDispatch()
   const router = useRouter()
-  const user = useSelector(selectUser)
 
   async function signOut() {
     await auth.signOut()
@@ -46,8 +45,9 @@ function SignOutButton() {
 
   return (
     <button
-      className="w-72 h-10 p-2 rounded-lg border border-gray-500 flex flex-row justify-center items-center"
-      onClick={signOut}>Sign Out {user.displayName}
+      className="w-full h-10 p-2 hover:bg-gray-400 hover:text-white hover:border-1 rounded-lg border border-gray-500 flex flex-row justify-center items-center"
+      onClick={signOut}>
+      Sign Out 🚪🚶
     </button>
   )
 }

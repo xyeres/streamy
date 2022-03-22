@@ -10,7 +10,10 @@ export default async function setUserDoc(user) {
       const docSnap = await getDoc(userRef)
 
       if (!docSnap.exists()) {
-        const data = { photoURL: user.photoURL, name: user.displayName, lastModified: serverTimestamp() }
+        const data = {
+          uid: user.uid,
+          lastModified: serverTimestamp() 
+        }
         const docRef = await setDoc(userRef, data, { merge: true })
         resolve(docRef)
       }

@@ -5,12 +5,12 @@ import LoadingMsg from "../../components/Layout/LoadingMsg";
 import { loginUser, selectUser } from "../../features/user/userSlice";
 import { auth } from "../../src/firebase";
 
-export default function AuthProvider({children}) {
+export default function AuthProvider({ children }) {
   const [user, loading, error] = useAuthState(auth)
   const rxUser = useSelector(selectUser)
   const dispatch = useDispatch()
 
-  if (!rxUser) dispatch(loginUser(user))
+  if (!rxUser && user) dispatch(loginUser(user.toJSON()))
 
   if (loading) {
     return <LoadingMsg message="Welcome" />
