@@ -24,4 +24,3 @@ export const {
 export default userAuthSlice.reducer
 
 export const selectUser = (state) => state.userAuth.user
-export const selectUsername = (state) => state.userAuth.username

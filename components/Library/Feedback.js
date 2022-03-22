@@ -7,6 +7,7 @@ import createFeedbackInDb from './createFeedbackInDb'
 import { GiCoolSpices } from 'react-icons/gi'
 import { useRouter } from 'next/router'
 import RoadMap from './RoadMap'
+import useUser from '../../features/user/useUser'
 
 
 export default function Feedback({ isOpen, setIsOpen }) {
@@ -22,7 +23,7 @@ export default function Feedback({ isOpen, setIsOpen }) {
   const isFormFilled = textArea && isEmotionSelected
   const router = useRouter()
   const { feedback } = router.query
-
+  const { user } = useUser()
 
   useEffect(() => {
     if (feedback === "open") {
@@ -50,7 +51,16 @@ export default function Feedback({ isOpen, setIsOpen }) {
       if (sad) emotion = 'sad'
       if (happy) emotion = 'happy'
 
-      await createFeedbackInDb(textArea, emotion)
+
+      let userDetails;
+      if (user) {
+        userDetails = {
+          name: user.displayName,
+          email: user.email
+        }
+      }
+
+      await createFeedbackInDb(textArea, emotion, userDetails)
 
       setTimeout(() => {
         setIsSubmitted(false)
@@ -138,6 +148,7 @@ export default function Feedback({ isOpen, setIsOpen }) {
                       {(textArea && isEmotionSelected && !isSubmitted) && 'Send feedback'}
                     </span>
                   </button>
+                  {user && <p className="text-xs font-semibold">{`(Logged in as ${user.displayName})`}</p>}
                   {isError && <p>Frowny face, something went wrong. <br />{isError.message}</p>}
                 </form>
               </div>
