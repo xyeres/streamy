@@ -12,18 +12,24 @@ import { useState } from 'react'
 
 export default function Login() {
   const [clicked, setclicked] = useState('not clicked')
+  const [error, setError] = useState(null)
   const user = useSelector(selectUser)
   const router = useRouter()
 
-  const signInWithGoogle = () => {
+  const signInWithGoogle = async () => {
     setclicked('yes clicked')
-    signInWithRedirect(auth, googleAuthProvider)
+    try {
+      await signInWithRedirect(auth, googleAuthProvider)
+    } catch(err) {
+      setError(err)
+    }
   }
   
   getRedirectResult(auth)
     .then((result) => {
       if (result) {
         setUserDoc(result.user)
+        router.push('/profile')
       }
     }).catch((error) => {
       console.error('Error using redirect result: ', error)
@@ -36,8 +42,6 @@ export default function Login() {
       const credential = GoogleAuthProvider.credentialFromError(error);
     });
 
-
-  if (user) router.push('/profile')
   //   <Image alt='Sign in with Google' height={24} width={24} src={'/images/google.png'} />
   return (
     <Layout>
@@ -49,6 +53,7 @@ export default function Login() {
           Continue with Google
         </button>
         {clicked}
+        {error}
         <FooterLine />
       </div>
     </Layout>
