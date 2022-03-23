@@ -31,7 +31,6 @@ export default function Login() {
   getRedirectResult(auth)
     .then((result) => {
       if (result) {
-        console.log(result)
         setUserDoc(result.user)
         router.push('/profile')
       }
