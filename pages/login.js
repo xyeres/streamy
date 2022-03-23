@@ -35,7 +35,7 @@ export default function Login() {
   return (
     <Layout>
       <div className="mt-10 flex flex-col items-center w-full">
-        <div className="max-w-lg p-4 flex flex-col items-center w-full mb-24 gap-6">
+        <div className="max-w-lg p-4 flex flex-col items-center w-full mb-24 gap-5">
           <GiSaloonDoors className="text-purple-500" size="8em" />
           <h1 className="text-lg text-gray-700 font-bold">Log in or create an account</h1>
           {
