@@ -6,6 +6,8 @@ import { Layout } from '../components/Layout'
 import setUserDoc from '../features/user/setUserDoc';
 import { useRouter } from 'next/router';
 import Image from 'next/image'
+import Link from 'next/link'
+import FooterLine from '../components/Layout/FooterLine'
 
 export default function Login() {
   const user = useSelector(selectUser)
@@ -13,16 +15,9 @@ export default function Login() {
 
   getRedirectResult(auth)
     .then((result) => {
-      // This gives you a Google Access Token. You can use it to access Google APIs.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-
-      // The signed-in user info.
-      const user = result.user;
-      
-      // If first sign-in, create user doc in firestore
-      setUserDoc(user)
-
+      if (result) {
+        setUserDoc(result.user)
+      }
     }).catch((error) => {
       console.error('Error using redirect result: ', error)
       // Handle Errors here.
@@ -34,16 +29,15 @@ export default function Login() {
       const credential = GoogleAuthProvider.credentialFromError(error);
     });
 
-  if (user) router.push('/profile')
 
+  if (user) router.push('/profile')
+  //   <Image alt='Sign in with Google' height={24} width={24} src={'/images/google.png'} />
   return (
     <Layout>
       <div className="m-4 mt-16 flex flex-col items-center">
         <h1 className="text-lg font-bold mb-10">Log in or create an account</h1>
         <SignInButtonGoogle />
-        <p className="text-xs justify-self-end mt-10">
-          By continuing you agree to our terms of service and privacy policy.
-        </p>
+        <FooterLine />
       </div>
     </Layout>
   )
@@ -55,11 +49,10 @@ function SignInButtonGoogle() {
   }
 
   return (
-    <div
-      className="w-72 h-10 p-2 rounded-lg border border-gray-500 flex flex-row justify-center items-center"
+    <button
+      className="w-72 h-10 p-2 rounded-lg border border-gray-500 flex flex-row justify-center items-center font-semibold pl-2 text-sm hover:bg-purple-500 hover:text-white"
       onClick={signInWithGoogle}>
-      <Image alt='Sign in with Google' height={24} width={24} src={'/images/google.png'} />
-      <p className="font-semibold pl-2 text-sm">Continue with Google</p>
-    </div>
+      Continue with Google
+    </button>
   )
 }
