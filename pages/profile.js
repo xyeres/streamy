@@ -21,10 +21,17 @@ export default function Profile() {
 
 function UserProfile() {
   const user = useSelector(selectUser)
+
+  // Ensure we get high quality photo from Twitter
+  let photoURL = user.photoURL
+  if (user.providerData[0].providerId === 'twitter.com') {
+    photoURL = user.photoURL.replace(/_normal/, '')
+  }
+  
   return (
     <div className="max-w-lg p-6 flex flex-col items-center gap-5 w-full mb-24">
-      <div className="w-20 h-20 rounded-full relative">
-        <Image priority alt="user profile" src={user.photoURL} layout="fill" className="rounded-full" />
+      <div className="w-24 h-24 rounded-full relative">
+        <Image priority alt="user profile" src={photoURL} layout="fill" className="rounded-full" />
       </div>
       <h1 className="text-xl">Hi, {user.displayName} 👋</h1>
       <FeedbackCard customHeader={<>Profiles!</>} customMessage={<>We&apos;re just getting profiles setup. Soon you&apos;ll be able to favorite songs and do other nifty things. Stay tuned. Tap here to drop us some feedback.</>} />
