@@ -1,12 +1,10 @@
 import { getRedirectResult, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth'
-import { useDispatch, useSelector } from 'react-redux'
-import { loginUser, selectUser } from '../features/user/userSlice'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../features/user/userSlice'
 import { auth, googleAuthProvider } from '../src/firebase'
 import { Layout } from '../components/Layout'
 import setUserDoc from '../features/user/setUserDoc';
 import { useRouter } from 'next/router';
-import Image from 'next/image'
-import Link from 'next/link'
 import FooterLine from '../components/Layout/FooterLine'
 import { useState } from 'react'
 
@@ -21,6 +19,7 @@ export default function Login() {
     try {
       await signInWithRedirect(auth, googleAuthProvider)
     } catch(err) {
+      console.log(err)
       setError(err)
     }
   }
