@@ -8,11 +8,18 @@ import { useRouter } from 'next/router';
 import Image from 'next/image'
 import Link from 'next/link'
 import FooterLine from '../components/Layout/FooterLine'
+import { useState } from 'react'
 
 export default function Login() {
+  const [clicked, setclicked] = useState('not clicked')
   const user = useSelector(selectUser)
   const router = useRouter()
 
+  const signInWithGoogle = () => {
+    setclicked('yes clicked')
+    signInWithRedirect(auth, googleAuthProvider)
+  }
+  
   getRedirectResult(auth)
     .then((result) => {
       if (result) {
@@ -36,23 +43,14 @@ export default function Login() {
     <Layout>
       <div className="m-4 mt-16 flex flex-col items-center">
         <h1 className="text-lg font-bold mb-10">Log in or create an account</h1>
-        <SignInButtonGoogle />
+        <button
+          className="w-72 h-10 p-2 rounded-lg border border-gray-500 flex flex-row justify-center items-center font-semibold pl-2 text-sm hover:bg-purple-500 hover:text-white"
+          onClick={signInWithGoogle}>
+          Continue with Google
+        </button>
+        {clicked}
         <FooterLine />
       </div>
     </Layout>
-  )
-}
-
-function SignInButtonGoogle() {
-  const signInWithGoogle = () => {
-    signInWithRedirect(auth, googleAuthProvider)
-  }
-
-  return (
-    <button
-      className="w-72 h-10 p-2 rounded-lg border border-gray-500 flex flex-row justify-center items-center font-semibold pl-2 text-sm hover:bg-purple-500 hover:text-white"
-      onClick={signInWithGoogle}>
-      Continue with Google
-    </button>
   )
 }
