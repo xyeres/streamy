@@ -10,7 +10,7 @@ export const AccountBtn = forwardRef(function AccountBtn({ onClick, href, msg, p
     <a aria-label="View account" href={href} onClick={onClick} ref={ref} className="text-purple-500 hover:text-purple-700">
       <span className="sr-only">{msg}</span>
       {photoURL ?
-        <Image alt="user profile" width={23.33} height={23.33} className="rounded-full" src={photoURL} />
+        <Image alt="user profile" width={30} height={30} className="rounded-full" src={photoURL} />
         :
         <MdAccountCircle size="1.75em" />
       }
