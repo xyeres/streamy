@@ -1,12 +1,12 @@
-import { getRedirectResult, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
+import { getRedirectResult, signInWithRedirect } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { FaGoogle } from 'react-icons/fa';
+import { FaGoogle, FaTwitter } from 'react-icons/fa';
 import { GiSaloonDoors } from 'react-icons/gi';
 import { Layout } from '../components/Layout';
 import FooterLine from '../components/Layout/FooterLine';
 import setUserDoc from '../features/user/setUserDoc';
-import { auth, googleAuthProvider } from '../src/firebase';
+import { auth, googleAuthProvider, twitterAuthProvider } from '../src/firebase';
 
 export default function Login() {
   const [error, setError] = useState(null)
@@ -20,9 +20,18 @@ export default function Login() {
     }
   }
 
+  const signInWithTwitter = async () => {
+    try {
+      await signInWithRedirect(auth, twitterAuthProvider)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
   getRedirectResult(auth)
     .then((result) => {
       if (result) {
+        console.log(result)
         setUserDoc(result.user)
         router.push('/profile')
       }
@@ -31,7 +40,6 @@ export default function Login() {
       setError(err.message)
     });
 
-  //   <Image alt='Sign in with Google' height={24} width={24} src={'/images/google.png'} />
   return (
     <Layout>
       <div className="mt-10 flex flex-col items-center w-full">
@@ -43,12 +51,20 @@ export default function Login() {
               {error}
             </div>
           }
-          <button
-            className="w-full h-10 p-2 rounded-lg border hover:border-0 border-gray-500 flex flex-row justify-center items-center font-semibold text-sm hover:bg-purple-600 hover:text-white"
-            onClick={signInWithGoogle}>
-            <FaGoogle size="1.4em" />
-            <span className='pl-2'>Continue with Google</span>
-          </button>
+          <div className="w-full flex flex-col gap-2">
+            <button
+              className="w-full h-10 p-2 rounded-lg border hover:border-0 border-gray-500 flex flex-row justify-center items-center font-semibold text-sm hover:bg-purple-600 hover:text-white"
+              onClick={signInWithGoogle}>
+              <FaGoogle size="1.4em" />
+              <span className='pl-2'>Continue with Google</span>
+            </button>
+            <button
+              className="w-full h-10 p-2 rounded-lg border hover:border-0 border-gray-500 flex flex-row justify-center items-center font-semibold text-sm hover:bg-purple-600 hover:text-white"
+              onClick={signInWithTwitter}>
+              <FaTwitter size="1.4em" />
+              <span className='pl-2'>Continue with Twitter</span>
+            </button>
+          </div>
           <FooterLine />
         </div>
       </div>
