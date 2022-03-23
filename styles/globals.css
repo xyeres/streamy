@@ -16,6 +16,10 @@ body {
   background-color: theme('colors.zinc.50');
 }
 
+.link {
+  @apply underline hover:no-underline text-purple-500
+}
+
 @layer components {
   .control-bar-show {
     @apply transition-transform duration-700 cursor-pointer fixed bottom-12 left-0 right-0;
