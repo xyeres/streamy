@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux"
 import FeedbackCard from "../components/FeedbackCard/FeedbackCard"
 import { Layout } from "../components/Layout"
 import AuthCheck from "../components/Layout/AuthCheck"
-import FooterLine from "../components/Layout/FooterLine"
 import { logoutUser, selectUser } from "../features/user/userSlice"
 import { auth } from "../src/firebase"
 
@@ -23,7 +22,7 @@ export default function Profile() {
 function UserProfile() {
   const user = useSelector(selectUser)
   return (
-    <div className="max-w-lg p-6 flex flex-col items-center gap-8 w-full">
+    <div className="max-w-lg p-6 flex flex-col items-center gap-8 w-full mb-24">
       <div className="w-48 h-48 rounded-full relative">
         <Image priority alt="user profile" src={user.photoURL} layout="fill" className="rounded-full" />
       </div>
