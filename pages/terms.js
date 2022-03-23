@@ -20,14 +20,14 @@ export default function terms() {
           <li>use the materials for any commercial purpose or for any public display;</li>
           <li>attempt to reverse engineer any software contained on United Pursuit Creative, LLC&apos;s Website;</li>
           <li>remove any copyright or other proprietary notations from the materials; or</li>
-          <li>transferring the materials to another person or "mirror" the materials on any other server.</li>
+          <li>transferring the materials to another person or &quot;mirror&quot; the materials on any other server.</li>
         </ul>
 
         <p className="py-4">This will let United Pursuit Creative, LLC to terminate upon violations of any of these restrictions. Upon termination, your viewing right will also be terminated and you should destroy any downloaded materials in your possession whether it is printed or electronic format.</p>
 
         <h2 className="text-xl font-semibold">3. Disclaimer</h2>
 
-        <p className="py-4">All the materials on United Pursuit Creative, LLC&apos;s Website are provided "as is". United Pursuit Creative, LLC makes no warranties, may it be expressed or implied, therefore negates all other warranties. Furthermore, United Pursuit Creative, LLC does not make any representations concerning the accuracy or reliability of the use of the materials on its Website or otherwise relating to such materials or any sites linked to this Website.</p>
+        <p className="py-4">All the materials on United Pursuit Creative, LLC&apos;s Website are provided &quot;as is&quot;. United Pursuit Creative, LLC makes no warranties, may it be expressed or implied, therefore negates all other warranties. Furthermore, United Pursuit Creative, LLC does not make any representations concerning the accuracy or reliability of the use of the materials on its Website or otherwise relating to such materials or any sites linked to this Website.</p>
 
         <h2 className="text-xl font-semibold">4. Limitations</h2>
 
