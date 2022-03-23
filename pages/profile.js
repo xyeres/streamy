@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import FeedbackCard from "../components/FeedbackCard/FeedbackCard"
 import { Layout } from "../components/Layout"
 import AuthCheck from "../components/Layout/AuthCheck"
+import FooterLine from "../components/Layout/FooterLine"
 import { logoutUser, selectUser } from "../features/user/userSlice"
 import { auth } from "../src/firebase"
 
@@ -28,7 +29,7 @@ function UserProfile() {
       </div>
       <h1 className="text-2xl">Hi {user.displayName} 👋</h1>
       <SignOutButton />
-      <FeedbackCard customHeader={<>Profiles!</>} customMessage={<>We&apos;re just getting profiles setup.Soon you&apos;ll be able to favorite songs and do other nifty things. Stay tuned. Tap here to drop us some feedback.</>} />
+      <FeedbackCard customHeader={<>Profiles!</>} customMessage={<>We&apos;re just getting profiles setup. Soon you&apos;ll be able to favorite songs and do other nifty things. Stay tuned. Tap here to drop us some feedback.</>} />
     </div>
   )
 }

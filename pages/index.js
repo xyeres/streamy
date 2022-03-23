@@ -61,6 +61,6 @@ export default function Home() {
           keywords={{ field: 'tags', opStr: 'array-contains', value: 'og' }}
         />
       </div>
-    </Layout >
+    </Layout>
   );
 }
