@@ -16,6 +16,10 @@ body {
   background-color: theme('colors.zinc.50');
 }
 
+input:not(:focus):not(:placeholder-shown):invalid {
+  @apply outline-dashed outline-red-500 border-0
+}
+
 .link {
   @apply underline hover:no-underline text-purple-500
 }
