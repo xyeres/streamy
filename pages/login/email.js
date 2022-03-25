@@ -7,7 +7,7 @@ import { Layout } from "../../components/Layout";
 import setUserDoc from "../../features/user/setUserDoc";
 import { auth } from "../../src/firebase";
 
-export default function email() {
+export default function Email() {
   const [error, setError] = useState(false)
   const router = useRouter()
   // Confirm the link is a sign-in with email link.

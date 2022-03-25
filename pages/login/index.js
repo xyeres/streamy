@@ -85,7 +85,7 @@ export default function Login() {
           <div className="max-w-lg p-8 flex flex-col items-center text-center w-full mb-4 gap-5">
             <BiMailSend className="text-purple-500" size="10em" />
             <h1 className="text-xl text-gray-700 font-bold mb-4">Email sent!</h1>
-            <p className=''>We've sent you a magic email link to automatically log you in. No passwords required here. Go check your mail!</p>
+            <p>We&apos;ve sent you a magic email link to automatically log you in. No passwords required here. Go check your mail!</p>
           </div>
         )
           :
