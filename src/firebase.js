@@ -43,7 +43,7 @@ if (typeof window === 'object') {
   enableIndexedDbPersistence(db)
     .catch((err) => {
       if (err.code == 'failed-precondition') {
-        alert(err.message)
+        console.error(err.message)
       } else if (err.code == 'unimplemented') {
         console.warn('Current browser does not support all of the features required to enable persistence')
       }

@@ -10,6 +10,7 @@ import FooterLine from '../../components/Layout/FooterLine';
 import setUserDoc from '../../features/user/setUserDoc';
 import { auth, googleAuthProvider, twitterAuthProvider } from '../../src/firebase';
 import Loader from '../../components/Layout/Loader';
+import useUser from '../../features/user/useUser';
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -17,15 +18,17 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const router = useRouter()
+  const {user } = useUser()
+  
+  if (user) router.push('/profile')
 
   const signInWithEmail = async (e) => {
     e.preventDefault()
     try {
       setIsLoading(true)
       const actionCodeSettings = {
-        // url: 'https://listen.unitedpursuit.com/login/email',
-        url: 'http://localhost:3000/login/email',
-        handleCodeInApp: true,
+        url: process.env.NEXT_PUBLIC_SITE_URL +'/login/email',
+        handleCodeInApp: true
       };
 
       await sendSignInLinkToEmail(auth, email, actionCodeSettings)
@@ -38,6 +41,7 @@ export default function Login() {
       setIsEmailLinkSent(true)
     } catch (err) {
       setError(err.message)
+      setIsLoading(false)
     }
   }
 
@@ -76,7 +80,7 @@ export default function Login() {
 
   return (
     <Layout>
-      <div className="mt-10 flex flex-col items-center w-full">
+      <div className="mt-5 flex flex-col items-center w-full">
         {isEmailLinkSent ? (
           <div className="max-w-lg p-8 flex flex-col items-center text-center w-full mb-4 gap-5">
             <BiMailSend className="text-purple-500" size="10em" />
