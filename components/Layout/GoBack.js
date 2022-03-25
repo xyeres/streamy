@@ -10,6 +10,7 @@ export default function GoBack() {
   const routesToIgnore = [
     router.route == "/",
     router.route == "/login",
+    router.route == "/login/email",
     router.route == "/profile",
     router.route == "/search",
     router.route == "/library",

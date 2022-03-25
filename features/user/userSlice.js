@@ -9,6 +9,7 @@ export const userAuthSlice = createSlice({
     loginUser: (state, action) => {
       const json = JSON.parse(JSON.stringify(action.payload))
       state.user = json
+      state.user.displayName ? null : state.user.displayName = state.user.email
     },
     logoutUser: (state) => {
       state.user = null
