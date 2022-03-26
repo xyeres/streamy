@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { FaGoogle, FaTwitter } from 'react-icons/fa';
 import { BiMailSend } from 'react-icons/bi';
 import { IoWarningOutline } from 'react-icons/io5';
-import { GiSaloonDoors } from 'react-icons/gi';
+import { BsDoorOpen } from 'react-icons/bs';
 import { Layout } from '../../components/Layout';
 import FooterLine from '../../components/Layout/FooterLine';
 import setUserDoc from '../../features/user/setUserDoc';
@@ -91,7 +91,7 @@ export default function Login() {
           :
           (<div className="max-w-lg p-4 flex flex-col items-center w-full mb-6 gap-5">
             {isLoading && <Loader />}
-            <GiSaloonDoors className="text-purple-500" size="8em" />
+            <BsDoorOpen className="text-purple-500" size="8em" />
             <h1 className="text-xl text-gray-700 font-bold mb-4">Log in or create an account</h1>
             {error && (
               <div className="flex flex-row gap-2 items-center m-4 w-full p-2 py-4 rounded-sm border-red-400 border-dashed border text-sm">
