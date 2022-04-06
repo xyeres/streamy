@@ -1,11 +1,10 @@
-import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
+import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { IoWarningOutline } from 'react-icons/io5';
-
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { Layout } from "../../components/Layout";
-import setUserDoc from "../../features/user/setUserDoc";
-import { auth } from "../../src/firebase";
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { Layout } from '../../components/Layout';
+import setUserDoc from '../../features/user/setUserDoc';
+import { auth } from '../../src/firebase';
 
 export default function Email() {
   const [error, setError] = useState(false)
