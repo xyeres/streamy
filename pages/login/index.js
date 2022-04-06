@@ -1,40 +1,40 @@
-import { getRedirectResult, sendSignInLinkToEmail, signInWithRedirect } from 'firebase/auth';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { FaGoogle, FaTwitter } from 'react-icons/fa';
-import { BiMailSend } from 'react-icons/bi';
-import { IoWarningOutline } from 'react-icons/io5';
-import { BsDoorOpen } from 'react-icons/bs';
-import { Layout } from '../../components/Layout';
-import FooterLine from '../../components/Layout/FooterLine';
-import setUserDoc from '../../features/user/setUserDoc';
-import { auth, googleAuthProvider, twitterAuthProvider } from '../../src/firebase';
-import Loader from '../../components/Layout/Loader';
-import useUser from '../../features/user/useUser';
+import { getRedirectResult, sendSignInLinkToEmail, signInWithRedirect } from "firebase/auth";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { FaGoogle, FaTwitter } from "react-icons/fa";
+import { BiMailSend } from "react-icons/bi";
+import { IoWarningOutline } from "react-icons/io5";
+import { BsDoorOpen } from "react-icons/bs";
+import { Layout } from "../../components/Layout";
+import FooterLine from "../../components/Layout/FooterLine";
+import setUserDoc from "../../features/user/setUserDoc";
+import { auth, googleAuthProvider, twitterAuthProvider } from "../../src/firebase";
+import Loader from "../../components/Layout/Loader";
+import useUser from "../../features/user/useUser";
 
 export default function Login() {
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState("")
   const [isEmailLinkSent, setIsEmailLinkSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const router = useRouter()
   const {user } = useUser()
   
-  if (user) router.push('/profile')
+  if (user) router.push("/profile")
 
   const signInWithEmail = async (e) => {
     e.preventDefault()
     try {
       setIsLoading(true)
       const actionCodeSettings = {
-        url: process.env.NEXT_PUBLIC_SITE_URL +'/login/email',
-        handleCodeInApp: true
+        url: process.env.NEXT_PUBLIC_SITE_URL +"/login/email",
+        handleCodeInApp: true,
       };
 
       await sendSignInLinkToEmail(auth, email, actionCodeSettings)
 
       // Save email locally in case user logs back in with same device
-      window.localStorage.setItem('emailForSignIn', email);
+      window.localStorage.setItem("emailForSignIn", email);
 
       // The link was successfully sent. Inform the user.
       setIsLoading(false)
@@ -71,10 +71,10 @@ export default function Login() {
     .then((result) => {
       if (result) {
         setUserDoc(result.user)
-        router.push('/profile')
+        router.push("/profile")
       }
     }).catch((err) => {
-      console.error('Error using redirect result:', err)
+      console.error("Error using redirect result:", err)
       setError(err.message)
     });
 
@@ -105,7 +105,7 @@ export default function Login() {
                 <label className='text-xs font-semibold' htmlFor='email'>
                   Email address
                 </label>
-                <input onChange={handleEmailInput} value={email} onInvalid={() => setError('Invalid email address')} className="w-full h-10 p-2 rounded-lg flex flex-row justify-center items-center font-semibold bg-zinc-50 border border-gray-500 focus:border-0 focus:outline-dashed focus:outline-2 outline-purple-400 text-sm" name='email' type="email" />
+                <input onChange={handleEmailInput} value={email} onInvalid={() => setError("Invalid email address")} className="w-full h-10 p-2 rounded-lg flex flex-row justify-center items-center font-semibold bg-zinc-50 border border-gray-500 focus:border-0 focus:outline-dashed focus:outline-2 outline-purple-400 text-sm" name='email' type="email" />
                 <button
                   className="relative w-full h-10 p-2 rounded-lg border hover:border-0 border-gray-500 flex flex-row justify-center items-center font-semibold text-sm hover:bg-purple-600 hover:text-white"
                   type='submit'>
