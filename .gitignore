@@ -35,3 +35,5 @@ yarn-error.log*
 # firebase
 *firestore*.log
 ui-debug.log
+
+.secrets
