@@ -19,8 +19,8 @@ function CoverGrid({ coll, path, order, limit, swrkey, keywords }) {
   })
 
   return (
-    <div className="flex overflow-x-auto flex-nowrap flex-row sm:flex-col py-4 pr-4">
-      <ul className="flex flex-row  gap-4 first:ml-4 flex-shrink-0">
+    <div className="flex overflow-x-auto flex-nowrap flex-row sm:flex-col py-4 pr-4 lg:overflow-x-visible">
+      <ul className="flex flex-row  gap-4 first:ml-4 flex-shrink-0 lg:flex-wrap">
         {albumItems}
       </ul>
     </div>
