@@ -5,7 +5,9 @@ export default function CoverGridItem({ item, path }) {
   return (
     <Link href={`${path}/${item.id}`}>
       <a>
-        <li className="list-none w-32 transition-transform relative hover:translate-y-[1px]">
+        <li className="list-none w-32 transition-all relative hover:translate-y-[1px] lg:w-48
+        lg:bg-gray-50 lg:hover:bg-gray-100 lg:p-4 lg:rounded-md
+        ">
           <Image
             alt={item.title}
             className="aspect-square object-cover rounded-md"
@@ -13,10 +15,10 @@ export default function CoverGridItem({ item, path }) {
             width={400}
             height={400}
           />
-          <p className="text-xs font-bold mt-3 text-neutral-700">
-            {item.title.length > 17 ? item.title.slice(0, 19) + '...' : item.title}
+          <p title={item.title} className="text-xs max-w-[124px] truncate font-bold mt-3 text-neutral-700 lg:max-w-[188px]">
+            {item.title}
           </p>
-          {item.artist ? <p className="text-xs text-neutral-700"> {item.artist}</p> : null}
+          {item.artist ? <p title={item.artist} className="text-xs text-neutral-500"> {item.artist}</p> : null}
           {item.songs ? <p className="text-xs text-neutral-700"> {item.songs.length} Tracks</p> : null}
         </li>
       </a>
