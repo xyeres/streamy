@@ -8,6 +8,9 @@ module.exports = {
       animation: {
         fill: 'fill 3s infinite',
       },
+      colors: {
+        'gray-150': '#f6f6f6',
+      },
       keyframes: {
         fill: {
           '100%': { width: '100%' },

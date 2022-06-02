@@ -46,9 +46,7 @@ function Grid() {
         swrkey="studioAlbums"
         keywords={{ field: 'tags', opStr: 'array-contains', value: 'studio' }}
       />
-      <div className="lg:flex lg:justify-center">
-        <FeedbackCard />
-      </div>
+      <FeedbackCard />
       <CategoryHeader title="Live albums" />
       <CoverGrid
         path="/album"

@@ -6,7 +6,7 @@ export default function CoverGridItem({ item, path }) {
     <Link href={`${path}/${item.id}`}>
       <a>
         <li className="list-none w-32 transition-all relative hover:translate-y-[1px] lg:w-48
-        lg:bg-gray-50 lg:hover:bg-gray-100 lg:p-4 lg:rounded-md
+        lg:bg-gray-150 lg:hover:bg-gray-100 lg:p-4 lg:rounded-md
         ">
           <Image
             alt={item.title}
