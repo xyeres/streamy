@@ -43,7 +43,7 @@ export default function Tracklist({ listId, listDoc, tracks, thumbnail }) {
             src={coverArt}
             className="rounded-xl aspect-square object-cover"
           />
-          <div className="absolute right-5 top-16">{listDoc.data.featured ? <FeaturedPill message="Featured" /> : null}</div>
+          <div className="absolute right-5 top-16 lg:top-28 lg:-right-5">{listDoc.data.featured ? <FeaturedPill message="Featured" /> : null}</div>
         </div>
         <div className="flex flex-col items-center lg:items-start">
           <h1 className="font-bold text-lg">{listDoc.data.title}</h1>
