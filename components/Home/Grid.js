@@ -13,6 +13,11 @@ function Grid() {
   const isPlayerLoaded = useSelector(selectUrl)
   return (
     <div className={`relative h-full w-full ${isPlayerLoaded ? 'pb-24' : 'pb-12'}`}>
+
+      <div className="hidden lg:flex-rowlg:my-10 lg:flex items-center justify-center">
+        <FeaturedCard featuredColl="albums" />
+      </div>
+
       <CategoryHeader title="Newly Added" />
       <CoverGrid
         path="/album"
@@ -25,8 +30,10 @@ function Grid() {
         keywords={{ field: 'tags', opStr: 'array-contains', value: 'monthlyep' }}
         swrkey="monthlyep"
       />
-      <CategoryHeader title="Featured Album" />
-      <FeaturedCard featuredColl="albums" />
+      <div className="lg:hidden">
+        <CategoryHeader title="Featured Album" />
+        <FeaturedCard featuredColl="albums" />
+      </div>
       <CategoryHeader title="New playlists" />
       <CoverGrid
         path="/playlist"
@@ -39,8 +46,9 @@ function Grid() {
         swrkey="studioAlbums"
         keywords={{ field: 'tags', opStr: 'array-contains', value: 'studio' }}
       />
-      <FeedbackCard />
-
+      <div className="lg:flex lg:justify-center">
+        <FeedbackCard />
+      </div>
       <CategoryHeader title="Live albums" />
       <CoverGrid
         path="/album"

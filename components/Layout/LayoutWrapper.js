@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { MdSearch } from 'react-icons/md'
 
 
-export default function LayoutWrapper({ children, home, search, library, bareBones }) {
+export default function LayoutWrapper({ children, home, search, library }) {
   return (
-    <div className={`w-full min-h-screen`}>
+    <div className={`w-full min-h-screen lg:flex lg:justify-center`}>
       {children}
       <Player />
       <nav>
