@@ -1,25 +1,31 @@
 import AlbumCoverPlaceholder from "./AlbumCoverPlaceholder";
 export default function LoadingGrid() {
-  return (
-    <div className="flex overflow-x-hidden flex-nowrap flex-row py-4">
-      <ul className="opacity-60 flex animate-pulse flex-row flex-shrink-0 text-neutral-300">
-        <li className="list-none w-32 mr-3 first:ml-4 transition-transform relative">
-          <AlbumCoverPlaceholder />
-          <p className="text-sm font-bold mt-3">Sun and Moon</p>
-        </li>
-        <li className="list-none w-32 mr-3 first:ml-4 transition-transform relative">
-          <AlbumCoverPlaceholder />
-          <p className="text-sm font-bold mt-3">A Plane in the Sky</p>
-        </li>
-        <li className="list-none w-32 mr-3 first:ml-4 transition-transform relative">
+  const titles = [
+    'Sun and Moon',
+    'A Plane in the Sky',
+    'Floating Lotus',
+    'Mystic River',
+    '40',
+    'Junction Mile',
+    'Seven Layers',
+    'Endless Options',
+    'Sunset Arc'
+  ]
 
-          <AlbumCoverPlaceholder />
-          <p className="text-sm font-bold mt-3">Floating Lotus</p>
-        </li>
-        <li className="list-none w-32 mr-3 first:ml-4 transition-transform relative">
-          <AlbumCoverPlaceholder />
-          <p className="text-sm font-bold mt-3">Mystic River</p>
-        </li>
+  const placeHolderAlbums = titles.map((title) => {
+    return (
+      <li key={title} className="list-none w-32 mr-3 transition-transform relative lg:w-48
+        lg:bg-gray-150 lg:hover:bg-gray-100 lg:p-4 lg:rounded-md lg:flex lg:flex-col lg:py-6">
+        <AlbumCoverPlaceholder />
+        <p className="text-sm font-bold mt-3">{title}</p>
+      </li>
+    )
+  })
+
+  return (
+    <div className="flex overflow-x-hidden flex-nowrap flex-row sm:flex-col py-4 pr-4 lg:overflow-x-visible">
+      <ul className="opacity-75 gap-4 first:ml-4 flex animate-pulse flex-row flex-shrink-0 text-neutral-300 lg:flex-wrap">
+        {placeHolderAlbums}
       </ul>
     </div>
   )

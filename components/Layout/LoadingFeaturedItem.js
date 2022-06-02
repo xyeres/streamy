@@ -2,7 +2,7 @@ import AlbumCoverPlaceholder from "./AlbumCoverPlaceholder";
 
 export default function LoadingFeaturedItem() {
   return (
-    <div className="relative flex animate-pulse cursor-pointer justify-start group hover:bg-opacity-[65%] items-start m-4 sm:mx-4 bg-gray-200 p-4 rounded-lg">
+    <div className="relative flex animate-pulse cursor-pointer justify-start group hover:bg-opacity-[65%] items-start m-4 sm:mx-4 bg-gray-200 p-4 rounded-lg lg:p-7 my-7 lg:m-7 lg:flex lg:items-center lg:w-full lg:justify-center lg:max-w-screen-xl lg:min-h-[260px]">
       <ul>
         <li className="opacity-40 flex items-center justify-center gap-2">
           <AlbumCoverPlaceholder borderColor="border-gray-700" />

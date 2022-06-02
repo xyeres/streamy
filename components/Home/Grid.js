@@ -14,7 +14,7 @@ function Grid() {
   return (
     <div className={`relative h-full w-full ${isPlayerLoaded ? 'pb-24' : 'pb-12'}`}>
 
-      <div className="hidden lg:flex-rowlg:my-10 lg:flex items-center justify-center">
+      <div className="hidden lg:my-10 lg:flex items-center justify-center">
         <FeaturedCard featuredColl="albums" />
       </div>
 
