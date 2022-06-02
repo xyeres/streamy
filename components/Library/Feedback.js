@@ -75,7 +75,7 @@ export default function Feedback({ isOpen, setIsOpen }) {
   }
 
   return (
-    <div>
+    <div className='w-full flex items-center justify-center'>
       <div className={
         `${isOpen ? "translate-x-0" : "-translate-y-[220%]"} 
         bg-violet-50
@@ -86,11 +86,13 @@ export default function Feedback({ isOpen, setIsOpen }) {
         transition-transform
         absolute
         top-[6%] 
-        left-4 
-        right-4  
         px-18 
         py-8
-        pt-12`
+        pt-12
+        w-full
+        lg:max-w-xl
+        lg:min-w-[590px]
+        `
       }
       >
         <MdOutlineClose onClick={handleToggle} className="absolute right-4 top-4 text-gray-300 cursor-pointer" size="1.5em" />
@@ -129,7 +131,7 @@ export default function Feedback({ isOpen, setIsOpen }) {
                     <span className="relative">
                       {isSubmitted && (
                         <div className="flex flex-col items-center justify-center relative">
-                          <span>Sent!</span>
+                          <span>{isSent ? 'Sent!' : 'Sending!'}</span>
                           <IoMdHeartHalf className="fixed animate-ping text-white" size="2em" />
                         </div>
                       )}

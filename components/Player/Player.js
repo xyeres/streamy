@@ -337,10 +337,10 @@ function Player() {
                 <Image priority width={48} height={48} alt="album cover" src={song.coverUrl} className='w-12 h-12' />
                 <div>
                   <div className="flex pl-1">
-                    <p className="font-bold">{song.title.length > 34 ? song.title.slice(0, 34) + '...' : song.title}</p>
+                    <p className="font-bold truncate max-w-[200px] sm:max-w-[390px]">{song.title}</p>
                   </div>
                   <div>
-                    <span className="pl-1">{song.artist.length > 34 ? song.artist.slice(0, 34) + '...' : song.artist}</span>
+                    <span className="pl-1 truncate max-w-[140px] sm:max-w-[190px]">{song.artist}</span>
                   </div>
                 </div>
               </div>

@@ -25,7 +25,7 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
 
   return (
     <li onClick={handleItemClick} className="list-none cursor-pointer hover:bg-gray-100 transition-colors duration-200 
-    flex flex-row text-xs p-2 items-center">
+    flex flex-row text-xs p-2 items-center lg:py-3">
       <span className="text-xs w-3 mr-2 text-right">
         {trackNo}
       </span>
@@ -38,12 +38,12 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
       <div className="flex-grow flex items-center justify-between ml-2">
         <div className='w-full pr-2'>
           <div className="flex items-start justify-between">
-            <p className="font-bold">
-              {song.title.length > 32 ? song.title.slice(0, 32) + '...' : song.title}
+            <p className="truncate font-semibold max-w-[190px] sm:max-w-[390px]">
+              {song.title}
             </p>
           </div>
           <div>
-            <span className="">{song.artist}</span>
+            <span className="truncate max-w-[190px] sm:max-w-[390px] text-neutral-500">{song.artist}</span>
           </div>
         </div>
         {/* {!!thumbnail &&
