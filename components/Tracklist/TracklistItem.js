@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { loadFromList, addToQueue, play, selectCurrentlyPlaying, selectIsPlaying } from "../Player/playerSlice";
+import { loadFromList, addToQueue, play, selectCurrentlyPlaying, selectIsPlaying, selectQueue } from "../Player/playerSlice";
 import { CgLoadbarSound } from 'react-icons/cg'
 import { MdMoreHoriz, MdQueue } from 'react-icons/md'
 import secondsToTime from '../Player/secondsToTime';
@@ -11,8 +11,7 @@ import useComponentVisible from '../../hooks/useComponentVisible';
 export default function TracklistItem({ song, index, listId, listSongs, thumbnail }) {
   const dispatch = useDispatch()
 
-  // const queue = useSelector(state => state.player.queue)
-  // console.log('queue', queue)
+  const queue = useSelector(selectQueue)
 
   const { dropDownRef, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
 
