@@ -68,6 +68,12 @@ export const playerSlice = createSlice({
     setPlayDuration: (state, action) => {
       state.playDuration = action.payload
     },
+    addToQueue: (state, action) => {
+      
+      
+        state.queue.unshift(action.payload)
+      
+    },
     loadFromList: (state, action) => {
       const { listSongs, listId } = action.payload
       const listIndex = action.payload.index
@@ -176,6 +182,7 @@ export const {
   setVolume,
   setCurrentTime,
   setPlayDuration,
+  addToQueue,
   loadFromList,
   loadNext,
   loadPrev,
