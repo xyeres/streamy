@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { loadFromList, addToQueue, play, selectCurrentlyPlaying, selectIsPlaying, selectQueue } from "../Player/playerSlice";
+import { loadFromList, addToQueue, play, selectCurrentlyPlaying, selectIsPlaying, selectQueue, selectUrl, selectPrevPlayed } from "../Player/playerSlice";
 import { CgLoadbarSound } from 'react-icons/cg'
 import { MdMoreHoriz, MdQueue } from 'react-icons/md'
 import secondsToTime from '../Player/secondsToTime';
@@ -12,6 +12,14 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
   const dispatch = useDispatch()
 
   const queue = useSelector(selectQueue)
+  const prevPlayed = useSelector(selectPrevPlayed)
+  const url = useSelector(selectUrl)
+  const currentlyPlaying = useSelector(selectCurrentlyPlaying)
+  const isPlaying = useSelector(selectIsPlaying)
+
+  console.log('QUEUE', queue)
+  console.log('PREVPLAYED', prevPlayed)
+  console.log('currentlyPlaying', currentlyPlaying)
 
   const { dropDownRef, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
 
@@ -27,7 +35,8 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
 
   const handleAddToQueueClick = (e) => {
     e.stopPropagation()
-    if (queue.length < 1) {
+    setIsComponentVisible(false)
+    if (queue.length === 0 && url ===  null) {
       dispatch(loadFromList({ index, listId, listSongs }))
       dispatch(play())
       return;
@@ -37,8 +46,7 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
   
   
 
-  const currentlyPlaying = useSelector(selectCurrentlyPlaying)
-  const isPlaying = useSelector(selectIsPlaying)
+
 
   const trackNo = useMemo(() => index + 1, [index])
   const duration = useMemo(() => secondsToTime(song.format.duration), [song])
