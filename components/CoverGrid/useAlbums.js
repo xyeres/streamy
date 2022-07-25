@@ -1,6 +1,6 @@
-import { query, orderBy, collection, getDocs, doc, getDoc, where, collectionGroup, limit } from "firebase/firestore";
-import { db } from "../../lib/firebase";
+import { collectionGroup, doc, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 import useSWR from "swr";
+import { db } from "../../lib/firebase";
 
 /**
  * Fetch a single album document
@@ -9,20 +9,6 @@ import useSWR from "swr";
  */
 export function useAlbum(albumId) {
   const { data, error } = useSWR(`${albumId}/album`, () => albumFetcher(albumId))
-  return {
-    data,
-    isLoading: !error && !data,
-    isError: error
-  }
-}
-
-/**
- * Fetch the songs related to a given albumId
- * @param {*} albumId 
- * @returns 
- */
-export function useAlbumSongs(albumId) {
-  const { data, error } = useSWR(`${albumId}/songs`, () => albumSongsFetcher(albumId))
   return {
     data,
     isLoading: !error && !data,
@@ -107,23 +93,6 @@ export async function albumFetcher(albumId) {
   qSnap.forEach((doc) => buffer.push(doc.data()))
 
   if (buffer.length > 0) return buffer[0]
-  else throw new Error(`Uh oh, ${albumId} not found`)
-}
-
-/**
- * Given an albumId and an artistId, fetch and return the album's songs
- * @param {*} albumId 
- * @returns array of song documents
- */
-export async function albumSongsFetcher(albumId) {
-  const buffer = []
-  const qRef = collectionGroup(db, 'songs')
-
-  let q = query(qRef, where('albumSlug', '==', albumId), orderBy('trackNo'))
-  const qSnap = await getDocs(q)
-  qSnap.forEach((doc) => buffer.push(doc.data()))
-
-  if (buffer.length > 0) return buffer
   else throw new Error(`Uh oh, ${albumId} not found`)
 }
 
