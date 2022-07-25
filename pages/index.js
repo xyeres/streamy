@@ -25,7 +25,7 @@ export async function getStaticProps() {
   const albumsMonthlyEP = await getAlbums({ ...options, value: 'monthlyep' })
   const albumsNew = await getAlbums({ ...options, value: 'new' })
   const albumsOG = await getAlbums({ ...options, value: 'og' }, null, 10)
-  const albumsStudio = await getAlbums({ ...options, value: 'monthlyep' })
+  const albumsStudio = await getAlbums({ ...options, value: 'studio' })
 
   // Get Playlists
   const playlistsNew = await getCollection("playlists")
