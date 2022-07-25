@@ -21,7 +21,8 @@ import {
   pause,
   selectQueue,
   stopAndUnload,
-  close
+  close,
+  selectUserQueue
 } from './playerSlice'
 import secondsToTime from './secondsToTime'
 import { functions } from '../../lib/firebase'
@@ -38,6 +39,7 @@ function Player() {
   const isPlaying = useSelector(selectIsPlaying)
   const isOpen = useSelector(selectIsOpen)
   const queue = useSelector(selectQueue)
+  const userQueue = useSelector(selectUserQueue)
   const prevPlayed = useSelector(selectPrevPlayed)
   const currentTime = useSelector(selectCurrentTime)
   const playDuration = useSelector(selectPlayDuration)
@@ -57,7 +59,7 @@ function Player() {
 
   /* Helpers */
   const updateMetadata = useCallback(
-    function() {
+    function () {
       // Setup media session
       if ('mediaSession' in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
@@ -79,7 +81,7 @@ function Player() {
     },
     [song],
   )
-  
+
 
   function updatePositionState() {
     if ('setPositionState' in navigator.mediaSession) {
@@ -92,13 +94,13 @@ function Player() {
     }
   }
 
-  function seek(time) {
+  const seek = useCallback((time) => {
     // Update state
     dispatch(setCurrentTime(time))
 
     // Move playhead to correct pos
     pRef.current.currentTime = time
-  }
+  }, [dispatch])
 
   /* Cloud Function Handler */
   const handleIncrementPlayCount = () => {
@@ -180,22 +182,23 @@ function Player() {
     seek(clickTime)
   }
 
-  const handlePrevSong = () => {
+  const handlePrevSong = useCallback(() => {
     // Play song from beginning if this is
     // first song in the playlist
+    seek(0.00)
     if (prevPlayed.length < 1) {
-      seek(0.00)
       dispatch(play())
     } else {
       dispatch(loadPrev())
       dispatch(play())
     }
-  }
+  }, [dispatch, seek, prevPlayed.length])
 
-  function handleNextSong() {
+  const handleNextSong = useCallback(() => {
     // If we're at the last song, 
     // close player and unload media
-    if (queue.length < 1) {
+    seek(0.00)
+    if (queue.length < 1 && userQueue.length < 1) {
       dispatch(close())
       setTimeout(function () {
         dispatch(stopAndUnload())
@@ -204,7 +207,7 @@ function Player() {
       dispatch(loadNext())
       dispatch(play())
     }
-  }
+  }, [seek, userQueue.length, dispatch, queue.length])
 
 
   const handleTimeUpdate = () => {
@@ -257,9 +260,10 @@ function Player() {
   }
 
   /* For Media Session */
-  const handlePlay = () => dispatch(play())
-  const handlePause = () => dispatch(pause())
-  const handleSeekTo = (details) => {
+  const handlePlay = useCallback(() => dispatch(play()), [dispatch])
+  const handlePause = useCallback(() => dispatch(pause()), [dispatch])
+
+  const handleSeekTo = useCallback((details) => {
     const audio = pRef.current
     if (details.fastSeek && ('fastSeek' in audio)) {
       audio.fastSeek(details.seekTime)
@@ -267,7 +271,7 @@ function Player() {
     }
     seek(details.seekTime)
     updatePositionState()
-  }
+  }, [seek])
 
   /* Media Session action handlers */
   useEffect(() => {

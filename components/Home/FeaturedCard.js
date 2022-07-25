@@ -1,20 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useFeatured } from '../CoverGrid/useAlbums';
-import ErrMsgHome from '../Layout/ErrMsgHome'
-import LoadingFeaturedItem from '../Layout/LoadingFeaturedItem'
 import FeaturedPill from './FeaturedPill';
 
-export default function FeaturedCard({ item, featuredColl }) {
-  const { data, isError, isLoading } = useFeatured(featuredColl)
-
-  if (isError) return <ErrMsgHome message={isError.message} />
-  if (isLoading) return <LoadingFeaturedItem />
-
-  const feature = data[0]
-
+export default function FeaturedCard({ feature }) {
   return (
-    <Link href={`album/${feature.id}`}>
+    <Link href={`/album/${feature.id}`}>
       <a className='w-full lg:flex lg:items-center lg:justify-center'>
         <div className='group transition-colors duration-300 lg:hover:bg-slate-700 lg:bg-slate-800 lg:p-7 my-7 lg:m-7 lg:flex lg:items-center w-full lg:justify-center lg:max-w-screen-xl'>
           <div className="relative flex cursor-pointer justify-start group duration-300 hover:bg-blue-500 items-start m-4 bg-gray-100 lg:bg-opacity-0 p-4 rounded-lg lg:hover:bg-opacity-0 lg:group-hover:bg-opacity-0 lg:p-8 lg:max-w-xl lg:text-white">

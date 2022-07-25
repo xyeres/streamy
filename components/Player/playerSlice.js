@@ -14,6 +14,7 @@ export const playerSlice = createSlice({
     duration: 0,
     loop: false,
     queue: [],
+    userQueue: [],
     prevPlayed: [],
     currentlyPlaying: {
       songUrl: null,
@@ -68,6 +69,9 @@ export const playerSlice = createSlice({
     setPlayDuration: (state, action) => {
       state.playDuration = action.payload
     },
+    addToQueue: (state, action) => {
+      state.userQueue.push(action.payload)
+    },
     loadFromList: (state, action) => {
       const { listSongs, listId } = action.payload
       const listIndex = action.payload.index
@@ -110,8 +114,16 @@ export const playerSlice = createSlice({
       state.currentTime = null
       state.duration = null
 
-      // Remove first song from queue
-      const nextSong = state.queue.shift()
+      // Check to see if user has a queue, shift if there's length
+      // if not, remove first song from internal queue
+      let nextSong = null
+
+      if (state.userQueue.length > 0) {
+        nextSong = state.userQueue.shift()
+      } else {
+        nextSong = state.queue.shift()
+      }
+
       if (nextSong) {
         // Push currently playing song to prevPlayed for playPrev action
         state.prevPlayed.push(state.currentlyPlaying)
@@ -153,7 +165,6 @@ export const playerSlice = createSlice({
       if (prevSong) {
         // put current song to front of queue so we can come back
         state.queue.unshift(state.currentlyPlaying)
-
         // Update Currently Playing
         state.currentlyPlaying = {
           ...state.currentlyPlaying,
@@ -176,6 +187,7 @@ export const {
   setVolume,
   setCurrentTime,
   setPlayDuration,
+  addToQueue,
   loadFromList,
   loadNext,
   loadPrev,
@@ -192,4 +204,5 @@ export const selectPlayDuration = (state) => state.player.playDuration
 export const selectDuration = (state) => state.player.duration
 export const selectUrl = (state) => state.player.url
 export const selectQueue = (state) => state.player.queue
+export const selectUserQueue = (state) => state.player.userQueue
 export const selectPrevPlayed = (state) => state.player.prevPlayed
