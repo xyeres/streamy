@@ -60,7 +60,7 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
       </span>
 
       {thumbnail &&
-        <div className="p-1">
+        <div className="p-1 flex-shrink-0">
           <Image data-testid="thumbnail-image" width={28} height={28} className="rounded-none flex-grow object-cover h-7 w-7" src={song.coverUrl} alt={song.album} />
         </div>
       }
