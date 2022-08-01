@@ -5,12 +5,12 @@ export default function CoverGridItem({ item, path }) {
   return (
     <Link href={`${path}/${item.id}`}>
       <a>
-        <li className="list-none w-32 transition-all duration-300 relative group lg:w-44
+        <li className="list-none w-32 relative group lg:w-44
         lg:rounded-md
         ">
           <Image
             alt={item.title}
-            className="group-hover:opacity-80 aspect-square object-cover rounded-md"
+            className="group-hover:opacity-80 transition-opacity aspect-square object-cover rounded-md"
             src={item.coverUrl}
             width={400}
             height={400}
