@@ -5,7 +5,7 @@ export default function CoverGridItem({ item, path }) {
   return (
     <Link href={`${path}/${item.id}`}>
       <a>
-        <li className="list-none w-32 transition-all duration-300 relative group lg:w-48
+        <li className="list-none w-32 transition-all duration-300 relative group lg:w-44
         lg:rounded-md
         ">
           <Image
