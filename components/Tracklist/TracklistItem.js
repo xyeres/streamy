@@ -17,9 +17,9 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
   const currentlyPlaying = useSelector(selectCurrentlyPlaying)
   const isPlaying = useSelector(selectIsPlaying)
 
-  console.log('QUEUE', queue)
-  console.log('PREVPLAYED', prevPlayed)
-  console.log('currentlyPlaying', currentlyPlaying)
+  // console.log('QUEUE', queue)
+  // console.log('PREVPLAYED', prevPlayed)
+  // console.log('currentlyPlaying', currentlyPlaying)
 
   const { dropDownRef, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
 
