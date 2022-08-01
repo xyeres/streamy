@@ -5,7 +5,6 @@
 :root {
   --vh-minus-48: calc(100vh - 48px);
   --vh-minus-96: calc(100vh - 96px);
-  --tst: calc(100%-48px);
 }
 
 html,
@@ -14,7 +13,7 @@ body {
 }
 
 body {
-  background-color: theme("colors.zinc.50");
+  @apply dark:bg-almostblack bg-zinc-50;
 }
 
 @layer components {

@@ -53,8 +53,8 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
 
 
   return (
-    <li onClick={handleItemClick} className="list-none cursor-pointer hover:bg-gray-100 transition-colors duration-200 
-    flex flex-row text-xs p-2 items-center lg:py-3 relative">
+    <li onClick={handleItemClick} className="odd:bg-neutral-100 dark:odd:bg-neutral-900 dark:even:bg-almostblack rounded-md dark:text-zinc-100 list-none cursor-pointer hover:bg-gray-200 dark:hover:bg-neutral-800 transition-colors duration-200 
+    flex flex-row text-xs p-2 pr-3 py-3 items-center lg:py-3 relative">
       <span className="text-xs w-3 mr-3 text-right">
         {(currentlyPlaying.slug === song.slug && isPlaying) ? <CgLoadbarSound size="2em" className="animate-pulse" /> : trackNo}
       </span>
@@ -67,12 +67,12 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
       <div className="flex-grow flex items-center justify-between ml-2">
         <div className='w-full pr-2'>
           <div className="flex items-start justify-between">
-            <p className="truncate font-semibold max-w-[190px] sm:max-w-[390px]">
+            <p className="truncate font-semibold max-w-[45vw] sm:max-w-[390px]">
               {song.title}
             </p>
           </div>
           <div>
-            <span className="truncate max-w-[190px] sm:max-w-[390px] text-neutral-500">{song.artist}</span>
+            <span className="truncate max-w-[45vw] sm:max-w-[390px] text-neutral-500 dark:text-neutral-400">{song.artist}</span>
           </div>
         </div>
         {/* {!!thumbnail &&
@@ -80,14 +80,14 @@ export default function TracklistItem({ song, index, listId, listSongs, thumbnai
             {song.album.length > 22 ? song.album.slice(0, 22) + '...' : song.album}
           </span>)
         } */}
-        <span aria-expanded={false} onClick={handleMoreBtnClick} className='inline mr-5 p-[2px] active:bg-gray-200 rounded-full'>
+        <span aria-expanded={false} onClick={handleMoreBtnClick} className='inline mr-5 p-[2px] active:bg-gray-200 dark:active:bg-neutral-900 rounded-full'>
           <MdMoreHoriz size={'1.65em'} />
         </span>
-        <div ref={dropDownRef} className='z-50 drop-shadow-md bg-white rounded-sm absolute top-10 right-14'>
+        <div ref={dropDownRef} className='z-50 drop-shadow-md bg-white dark:bg-black rounded-sm absolute top-10 right-14'>
           {isComponentVisible && (
             <ul>
-              <li onClick={handleAddToQueueClick} className='hover:bg-gray-400 hover:text-white p-4 px-5 flex rounded-sm group'>
-                <MdQueue className='text-gray-600 mr-2 group-hover:text-white' size="1.15rem" /> Add to queue</li>
+              <li onClick={handleAddToQueueClick} className='hover:bg-neutral-400 dark:hover:bg-neutral-700 hover:text-white p-4 px-5 flex rounded-sm group'>
+                <MdQueue className='text-gray-600 dark:text-gray-200 mr-2 group-hover:text-white' size="1.15rem" /> Add to queue</li>
             </ul>
           )}
         </div>

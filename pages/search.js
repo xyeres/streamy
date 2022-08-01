@@ -1,4 +1,4 @@
-import { MdOutlineSearch, MdCancel, MdOutlineMusicNote, MdQueueMusic } from "react-icons/md"
+import { MdOutlineSearch, MdCancel, MdQueueMusic } from "react-icons/md"
 import { InstantSearch, connectHits, connectSearchBox, connectStateResults } from 'react-instantsearch-dom'
 import Layout from "../components/Layout/Layout"
 import algoliasearch from 'algoliasearch/lite'
@@ -18,7 +18,7 @@ export default function Search() {
 
   const NoQuery = () => {
     return (
-      <div className="flex flex-col items-center justify-center text-lg text-gray-400 p-4 text-center py-20">
+      <div className="flex flex-col items-center justify-center text-lg text-gray-400 dark:text-gray-300 p-4 text-center py-20">
         <MdQueueMusic size="4em" className="text-gray-300 drop-shadow-sm" />
         <h2 className="font-semibold">
           Something missing?
@@ -58,7 +58,7 @@ export default function Search() {
           value={currentRefinement}
           ref={searchInputRef}
           onChange={(e) => refine(e.currentTarget.value)}
-          className="bg-gray-100 mb-4 focus:outline-2 text-gray-500 focus:outline-gray-400 p-2 px-4 pl-10 rounded-3xl w-full"
+          className="bg-gray-100 dark:bg-neutral-800 mb-4 focus:outline-2 text-gray-500 focus:outline-gray-400 p-2 px-4 pl-10 rounded-3xl w-full"
         />
         {
           currentRefinement ?
