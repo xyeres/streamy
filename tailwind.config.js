@@ -10,6 +10,7 @@ module.exports = {
       },
       colors: {
         'gray-150': '#f6f6f6',
+        'almostblack': '#0d0800',
       },
       keyframes: {
         fill: {

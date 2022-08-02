@@ -5,27 +5,18 @@
 :root {
   --vh-minus-48: calc(100vh - 48px);
   --vh-minus-96: calc(100vh - 96px);
-  --tst: calc(100%-48px);
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
 body {
-  background-color: theme('colors.zinc.50');
+  @apply dark:bg-almostblack bg-zinc-50;
 }
 
 @layer components {
-  .bottom-line::after { 
-    content:'';
-    position:absolute;
-    top:30px;
-    left:1rem;
-    width: 180px;
-    height:0px;
-  }
-
   .control-bar-show {
     @apply transition-transform duration-700 cursor-pointer fixed bottom-12 left-0 right-0;
   }

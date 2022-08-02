@@ -99,7 +99,7 @@ export default function Home({ feature, albumsNew, albumsMonthlyEP, albumsStudio
           path="/album"
           items={albumsOG}
         />
-        <div className='flex justify-end pb-4 text-xs text-gray-50'>
+        <div className='flex justify-end pb-4 text-xs text-gray-50 dark:text-gray-800'>
           {buildTime}
         </div>
       </div>

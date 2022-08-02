@@ -335,16 +335,16 @@ function Player() {
           <div aria-controls="player-controls" aria-expanded={isOpen} onClick={handleOpenClose}
             className={isOpen ? "control-bar-hide" : "control-bar-show"}>
             <span className="sr-only">Player Controls</span>
-            <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100">
+            <div className="flex items-center justify-between h-12 drop-shadow border-t border-gray-300 bg-zinc-100 dark:bg-black dark:border-gray-900">
               <div className='h-1 w-full absolute top-0 after:h-1 after:contents'></div>
               <div className="flex items-center flex-row text-xs">
                 <Image priority width={48} height={48} alt="album cover" src={song.coverUrl} className='w-12 h-12' />
-                <div>
-                  <div className="flex pl-1">
-                    <p className="font-bold truncate max-w-[200px] sm:max-w-[390px]">{song.title}</p>
+                <div className='pl-2'>
+                  <div className="flex">
+                    <p className="dark:text-neutral-100 font-bold truncate max-w-[200px] sm:max-w-[390px]">{song.title}</p>
                   </div>
                   <div>
-                    <span className="pl-1 truncate max-w-[140px] sm:max-w-[190px]">{song.artist}</span>
+                    <span className="dark:text-neutral-400 truncate max-w-[140px] sm:max-w-[190px]">{song.artist}</span>
                   </div>
                 </div>
               </div>
@@ -353,8 +353,8 @@ function Player() {
                   isLoading={isMediaLoaded}
                   playPauseIconSize="2em"
                   loadIconSize="1.5em"
-                  playOrPauseStyles="text-gray-800 drop-shadow-lg cursor-pointer"
-                  loadIconStyles="animate-spin text-gray-700"
+                  playOrPauseStyles="text-gray-800 dark:text-gray-50 drop-shadow-lg cursor-pointer"
+                  loadIconStyles="animate-spin text-gray-700 dark:text-gray-100"
                 />
               </div>
             </div>

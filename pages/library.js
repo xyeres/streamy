@@ -11,10 +11,10 @@ export default function Library() {
   
   return (
     <Layout library>
-      <div className="overflow-hidden text-center m-4 gap-6 text-slate-600 flex flex-col items-center justify-center h-[76vh]">
+      <div className="overflow-hidden text-center m-4 gap-6 text-gray-600 dark:text-gray-300 flex flex-col items-center justify-center h-[76vh]">
         <GiHeartBottle size="6em" className="drop-shadow-md hover:drop-shadow-lg transition-all" />
         <h1 className="text-xl mb-10">Library coming soon!</h1>
-        <p className="font-bold px-2">But while you&apos;re here, mind telling us what you think of the app?</p>
+        <p className="font-bold px-2 mb-2">But while you&apos;re here, mind telling us what you think of the app?</p>
         <button onClick={handleFeedbackToggle} className="bg-violet-600 group animate-pulse ring ring-offset-4 hover:shadow-inner rounded-full hover:ring-offset-2 hover:ring-none transition-all ring-violet-600 text-white flex items-center justify-center px-6 py-3">
           Give a little <span className="mx-2"><GiTechnoHeart className="animate-pulse text-red-500" size="2em" /></span> feedback
         </button>

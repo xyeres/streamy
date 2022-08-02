@@ -16,7 +16,7 @@ export default function SongResultListItem({ song }) {
   }
   
   return (
-    <li onClick={handleSongClick} className="hover:bg-gray-200 hover:rounded-md p-[7px] text-sm cursor-pointer">
+    <li onClick={handleSongClick} className="hover:bg-gray-200 dark:hover:bg-neutral-800 hover:rounded-md p-[7px] text-sm cursor-pointer">
       <div className="flex flex-row">
         <div className="flex-shrink-0">
           <Link href={`album/${song.albumSlug}`}>
@@ -32,8 +32,8 @@ export default function SongResultListItem({ song }) {
           </Link>
         </div>
         <div className="flex flex-col justify-center w-full ml-3">
-          <p className="font-bold">{song.title}</p>
-          <p className="text-gray-500 text-xs pt-1 flex items-center flex-wrap">
+          <p className="dark:text-neutral-100 font-bold">{song.title}</p>
+          <p className="text-gray-500 dark:text-neutral-400 text-xs pt-1 flex items-center flex-wrap">
             {song.artist}
             <GoPrimitiveDot className="mx-1" size="0.5em" />
             {song.album}
