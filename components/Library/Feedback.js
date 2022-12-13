@@ -75,7 +75,7 @@ export default function Feedback({ isOpen, setIsOpen }) {
   }
 
   return (
-    <div className='w-full flex items-center justify-center'>
+    <div className='w-full z-50 flex items-center justify-center'>
       <div className={
         `${isOpen ? "translate-x-0" : "-translate-y-[220%]"} 
         bg-violet-50

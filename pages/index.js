@@ -10,6 +10,7 @@ import getCollection from "../lib/getCollection";
 import { MdSearch } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { selectUrl } from "../components/Player/playerSlice";
+import SearchIcon from "../components/Home/SearchIcon";
 
 export async function getStaticProps() {
   const featuredAlbums = await getFeatured("albums");
@@ -22,7 +23,10 @@ export async function getStaticProps() {
   const options = { field: "tags", opStr: "array-contains" };
   const albumsLive = await getAlbums({ ...options, value: "live" }, null, 12);
   const albumsMonthlyEP = await getAlbums({ ...options, value: "monthlyep" });
-  const albumsNew = await getAlbums({ ...options, value: "new" }, "lastUpdated");
+  const albumsNew = await getAlbums(
+    { ...options, value: "new" },
+    "lastUpdated"
+  );
   const albumsOG = await getAlbums({ ...options, value: "og" }, null, 10);
   const albumsStudio = await getAlbums({ ...options, value: "studio" });
 
@@ -58,13 +62,7 @@ export default function Home({
 
   return (
     <Layout home>
-      <div className="hidden z-50 shadow-md transition-colors hover:text-white bg-gray-200 hover:bg-purple-500 p-2 rounded-full lg:inline fixed right-5 top-4">
-        <Link href="/search">
-          <a>
-            <MdSearch size="1.45em" />
-          </a>
-        </Link>
-      </div>
+      <SearchIcon />
       <div
         className={`relative h-full w-full ${
           isPlayerLoaded ? "pb-24" : "pb-12"
