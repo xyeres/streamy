@@ -3,24 +3,23 @@ import Link from "next/link";
 import FeaturedPill from "../Home/FeaturedPill";
 
 export default function CoverGridItem({ item, path }) {
-  console.log(item)
   return (
     <Link href={`${path}/${item.id}`}>
       <a>
         <li
-          className="list-none w-32 relative group lg:w-44
+          className="list-none w-32 relative group lg:w-44 transition-colors bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 p-5
         lg:rounded-md
         "
         >
           <Image
             alt={item.title}
-            className="group-hover:opacity-80 transition-opacity aspect-square object-cover rounded-md"
+            className="group-hover:opacity-80 shadow-xl transition-opacity aspect-square object-cover rounded-md"
             src={item.coverUrl}
             width={400}
             height={400}
           />
           {item.tags?.includes("new-pill") ? (
-            <div className="absolute -right-5 -top-3">
+            <div className="absolute -right-4 top-2">
               <FeaturedPill message="new" />
             </div>
           ) : null}

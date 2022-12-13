@@ -2,7 +2,7 @@ import CoverGridItem from "./CoverGridItem";
 
 function CoverGrid({ items, path }) {
   const listItems = items.map((item, index) => {
-    return <CoverGridItem key={index} path={path} item={item} />
+    return <CoverGridItem key={item.id} path={path} item={item} />
   })
 
   return (
