@@ -19,7 +19,7 @@ export default function CoverGridItem({ item, path }) {
             height={400}
           />
           {item.tags?.includes("new-pill") ? (
-            <div className="z-50 absolute -right-4 top-2">
+            <div className="z-40 absolute -right-4 top-2">
               <FeaturedPill message="new" />
             </div>
           ) : null}

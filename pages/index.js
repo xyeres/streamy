@@ -3,11 +3,9 @@ import CategoryHeader from "../components/Home/CategoryHeader";
 import FeaturedCard from "../components/Home/FeaturedCard";
 import FeedbackCard from "../components/Home/FeedbackCard";
 import Layout from "../components/Layout/Layout";
-import Link from "next/link";
 import getFeatured from "../lib/getFeatured";
 import getAlbums from "../lib/getAlbums";
 import getCollection from "../lib/getCollection";
-import { MdSearch } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { selectUrl } from "../components/Player/playerSlice";
 import SearchIcon from "../components/Home/SearchIcon";
@@ -28,7 +26,7 @@ export async function getStaticProps() {
     "lastUpdated"
   );
   const albumsOG = await getAlbums({ ...options, value: "og" }, null, 10);
-  const albumsStudio = await getAlbums({ ...options, value: "studio" });
+  const albumsStudio = await getAlbums({ ...options, value: "studio" }, "year");
 
   // Get Playlists
   const playlistsNew = await getCollection("playlists");
