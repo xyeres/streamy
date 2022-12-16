@@ -12,6 +12,11 @@ body {
   height: 100%;
 }
 
+dialog::backdrop {
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.8)
+}
+
 body {
   @apply dark:bg-almostblack bg-zinc-50;
 }

@@ -9,6 +9,7 @@ import getCollection from "../lib/getCollection";
 import { useSelector } from "react-redux";
 import { selectUrl } from "../components/Player/playerSlice";
 import SearchIcon from "../components/Home/SearchIcon";
+import NotificationCard from "../components/Home/NotificationCard";
 
 export async function getStaticProps() {
   const featuredAlbums = await getFeatured("albums");
